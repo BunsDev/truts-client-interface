@@ -1,0 +1,13 @@
+.ratingComp {
+    display: flex;
+    width: fit-content;
+    height: fit-content;
+
+    img {
+        width: 16px;
+        height: 16px;
+        margin-right: 6px;
+        margin-top: 9.5px;
+        object-fit: contain;
+    }
+}
