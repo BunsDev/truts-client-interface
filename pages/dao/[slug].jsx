@@ -6,7 +6,7 @@ import Nav from '../../components/Nav';
 import DaoCard from '../../components/DaoCard';
 import axios from 'axios'
 import { useRouter } from 'next/router'
-
+import Tip from '../../utils/tip';
 
 const API = process.env.API;
 
@@ -34,6 +34,9 @@ function DaoPage() {
     const router = useRouter()
     const slug = router.query.slug
 
+    const [walletModelVisible, setwalletModelVisible] = useState(false);
+
+    //Tipping modules
 
 
     useEffect(() => {
@@ -97,6 +100,7 @@ function DaoPage() {
     return (
         <>
             <div className={styles.con}>
+                <WalletModal visible={walletModelVisible} setvisible={setwalletModelVisible} />
                 <Nav />
                 <div className={styles.cover}>
                     <img src={(dao_data.dao_cover) ? dao_data.dao_cover : "/dao-cover.png"} alt="" />
@@ -178,15 +182,16 @@ function DaoPage() {
 
                         {
                             dao_data.reviews.map((ele, idx) => {
-
                                 return <Comment
                                     key={idx + "comment"}
                                     comment={ele.review_desc}
                                     address={ele.public_address}
                                     rating={ele.rating}
                                     profile_img={ele.profile_img}
+                                    openModel={() => {
+                                        setwalletModelVisible(true);
+                                    }}
                                 />
-
                             }).reverse()
 
                         }
@@ -258,7 +263,159 @@ function DaoPage() {
     )
 }
 
-function Comment({ comment, address, rating, profile_img }) {
+const WalletModal = ({ setvisible, visible }) => {
+
+    const CONNECT_WALLET = 'CONNECT_WALLET';
+    const WRONG_NETWORK = 'WRONG_NETWORK';
+    const TIP_REVIEWER = 'TIP_REVIEWER';
+    const SUCCESS = 'SUCESS';
+    const FAILURE = 'FAILURE'
+
+    const [dialogType, setdialogType] = useState(CONNECT_WALLET);
+
+    let { currentAccount, payWithMetamask, connectWallet, checkConnectedWallet, changenetwork } = Tip(setdialogType);
+
+    const scrollDisable = (control) => {
+        if (control) {
+            document.querySelector('body').style.overflow = "hidden";
+        }
+        else {
+            console.log("enable scroll")
+            document.querySelector('body').style.overflow = "auto";
+        }
+    }
+
+    useEffect(() => {
+        if (visible) {
+            openModel();
+        }
+    }, [visible])
+
+    const openModel = () => {
+        scrollDisable(true);
+    }
+
+    const closeModel = () => {
+        scrollDisable(false);
+        setvisible(false);
+    }
+
+    let wallets = <>
+        <div className={styles.wallets}>
+            <h1 className={styles.title}>Connect Wallet</h1>
+            <p className={styles.subTitle}>Please select one of the following to proceed</p>
+            <div className={styles.box}>
+                <div className={styles.option} onClick={() => {
+                    checkConnectedWallet();
+                }}>
+                    <img src="/metamask.png" alt="" />
+                    <p>Metamask</p>
+                </div>
+                <div className={styles.option}>
+                    <img src="/wallet-connect.png" alt="" />
+                    <p>Wallet Connect</p>
+                </div>
+            </div>
+        </div>
+    </>
+
+    let wrongNetwork = <>
+        <div className={styles.wallets}>
+            <h1 className={styles.title}>Wrong Network</h1>
+            <p className={styles.subTitle}>Please switch to Matic network in your Wallet</p>
+            <div className={styles.connectBtn} onClick={() => {
+                changenetwork();
+            }}>
+                <img src="/polygon.png" alt="" />
+                <p>Switch to Polygon Chain</p>
+            </div>
+        </div>
+    </>
+
+
+    let tipReviewer = <>
+        <div className={styles.wallets}>
+            <h1 className={styles.title}>Tip the reviewer</h1>
+            <p className={styles.subTitle}>Please note, tips are only possible on <strong>Polygon</strong></p>
+            <div className={styles.tokenAmountBox}>
+                <div className={styles.head}>
+                    <p>Pay With</p>
+                </div>
+                <div className={styles.body}>
+                    <span className={styles.token}>
+                        <img src="/matic.png" alt="" />
+                        <h2>MATIC</h2>
+                    </span>
+                    <h1 className={styles.amount}>1.00</h1>
+                </div>
+            </div>
+            <div className={styles.connectBtn} onClick={async () => {
+                await payWithMetamask();
+            }}>
+                {/* <img src="/polygon.png" alt="" /> */}
+                <p>Tip it!</p>
+            </div>
+        </div>
+    </>
+
+    let success = <>
+        <div className={styles.wallets}>
+            <div className={styles.finalPrompt}>
+                <img src="/sucess_tick.png" alt="" />
+                <p>Transaction successful. Thank you for your contribution and gratuity.</p>
+            </div>
+        </div>
+    </>
+
+    let failure = <>
+        <div className={styles.wallets}>
+            <div className={styles.finalPrompt}>
+                <img src="/oops.png" alt="" />
+                <p>Transaction unsuccessful. Can you please try again :)</p>
+            </div>
+        </div>
+    </>
+
+    const selector = () => {
+        if (dialogType == CONNECT_WALLET) {
+            return wallets
+        }
+        else if (dialogType == WRONG_NETWORK) {
+            return wrongNetwork
+        }
+        else if (dialogType == TIP_REVIEWER) {
+            return tipReviewer
+        }
+        else if (dialogType == SUCCESS) {
+            return success
+        }
+        else if (dialogType == FAILURE) {
+            return failure
+        }
+    }
+
+    if (visible) {
+        return (
+            <div className={styles.walletCon}>
+                <div className={styles.walletModal}>
+                    <img src={'/close.svg'} onClick={() => {
+                        setdialogType(CONNECT_WALLET);
+                        closeModel()
+                    }} className={styles.closeIcon} />
+                    {
+                        selector(dialogType)
+                    }
+                </div>
+            </div>
+        )
+    }
+    else {
+        return null
+    }
+
+}
+
+function Comment({ comment, address, rating, profile_img, openModel }) {
     let p_img = (profile_img) ? profile_img : "/herobg.png"
     return (
         <div className={styles.comment}>
@@ -270,7 +427,7 @@ function Comment({ comment, address, rating, profile_img }) {
             <p className={styles.commentText}>
                 {comment}
             </p>
-            {/* <div className={styles.likes}>
+            <div className={styles.likes}>
                 <span>
                     <img src="/thumbs-up.png" alt="" />
                     <p>234</p>
@@ -279,7 +436,11 @@ function Comment({ comment, address, rating, profile_img }) {
                     <img src="/thumbs-down.png" alt="" />
                     <p>234</p>
                 </span>
-            </div> */}
+                <span>
+                    <img src="/tips.png" alt="" onClick={openModel} />
+                    {/* <p>234</p> */}
+                </span>
+            </div>
         </div>
     )
 }
