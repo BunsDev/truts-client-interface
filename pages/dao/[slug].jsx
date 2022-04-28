@@ -420,7 +420,7 @@ const WalletModal = ({ setvisible, visible }) => {
 }
 
 function Comment({ comment, address, rating, profile_img, openModel }) {
-    let p_img = (profile_img) ? profile_img : "/herobg.png"
+    let p_img = (profile_img) ? profile_img : "/hero-bg.png"
     return (
         <div className={styles.comment}>
             <div className={styles.profileName}>
