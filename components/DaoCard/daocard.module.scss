@@ -8,6 +8,7 @@
     margin: 23.5px 6.5px;
     overflow: hidden;
     cursor: pointer;
+    animation: appear 0.35s ease-in-out forwards;
 }
 
 .cardCover {
@@ -76,5 +77,15 @@
         font-weight: 500;
         font-size: 12px !important;
         margin-left: 2px !important;
+    }
+}
+
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
     }
 }

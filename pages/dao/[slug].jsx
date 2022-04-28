@@ -116,7 +116,11 @@ function DaoPage() {
                         <div className={styles.tags}>
                             {
                                 [...uniqueCategories].map((cat) => {
-                                    return <span key={"cat" + cat}>{`${cat} DAO`}</span>
+                                    return <span
+                                        onClick={() => {
+                                            openNewTab(`${location.href.split('/')[0]}/dao-list?category=${cat}`)
+                                        }}
+                                        key={"cat" + cat}>{`${cat} DAO`}</span>
                                 })
                             }
                         </div>
@@ -510,5 +514,14 @@ function Dial({ percent }) {
         </div>
     )
 }
+
+const openNewTab = (url) => {
+    if (url.length < 1) return
+    let a = document.createElement('a');
+    a.target = '_blank';
+    a.href = url;
+    a.click();
+}
+
 
 export default DaoPage
