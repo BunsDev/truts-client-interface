@@ -5,6 +5,7 @@ import DaoCard from '../../components/DaoCard';
 import Nav from '../../components/Nav';
 import axios from 'axios';
 import { useRouter } from 'next/router'
+import Router from 'next/dist/server/router';
 
 const API = process.env.API
 
@@ -20,25 +21,29 @@ export default function Index() {
             var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
             if (match) return match[2];
         }
-        getDetails(cookie)
+        let uid = window.location.href.split('=')[1];
+        getDetails(cookie, uid)
     }, [])
 
 
-    const getDetails = async (cookie) => {
+    const getDetails = async (cookie, uid) => {
+
         let id = cookie('target')
-        let guild_list = window.location.href.split('=')[1];
-        guild_list = guild_list.split(',');
 
         try {
             let res = await axios.get(`${process.env.API}/dao/get-dao-by-id?id=${id}`);
-            //console.log(guild_list);
-            console.log(res.data.data.guild_id);
-            if (id) {
-                if (guild_list.includes(res.data.data.guild_id)) {
-                    setdata(res.data.data);
+            let user = await axios.get(`${process.env.API}/auth/user?uid=${uid}`)
+            let guild_id = res.data.guild_id;
+            if (res.status == 200, user.status == 200) {
+                let guild_list = JSON.parse(user.data.guilds).map((ele) => {
+                    return ele.id;
+                });
+
+                if (guild_list.includes(guild_id)) {
+                    setdata(res.data);
                 }
                 else {
-                    alert("Please join the Discord");
+                    alert("not a member")
                 }
             }
         }
