@@ -126,19 +126,20 @@ function DaoPage() {
                         </div>
                     </div>
                 </div>
-                <div className={styles.titleBar}>
-                    <h1>Reviews</h1>
-                    <div className={styles.btns}>
-                        <button onClick={() => {
-                            window.location.href = `../set-review/${dao_data._id}`
-                        }}>Add a Review</button>
-                        <button onClick={() => {
-                            navigator.clipboard.writeText(`Daoverse.com/dao/${slug}`);
-                        }} id={"clipboard"} className={styles.slug}>{`Daoverse.com/dao/${slug}`}<span className={styles.copy}></span></button>
-                    </div>
-                </div>
+
                 <div className={styles.contentCon}>
                     <div className={styles.content}>
+                        <div className={styles.titleBar}>
+                            <h1>Reviews</h1>
+                            <div className={styles.btns}>
+                                <button onClick={() => {
+                                    window.location.href = `../set-review/${dao_data._id}`
+                                }}>Add a Review</button>
+                                {/* <button onClick={() => {
+                                    navigator.clipboard.writeText(`Daoverse.com/dao/${slug}`);
+                                }} id={"clipboard"} className={styles.slug}>{`Daoverse.com/dao/${slug}`}<span className={styles.copy}></span></button> */}
+                            </div>
+                        </div>
                         <div className={styles.dials} >
                             <span className={styles.dialRow}>
                                 <div name={"q1"} className={styles.dialCon}>
@@ -205,21 +206,21 @@ function DaoPage() {
                     </div>
                     <div className={styles.rightNav}>
                         <div className={styles.socials}>
-                            <button style={{ background: "#1da1f2" }}>
+                            <button style={{ borderColor: "#1da1f2" }}>
                                 <img src="/twitter-white.png" alt="" />
                                 <p>10K followers</p>
                             </button>
-                            <button style={{ background: "#F7F7F7" }}>
+                            <button>
                                 <img src="/web-outline.png" alt="" />
-                                <p style={{ color: "black" }}>{dao_data.slug}.com</p>
+                                <p>{dao_data.slug}.com</p>
                             </button>
-                            <button style={{ background: "#4962FE" }}>
+                            <button style={{ borderColor: "#4962FE" }}>
                                 <img src="/discord-white.png" alt="" />
                                 <p>5K members</p>
                             </button>
-                            <button style={{ background: "#F7F7F7" }}>
+                            <button >
                                 <img src="/web-outline.png" alt="" />
-                                <p style={{ color: "black" }}>{dao_data.slug}.xyz</p>
+                                <p >{dao_data.slug}.xyz</p>
                             </button>
                         </div>
 

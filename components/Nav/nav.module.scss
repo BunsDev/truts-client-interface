@@ -4,9 +4,13 @@
     display: flex;
     align-items: center;
     height: fit-content;
-    margin-top: 20px;
+    height: 111px;
+    //border: 1px solid red;
+    //margin-top: 20px;
     padding: 0 50px;
-    top: 0;
+    top: 0; 
+    
+    border-bottom: 1px solid rgb(209, 209, 209);
 
     .logo {
         height: 35.51px;
@@ -40,6 +44,17 @@
             font-weight: 500;
             font-size: 16px;
             border-radius: 100px;
+
+            &:hover {
+                background: linear-gradient(90deg, #5e1ed1 0%, #3065f3 100%);
+                color: white;
+            }
+
+            &:focus {
+                background: linear-gradient(90deg, #5e1ed1 0%, #3065f3 100%);
+                outline: thick double #3065f3;
+                color: white;
+            }
         }
     }
 }
