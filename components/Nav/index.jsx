@@ -19,7 +19,7 @@ const openMetaMask = async () => {
     return accounts[0]
 }
 
-function Nav({ topSearchVisible, data }) {
+function Nav({ topSearchVisible, data, outline }) {
     let search_style = styles.nav;
     if (topSearchVisible) {
         search_style = styles.nav + ' ' + styles.topNavSearch
@@ -35,7 +35,7 @@ function Nav({ topSearchVisible, data }) {
     }, [])
 
     return (
-        <div className={search_style}>
+        <div className={search_style} style={(outline) ? { borderBottom: '1px solid rgb(209, 209, 209)' } : null}>
             <img className={styles.logo} onClick={() => { window.location.href = '/' }} src="/logo.png" alt="" />
             <SearchComp data={data} topSearchVisible={topSearchVisible} />
             <ul>
@@ -53,6 +53,10 @@ function Nav({ topSearchVisible, data }) {
             </ul>
         </div>
     )
+}
+
+Nav.defaultProps = {
+    outline: false
 }
 
 function SearchComp({ topSearchVisible, data }) {
