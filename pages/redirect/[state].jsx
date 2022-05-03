@@ -15,17 +15,27 @@ function DaoForm() {
     let success = <>
         <img src="/sucess_tick.png" className={styles.sc_tick} alt="" />
         <p>Congratulations! You have successfully submitted . Now sit back and relax. If we need more information, we will reach out to you. Otherwise, you are all set :)</p>
-        <button onClick={() => {
-            window.location.href = '../'
-        }}>Explore DAOverse</button>
+
+        <span className={styles.btns}>
+            <button className={styles.primaryBtn} onClick={() => {
+                window.location.href = '../'
+            }}>Join DAOverse Community</button>
+            <button onClick={() => {
+                window.location.href = '../'
+            }}>See Related Reviews</button>
+        </span>
+
     </>
 
     let failed = <>
         <img src="/oops.png" className={styles.sc_oops} alt="" />
         <p>Oops, something went wrong. Can you please try again :(</p>
-        <button onClick={() => {
-            window.location.href = '../'
-        }}>Try again</button>
+        <span className={styles.btns}>
+            <button onClick={() => {
+                window.location.href = '../'
+            }}>Try again</button>
+        </span>
+
     </>
 
     if (!state) {

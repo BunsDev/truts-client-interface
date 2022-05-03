@@ -39,14 +39,22 @@ function Nav({ topSearchVisible, data, outline }) {
             <img className={styles.logo} onClick={() => { window.location.href = '/' }} src="/logo.png" alt="" />
             <SearchComp data={data} topSearchVisible={topSearchVisible} />
             <ul>
-                <li>Add a dao</li>
-                <li>Discover DAOs</li>
+                <li onClick={() => {
+                    openNewTab(`${location.href.split('/')[0]}/dao-form`)
+                }} >Add a dao</li>
+                <li onClick={() => {
+                    openNewTab(`${location.href.split('/')[0]}/dao-list`)
+                }}>Discover DAOs</li>
                 <li>
                     <button onClick={async (e) => {
                         if (!wallet) {
                             let res = await openMetaMask();
                             window.localStorage.setItem('wallet', res);
                             setwallet(res);
+                        }
+                        else {
+                            window.localStorage.removeItem('wallet');
+                            setwallet(null);
                         }
                     }} >{(wallet) ? wallet.slice(0, 5) + "..." + wallet.slice(-4, -1) : "Connect wallet"}</button>
                 </li>

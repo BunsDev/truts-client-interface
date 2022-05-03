@@ -345,6 +345,11 @@
     grid-area: e;
     width: 96% !important;
     color: white;
+
+    &:hover{
+        filter: invert(100%);
+    }
+
     .copy {
         display: flex;
         width: 20px;
@@ -682,6 +687,9 @@
             object-fit: contain;
             filter: invert(100%);
             margin-left: 25px;
+            cursor: pointer;
+            border-radius: 100%;
+            mask-image: linear-gradient(90deg, #5e1ed1 0%, #3065f3 100%);
         }
 
         margin-left: auto;

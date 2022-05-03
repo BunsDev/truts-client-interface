@@ -210,19 +210,31 @@ function DaoPage() {
                     </div>
                     <div className={styles.rightNav}>
                         <div className={styles.socials} id={"rightPane"}>
-                            <button className={styles.twitterBtn} style={{ borderColor: "#1da1f2" }}>
+                            <button onClick={() => {
+                                openNewTab(dao_data.twitter_link)
+                            }} className={styles.twitterBtn} style={{ borderColor: "#1da1f2" }}>
                                 <img src="/twitter-white.png" alt="" />
                                 <p>10K followers</p>
                             </button>
-                            <button className={styles.webBtn}>
+                            <button
+                                onClick={() => {
+                                    openNewTab(dao_data.website_link)
+                                }}
+                                className={styles.webBtn}>
                                 <img src="/web-outline.png" alt="" />
                                 <p >{dao_data.slug}.com</p>
                             </button>
-                            <button className={styles.discordBtn} style={{ borderColor: "#4962FE" }}>
+                            <button onClick={() => {
+                                openNewTab(dao_data.discord_link)
+                            }} className={styles.discordBtn} style={{ borderColor: "#4962FE" }}>
                                 <img src="/discord-white.png" alt="" />
                                 <p>5K members</p>
                             </button>
-                            <button className={styles.webBtn} >
+                            <button className={styles.webBtn}
+                                onClick={() => {
+                                    openNewTab(dao_data.website_link)
+                                }}
+                            >
                                 <img src="/web-outline.png" alt="" />
                                 <p >{dao_data.slug}.xyz</p>
                             </button>
@@ -322,9 +334,15 @@ const InfoBar = ({ data }) => {
                     456 Reviews
                 </p>
                 <span className={styles.infoBarBtns}>
-                    <img src="/twitter-white.png" alt="" />
-                    <img src="/discord-white.png" alt="" />
-                    <img src="/web-white.png" alt="" />
+                    <img onClick={() => {
+                        openNewTab(data.twitter_link);
+                    }} src="/twitter-white.png" alt="" />
+                    <img onClick={() => {
+                        openNewTab(data.discord_link);
+                    }} src="/discord-white.png" alt="" />
+                    <img onClick={() => {
+                        openNewTab(data.website_link);
+                    }} src="/web-white.png" alt="" />
                     <div className={styles.btns}>
                         <button onClick={() => {
                             window.location.href = `../set-review/${data._id}`
