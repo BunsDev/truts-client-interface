@@ -100,7 +100,7 @@ function DaoPage() {
     return (
         <>
             <div className={styles.con}>
-                <InfoBar />
+                {/* <InfoBar /> */}
                 <WalletModal visible={walletModelVisible} setvisible={setwalletModelVisible} />
                 <Nav />
                 <div className={styles.cover}>
