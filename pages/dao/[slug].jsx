@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import Head from 'next/head'
 import styles from './daoPage.module.scss'
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -99,8 +100,13 @@ function DaoPage() {
 
     return (
         <>
+            <Head>
+                <title>{dao_data.dao_name}</title>
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                <link rel="preload" as="image" href="/verified.png"></link>
+            </Head>
             <div className={styles.con}>
-                {/* <InfoBar /> */}
+                <InfoBar data={dao_data} />
                 <WalletModal visible={walletModelVisible} setvisible={setwalletModelVisible} />
                 <Nav />
                 <div className={styles.cover}>
@@ -136,7 +142,6 @@ function DaoPage() {
                                 <button onClick={() => {
                                     window.location.href = `../set-review/${dao_data._id}`
                                 }}>Add a Review</button>
-
                             </div>
                         </div>
                         <div className={styles.dials} >
@@ -272,7 +277,7 @@ function DaoPage() {
     )
 }
 
-const InfoBar = () => {
+const InfoBar = ({ data }) => {
 
     const [infoBarVisible, setinfoBarVisible] = useState(false);
 
@@ -308,15 +313,29 @@ const InfoBar = () => {
     if (infoBarVisible) {
         return (
             <div className={styles.infoBar}>
-
+                <div className={styles.profileName}>
+                    <img style={{ gridArea: 'a' }} src={data.dao_cover} alt="" />
+                    <h1>{data.dao_name}</h1>
+                    <Starrating rating={data.average_rating} />
+                </div>
+                <p className={styles.noReviews}>
+                    456 Reviews
+                </p>
+                <span className={styles.infoBarBtns}>
+                    <img src="/twitter-white.png" alt="" />
+                    <img src="/discord-white.png" alt="" />
+                    <img src="/web-white.png" alt="" />
+                    <div className={styles.btns}>
+                        <button onClick={() => {
+                            window.location.href = `../set-review/${data._id}`
+                        }}>Add a Review</button>
+                    </div>
+                </span>
             </div>
         )
     }
     else {
-        return (
-            <>
-            </>
-        )
+        return null
     }
 }
 
