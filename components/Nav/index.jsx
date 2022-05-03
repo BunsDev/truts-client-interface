@@ -48,7 +48,7 @@ function Nav({ topSearchVisible, data, outline }) {
                             window.localStorage.setItem('wallet', res);
                             setwallet(res);
                         }
-                    }} >{(wallet) ? wallet.slice(0, 5) + "..." + wallet.slice(-6, -1) : "Connect wallet"}</button>
+                    }} >{(wallet) ? wallet.slice(0, 5) + "..." + wallet.slice(-4, -1) : "Connect wallet"}</button>
                 </li>
             </ul>
         </div>

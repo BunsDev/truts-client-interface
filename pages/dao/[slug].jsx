@@ -100,6 +100,7 @@ function DaoPage() {
     return (
         <>
             <div className={styles.con}>
+                <InfoBar />
                 <WalletModal visible={walletModelVisible} setvisible={setwalletModelVisible} />
                 <Nav />
                 <div className={styles.cover}>
@@ -135,9 +136,7 @@ function DaoPage() {
                                 <button onClick={() => {
                                     window.location.href = `../set-review/${dao_data._id}`
                                 }}>Add a Review</button>
-                                {/* <button onClick={() => {
-                                    navigator.clipboard.writeText(`Daoverse.com/dao/${slug}`);
-                                }} id={"clipboard"} className={styles.slug}>{`Daoverse.com/dao/${slug}`}<span className={styles.copy}></span></button> */}
+
                             </div>
                         </div>
                         <div className={styles.dials} >
@@ -205,26 +204,31 @@ function DaoPage() {
 
                     </div>
                     <div className={styles.rightNav}>
-                        <div className={styles.socials}>
-                            <button style={{ borderColor: "#1da1f2" }}>
+                        <div className={styles.socials} id={"rightPane"}>
+                            <button className={styles.twitterBtn} style={{ borderColor: "#1da1f2" }}>
                                 <img src="/twitter-white.png" alt="" />
                                 <p>10K followers</p>
                             </button>
-                            <button>
+                            <button className={styles.webBtn}>
                                 <img src="/web-outline.png" alt="" />
-                                <p>{dao_data.slug}.com</p>
+                                <p >{dao_data.slug}.com</p>
                             </button>
-                            <button style={{ borderColor: "#4962FE" }}>
+                            <button className={styles.discordBtn} style={{ borderColor: "#4962FE" }}>
                                 <img src="/discord-white.png" alt="" />
                                 <p>5K members</p>
                             </button>
-                            <button >
+                            <button className={styles.webBtn} >
                                 <img src="/web-outline.png" alt="" />
                                 <p >{dao_data.slug}.xyz</p>
                             </button>
+                            <button className={styles.slug} onClick={(e) => {
+                                navigator.clipboard.writeText(`Daoverse.com/dao/${slug}`);
+                                document.querySelector('#copyBtn').style.background = "url('/sucess.png')";
+                                document.querySelector('#copyText').innerText = "Copied to Clipboard";
+                            }} id={"clipboard"} ><span id={"copyBtn"} className={styles.copy} /> <p id={"copyText"} className={styles.copyText}>{`Daoverse.com/dao/${slug}`}</p> </button>
                         </div>
 
-                        <div className={styles.daoInfoPane}>
+                        <div className={styles.daoInfoPane} >
                             <span className={styles.qn}>
                                 <h3>What is it?</h3>
                                 <p>Think of them like an internet-native business that`s collectively owned and managed by its members. </p>
@@ -266,6 +270,54 @@ function DaoPage() {
 
         </>
     )
+}
+
+const InfoBar = () => {
+
+    const [infoBarVisible, setinfoBarVisible] = useState(false);
+
+    useEffect(() => {
+        let rightPane = document.querySelector('#rightPane')
+        document.addEventListener('scroll', (e) => {
+            if (rightPane.getBoundingClientRect().top < -260) {
+                setinfoBarVisible((state) => {
+                    if (!state) {
+                        return !state
+                    }
+                    else {
+                        return state
+                    }
+                });
+                console.log("visible")
+            }
+            else {
+                console.log("in-visible");
+                setinfoBarVisible((state) => {
+                    if (state) {
+                        return !state
+                    }
+                    else {
+                        return state
+                    }
+                });
+            }
+        })
+
+    }, [])
+
+    if (infoBarVisible) {
+        return (
+            <div className={styles.infoBar}>
+
+            </div>
+        )
+    }
+    else {
+        return (
+            <>
+            </>
+        )
+    }
 }
 
 const WalletModal = ({ setvisible, visible }) => {
@@ -426,7 +478,7 @@ function Comment({ comment, address, rating, profile_img, openModel }) {
         <div className={styles.comment}>
             <div className={styles.profileName}>
                 <img style={{ gridArea: 'a' }} src={p_img} alt="" />
-                <h1>{address.slice(0, 5) + "..." + address.slice(-6, -1)}</h1>
+                <h1>{address.slice(0, 5) + "..." + address.slice(-4, -1)}</h1>
                 <Starrating rating={rating} />
             </div>
             <p className={styles.commentText}>

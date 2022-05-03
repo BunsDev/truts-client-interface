@@ -9,8 +9,13 @@
     border-radius: 25.3785px;
     margin: 23.5px 6.5px;
     overflow: hidden;
-    box-shadow: 0px 3.17231px 12.6892px rgba(51, 51, 51, 0.397), 0px 3.17231px 3.17231px rgba(51, 51, 51, 0.24);
+    // box-shadow: 0px 3.17231px 12.6892px rgba(51, 51, 51, 0.397), 0px 3.17231px 3.17231px rgba(51, 51, 51, 0.24);
     animation: appear 0.35s ease-in-out forwards;
+    outline: 2px solid rgba(48, 100, 243, 0);
+    transition: all 0.25s ease-in-out;
+    &:hover {
+        outline: 2px solid rgba(48, 101, 243, 1);
+    }
 }
 
 .rating {

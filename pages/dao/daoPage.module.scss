@@ -87,13 +87,13 @@
 .titleBar {
     display: flex;
     width: 100%;
-   // margin-top: 10px;
+    // margin-top: 10px;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 30px;
     h1 {
-        font-weight: 600;
-        font-size: 40px;
+        font-weight: 500;
+        font-size: 25px;
         border-bottom: 3px solid #3065f3;
         margin-top: 0;
     }
@@ -103,35 +103,22 @@
         align-items: center;
         button {
             border-radius: 32px;
-            min-width: 223px;
-            height: 51px;
+            //min-width: 223px;
+            height: 39px;
             border: 1.8px solid rgb(48, 100, 243);
             margin-right: 12px;
             font-weight: 400;
-            font-size: 20px;
             line-height: 24px;
             padding: 0 40px;
             background: linear-gradient(90deg, #5e1ed1 0%, rgb(48, 101, 243) 100%);
             color: white;
-        }
+            font-size: 16px;
+            &:hover {
+                background: linear-gradient(90deg, #4910ae 0%, #1248d9 100%);
+            }
 
-        .slug {
-            width: 459px;
-            margin-right: 0;
-            background: white;
-            color: black;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            .copy {
-                display: flex;
-                width: 20px;
-                height: 20px;
-                background-size: cover !important;
-                background-repeat: no-repeat;
-                background: url("/copy.png");
-                margin-left: 15px;
+            &:focus {
+                outline: thick double #3065f3;
             }
         }
     }
@@ -256,9 +243,9 @@
 
         h1 {
             font-weight: 500;
-            font-size: 20px;
+            font-size: 18px;
             margin: 0;
-            color: rgb(29, 75, 202);
+            color: rgb(0, 0, 0);
         }
 
         .ratingComp {
@@ -304,22 +291,20 @@
     width: 459px;
     margin-left: 48px;
     flex-direction: column;
-    height: max-content;
-    position: sticky;
-    top: 50px;
-    margin-bottom: 20px;
 }
 
 .socials {
     width: 100%;
-    height: 155px;
+    //height: 155px;
     background: #121212;
     border-radius: 32px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
     padding: 21.5px 25.5px;
     padding-bottom: 0;
+    grid-template-areas: "a b" "c d" "e e";
+    justify-items: center;
     button {
         width: 192px;
         height: 44px;
@@ -332,6 +317,7 @@
         padding: 0 26.5px;
         background-color: black;
         border: 1.5px solid white;
+        transition: all 0.25s ease-in-out;
         img {
             width: 28px;
             object-fit: contain;
@@ -344,6 +330,53 @@
             margin-left: 8px;
         }
     }
+
+    .twitterBtn {
+        &:hover {
+            background-color: #1da1f2;
+        }
+    }
+
+    .discordBtn {
+        &:hover {
+            background-color: #4962fe;
+        }
+    }
+
+    .webBtn {
+        &:hover {
+            filter: invert(100%);
+        }
+    }
+}
+
+.slug {
+    margin-right: 0;
+    background: white;
+    color: black;
+    font-weight: 500;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-area: e;
+    width: 96% !important;
+    color: white;
+    .copy {
+        display: flex;
+        width: 20px;
+        height: 20px;
+        background-size: cover !important;
+        background-repeat: no-repeat;
+        background: url("/link.png");
+        margin-right: 8px;
+        margin-bottom: 2.5px;
+    }
+
+    .copyText {
+        margin: 0;
+        padding: 0;
+    }
 }
 
 .daoInfoPane {
@@ -355,6 +388,11 @@
     margin-top: 24px;
     flex-direction: column;
     padding: 32px 24px;
+    height: max-content;
+    position: sticky;
+
+    top: 120px;
+    margin-bottom: 20px;
     .qn {
         display: flex;
         flex-direction: column;
@@ -598,4 +636,15 @@
         text-align: center;
         width: 354px;
     }
+}
+
+.infoBar {
+    display: flex;
+    width: 100%;
+    height: 111px;
+    top: 0;
+    position: sticky;
+    top: 0;
+    z-index: 500;
+    background: #f7f7f7;
 }
