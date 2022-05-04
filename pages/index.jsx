@@ -6,6 +6,10 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import stringSimilarity from "string-similarity";
 import ClipboardJS from 'clipboard'
+import DaoCard from '../components/DaoCard';
+
+
+import addSampleData from './../addSampleData'
 
 const openNewTab = (url) => {
   if (url.length < 1) return
@@ -29,6 +33,7 @@ export default function Home() {
   useEffect(() => {
     getDaolistAPI(setdaoList);
     getLeaderboard(setleaderboard)
+    //addSampleData();
   }, [])
 
 
@@ -96,7 +101,7 @@ export default function Home() {
 
           <div className={styles.tagtabs} >
             {
-              ['all', 'social', 'investment', 'service', 'protocol', 'NFT', 'marketplace']
+              ['all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal']
                 .map((tag) => {
                   let class_list = styles.tab;
                   if (tag == selectedTab) { class_list = class_list + ' ' + styles.selected }
@@ -244,14 +249,14 @@ function SearchComp({ data }) {
 
   return (
     <div className={styles.searchComp}>
-      <input value={searchTerm} 
-      placeholder={'Search your DAO here'}
-      type="text" onChange={(e) => { setsearchTerm(e.target.value) }}
+      <input value={searchTerm}
+        placeholder={'Search your DAO here'}
+        type="text" onChange={(e) => { setsearchTerm(e.target.value) }}
         onFocus={() => {
           setinputFocus(true);
         }}
         onBlur={() => {
-          setinputFocus(false);
+          setTimeout(() => { setinputFocus(false) },0)
         }}
       />
       <img className={styles.searchIcon} src="search-blue.png" alt="" />
@@ -266,31 +271,7 @@ function SearchComp({ data }) {
   )
 }
 
-function DaoCard({ data, link }) {
-  let cover = (data.dao_cover) ? data.dao_cover : "https://assets.hongkiat.com/uploads/minimalist-dekstop-wallpapers/4k/original/14.jpg?3";
 
-  return (
-    <div className={styles.daoCard} onClick={() => {
-      openNewTab(`${window.location.href}/dao/${link}`)
-    }}>
-      <img className={styles.cardCover} src={cover} alt="" />
-      <div className={styles.info}>
-        <p>{data.dao_name} <img src="/verified.png" alt="" /> </p>
-        <span className={styles.rating}>
-          <div className={styles.ratingBox}>
-            <p>{"4.0"}</p> <img src="/star-filled.png" alt="" />
-          </div>
-          <p className={styles.noReviews}>{Math.floor(Math.random() * 100)} reviews</p>
-        </span>
-        <span className={styles.socialIcon}>
-          <img src="/twitter-grey.png" onClick={() => { openNewTab(data.twitter_link) }} alt="" />
-          <img src="/discord-grey.png" onClick={() => { openNewTab(data.discord_link) }} alt="" />
-          <img src="/web-grey.png" onClick={() => { openNewTab(data.website_link) }} alt="" />
-        </span>
-      </div>
-    </div>
-  )
-}
 
 function Starrating({ rating }) {
   return (

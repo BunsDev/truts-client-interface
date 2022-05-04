@@ -15,7 +15,7 @@ function DaoList() {
     useEffect(() => {
         let query_category = window.location.href.split('=')[1];
         if (query_category) {
-            setselectedTab(query_category.toLowerCase());
+            setselectedTab(query_category);
         }
         getDaoList();
     }, [])
@@ -62,13 +62,7 @@ function DaoList() {
                     />
                     {/* Second filter */}
                     <Filter list={[
-                        'all',
-                        'social',
-                        'investment',
-                        'service',
-                        'protocol',
-                        'NFT',
-                        'marketplace'
+                        'all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal'
                     ]} selectedTab={selectedTab} setselectedTab={setselectedTab} />
                 </div>
                 <div className={styles.cardCon}>
@@ -77,22 +71,17 @@ function DaoList() {
                             if (selectedTab == 'all') {
                                 return (
                                     <DaoCard
-                                        cover={ele.dao_cover}
-                                        name={ele.dao_name}
                                         link={ele.slug}
                                         data={ele}
-                                        rating={ele.average_rating}
-                                        key={'c' + idx + selectedTab} />
+                                        key={'c' + idx + selectedTab}
+                                    />
                                 )
                             } else {
 
                                 if (ele.dao_category.includes(selectedTab)) {
                                     return <DaoCard
-                                        cover={ele.dao_cover}
-                                        name={ele.dao_name}
                                         link={ele.slug}
                                         data={ele}
-                                        rating={ele.average_rating}
                                         key={'c' + idx + selectedTab}
                                     />
                                 }

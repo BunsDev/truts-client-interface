@@ -117,7 +117,7 @@ function DaoPage() {
                         <span className={styles.subRatingCon}>
                             <Starrating rating={dao_data.average_rating} />
                             <div className={styles.subRating}>
-                                125 reviews
+                                {dao_data.review_count} reviews
                             </div>
                         </span>
                         <div className={styles.tags}>
@@ -242,7 +242,7 @@ function DaoPage() {
                                 navigator.clipboard.writeText(`Daoverse.com/dao/${slug}`);
                                 document.querySelector('#copyBtn').style.background = "url('/sucess.png')";
                                 document.querySelector('#copyText').innerText = "Copied to Clipboard";
-                            }} id={"clipboard"} ><span id={"copyBtn"} className={styles.copy} /> <p id={"copyText"} className={styles.copyText}>{`Daoverse.com/dao/${slug}`}</p> </button>
+                            }} id={"clipboard"} ><span id={"copyBtn"} className={styles.copy} /> <p id={"copyText"} className={styles.copyText}>{"truts.xyz/dao/" + dao_data.slug}</p><span id={"copyBtn"} className={styles.copyIcon} /> </button>
                         </div>
 
                         <div className={styles.daoInfoPane} >
@@ -264,7 +264,7 @@ function DaoPage() {
                             </span>
                             <span className={styles.qn}>
                                 <h3>URL Slug</h3>
-                                <p>{"Daoverse.app/dao/" + dao_data.slug}</p>
+                                <p>{"truts.xyz/dao/" + dao_data.slug}</p>
                             </span>
                         </div>
                     </div>
@@ -276,7 +276,7 @@ function DaoPage() {
                     {
                         dao_list.map((ele, idx) => {
                             if (idx < 5) {
-                                return <DaoCard link={ele.slug} cover={ele.dao_cover} name={ele.dao_name} rating={parseInt(ele.average_rating)} key={idx + "daolist"} />
+                                return <DaoCard link={ele.slug} data={ele} key={idx + "daolist"} />
                             }
                         })
                     }
@@ -331,7 +331,7 @@ const InfoBar = ({ data }) => {
                     <Starrating rating={data.average_rating} />
                 </div>
                 <p className={styles.noReviews}>
-                    456 Reviews
+                    {data.review_count} Reviews
                 </p>
                 <span className={styles.infoBarBtns}>
                     <img onClick={() => {
@@ -515,7 +515,11 @@ function Comment({ comment, address, rating, profile_img, openModel }) {
         <div className={styles.comment}>
             <div className={styles.profileName}>
                 <img style={{ gridArea: 'a' }} src={p_img} alt="" />
-                <h1>{address.slice(0, 5) + "..." + address.slice(-4, -1)}</h1>
+                <h1 onClick={() => {
+                    navigator.clipboard.writeText(address);
+                }}
+                    style={{ cursor: "pointer" }}
+                >{address.slice(0, 5) + "..." + address.slice(-4, -1)}</h1>
                 <Starrating rating={rating} />
             </div>
             <p className={styles.commentText}>

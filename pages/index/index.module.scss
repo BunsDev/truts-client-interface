@@ -227,7 +227,7 @@
             flex-direction: column;
             width: 249.85px;
             //  height: 280.75px;
-            height: 314px;
+            // height: 314px;
             background-color: rgba(107, 107, 107, 0.425);
             border-radius: 25.3785px;
             margin: 23.5px 6.5px;
@@ -289,9 +289,9 @@
             display: flex;
             width: 100%;
             height: 117.75px;
-            height: 151px;
+            height: 132px;
             background-color: black;
-            margin-top: auto;
+            // margin-top: auto;
             flex-direction: column;
             padding: 16px;
             p {
@@ -307,11 +307,21 @@
             }
 
             .socialIcon {
+                display: flex;
                 margin-left: 3px;
                 margin-top: 17.5px;
                 img {
-                    margin-right: 6.5px;
                     width: 16px;
+                    margin-left: 13px;
+                    object-fit: contain;
+                }
+
+                p {
+                    color: #8c8c8c;
+                    font-weight: 500;
+                    font-size: 12px;
+                    margin: 0;
+                    margin-left: 4px;
                 }
             }
         }

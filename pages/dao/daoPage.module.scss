@@ -88,7 +88,7 @@
     display: flex;
     width: 100%;
     // margin-top: 10px;
-    align-items: center;
+    //align-items: center;
     justify-content: space-between;
     margin-bottom: 30px;
     h1 {
@@ -346,11 +346,12 @@
     width: 96% !important;
     color: white;
 
-    &:hover{
+    &:hover {
         filter: invert(100%);
     }
 
-    .copy {
+    .copy,
+    .copyIcon {
         display: flex;
         width: 20px;
         height: 20px;
@@ -359,6 +360,10 @@
         background: url("/link.png");
         margin-right: 8px;
         margin-bottom: 2.5px;
+    }
+    .copyIcon {
+        margin-left: 8px;
+        background: url("/copy.png");
     }
 
     .copyText {
@@ -702,7 +707,6 @@
 
 .btns {
     display: flex;
-    align-items: center;
     button {
         border-radius: 32px;
         //min-width: 223px;
@@ -722,6 +726,7 @@
         &:focus {
             outline: thick double #3065f3;
         }
+        margin-top: 0;
     }
 }
 
