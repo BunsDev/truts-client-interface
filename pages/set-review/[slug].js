@@ -21,8 +21,10 @@ export default function Redirect() {
 
     useEffect(() => {
         setCookie('target', slug, 1);
-        window.location.href = `${API}/auth/discord`
-    }, [slug])
+        if (slug.length > 1) {
+            window.location.href = `${API}/auth/discord`
+        }
+    }, [router.query])
 
     if (!slug) {
         return (
