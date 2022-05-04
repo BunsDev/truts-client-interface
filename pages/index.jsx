@@ -8,8 +8,7 @@ import stringSimilarity from "string-similarity";
 import ClipboardJS from 'clipboard'
 import DaoCard from '../components/DaoCard';
 
-
-import addSampleData from './../addSampleData'
+//import addSampleData from './../addSampleData'
 
 const openNewTab = (url) => {
   if (url.length < 1) return
