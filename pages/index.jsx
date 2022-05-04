@@ -58,6 +58,12 @@ export default function Home() {
 
   const [searchTerm, setsearchTerm] = useState("");
 
+  const [visibleCardCountDivider, setvisibleCardCountDivider] = useState(1);
+
+  // useEffect(() => {
+  //   setvisibleCardCountDivider(Math.ceil(daoList.length / 20))
+  // }, [daoList])
+
   return (
     <div className={styles.container}>
       <Head>
@@ -119,21 +125,29 @@ export default function Home() {
             {/* List of daos */}
             {
               daoList.map((ele, idx) => {
-                if (selectedTab == 'all') {
-                  return (
-                    <DaoCard link={ele.slug} data={ele} key={'c' + idx + selectedTab} />
-                  )
-                } else {
-                  if (ele.dao_category.includes(selectedTab)) {
-                    return <DaoCard link={ele.slug} data={ele} key={'c' + idx + selectedTab} />
+                if (idx < (20 * visibleCardCountDivider))
+                  if (selectedTab == 'all') {
+                    return (
+                      <DaoCard link={ele.slug} data={ele} key={'c' + idx + selectedTab} />
+                    )
+                  } else {
+                    if (ele.dao_category.includes(selectedTab)) {
+                      return <DaoCard link={ele.slug} data={ele} key={'c' + idx + selectedTab} />
+                    }
                   }
-                }
               })
             }
           </div>
-          <button className={styles.seeMoreBtn}>
+          {(Math.ceil(daoList.length / 20) > visibleCardCountDivider) && <button className={styles.seeMoreBtn} onClick={() => {
+            setvisibleCardCountDivider((did) => {
+              if ((did + 1) <= Math.ceil(daoList.length / 20)) {
+                return did + 1;
+              }
+              return did
+            })
+          }}>
             See more
-          </button>
+          </button>}
         </div>
 
         <div className={styles.leaderboard}>
@@ -255,7 +269,7 @@ function SearchComp({ data }) {
           setinputFocus(true);
         }}
         onBlur={() => {
-          setTimeout(() => { setinputFocus(false) },0)
+          setTimeout(() => { setinputFocus(false) }, 0)
         }}
       />
       <img className={styles.searchIcon} src="search-blue.png" alt="" />
