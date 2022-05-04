@@ -87,7 +87,9 @@ export default function Index() {
 
     if (!data) {
         return (
-            <h1></h1>
+            <h1>
+
+            </h1>
         )
     }
 
@@ -275,7 +277,7 @@ export default function Index() {
                     {
                         dao_list.map((ele, idx) => {
                             if (idx < 5) {
-                                return <DaoCard link={ele.slug} cover={ele.dao_cover} name={ele.dao_name} rating={parseInt(ele.average_rating)} key={idx + "daolist"} />
+                                return <DaoCard data={ele} key={idx + "daolist"} />
                             }
                         })
                     }
