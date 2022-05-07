@@ -245,6 +245,7 @@
             height: 40px;
             border-radius: 100%;
             margin-right: 10px;
+ 
         }
     }
 
@@ -258,6 +259,11 @@
                 width: 18.62px;
                 object-fit: contain;
                 margin-right: 4.5px;
+                cursor: pointer;
+
+                &:hover{
+                    opacity: 0.5;
+                }
             }
             p {
                 margin: 0;

@@ -29,7 +29,6 @@ function Starrating({ rating }) {
     )
 }
 
-
 function DaoPage() {
 
     const router = useRouter()
@@ -197,6 +196,7 @@ function DaoPage() {
                                     address={ele.public_address}
                                     rating={ele.rating}
                                     profile_img={ele.profile_img}
+                                    data={ele}
                                     openModel={() => {
                                         setwalletModelVisible(true);
                                     }}
@@ -258,14 +258,14 @@ function DaoPage() {
                                 <h3>Vision</h3>
                                 <p>Votes tallied, and outcome implemented automatically without trusted intermediary.</p>
                             </span>
-                            <span className={styles.qn}>
+                            {/* <span className={styles.qn}>
                                 <h3>Type of DAO</h3>
                                 <p>{[...uniqueCategories][0]} {[...uniqueCategories][1]}</p>
                             </span>
                             <span className={styles.qn}>
                                 <h3>URL Slug</h3>
                                 <p>{"truts.xyz/dao/" + dao_data.slug}</p>
-                            </span>
+                            </span> */}
                         </div>
                     </div>
                 </div>
@@ -509,7 +509,44 @@ const WalletModal = ({ setvisible, visible }) => {
 
 }
 
-function Comment({ comment, address, rating, profile_img, openModel }) {
+function Comment({ comment, address, rating, profile_img, openModel, data }) {
+
+    const openMetaMask = async (type) => {
+        let ethereum = window.ethereum
+        let accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+        console.log(accounts);
+        let res = await addRating(accounts[0], type)
+        return res;
+    }
+
+    const addRating = async (wallet_address, type) => {
+        try {
+            let res = await axios.post(`${API}/review/rate-review`, {
+                "review_id": data._id,
+                "wallet_address": wallet_address,
+                "type": type
+            });
+            if (res.status == 200) {
+                return true;
+            }
+            else {
+                alert("network error");
+                return false;
+            }
+        }
+        catch (er) {
+            console.log(er)
+            return false;
+        }
+    }
+
+    const [reviewRating, setReviewRating] = useState({
+        thumbs_up: data.thumbs_up,
+        thumbs_down: data.thumbs_down
+    })
+
+    const [lock, setlock] = useState(false)
+
     let p_img = (profile_img) ? profile_img : "/hero-bg.png"
     return (
         <div className={styles.comment}>
@@ -527,12 +564,29 @@ function Comment({ comment, address, rating, profile_img, openModel }) {
             </p>
             <div className={styles.likes}>
                 <span>
-                    <img src="/thumbs-up.png" alt="" />
-                    <p>234</p>
+                    <img src="/thumbs-up.png" alt="" onClick={async () => {
+                        if (lock) return
+                        let res = await openMetaMask(true)
+                        res && setReviewRating((s) => {
+                            s.thumbs_up = s.thumbs_up + 1;
+                            console.log(s.thumbs_up);
+                            return { ...s };
+                        });
+                        setlock(true);
+                    }} />
+                    <p>{(reviewRating.thumbs_up)}</p>
                 </span>
                 <span>
-                    <img src="/thumbs-down.png" alt="" />
-                    <p>234</p>
+                    <img src="/thumbs-down.png" alt="" onClick={async () => {
+                        let res = await openMetaMask(false)
+                        res && setReviewRating((s) => {
+                            if (lock) return
+                            s.thumbs_down = s.thumbs_down + 1;
+                            return { ...s };
+                        });
+                        setlock(true);
+                    }} />
+                    <p>{(reviewRating.thumbs_down)}</p>
                 </span>
                 <span>
                     <img src="/tips.png" alt="" onClick={openModel} />
