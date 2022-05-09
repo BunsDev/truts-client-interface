@@ -540,12 +540,7 @@ function Comment({ comment, address, rating, profile_img, openModel, data }) {
         }
     }
 
-    const [reviewRating, setReviewRating] = useState({
-        thumbs_up: data.thumbs_up,
-        thumbs_down: data.thumbs_down
-    })
-
-    const [lock, setlock] = useState(false)
+    const [currentRatingState, setcurrentRatingState] = useState('');
 
     let p_img = (profile_img) ? profile_img : "/hero-bg.png"
     return (
@@ -565,32 +560,20 @@ function Comment({ comment, address, rating, profile_img, openModel, data }) {
             <div className={styles.likes}>
                 <span>
                     <img src="/thumbs-up.png" alt="" onClick={async () => {
-                        if (lock) return
                         let res = await openMetaMask(true)
-                        res && setReviewRating((s) => {
-                            s.thumbs_up = s.thumbs_up + 1;
-                            console.log(s.thumbs_up);
-                            return { ...s };
-                        });
-                        setlock(true);
+                        res && setcurrentRatingState('thumbs_up');
                     }} />
-                    <p>{(reviewRating.thumbs_up)}</p>
+                    <p>{(currentRatingState == 'thumbs_up') ? data.thumbs_up + 1 : data.thumbs_up}</p>
                 </span>
                 <span>
                     <img src="/thumbs-down.png" alt="" onClick={async () => {
                         let res = await openMetaMask(false)
-                        res && setReviewRating((s) => {
-                            if (lock) return
-                            s.thumbs_down = s.thumbs_down + 1;
-                            return { ...s };
-                        });
-                        setlock(true);
+                        res && setcurrentRatingState('thumbs_down');
                     }} />
-                    <p>{(reviewRating.thumbs_down)}</p>
+                    <p>{(currentRatingState == 'thumbs_down') ? data.thumbs_down + 1 : data.thumbs_down}</p>
                 </span>
                 <span>
                     <img src="/tips.png" alt="" onClick={openModel} />
-                    {/* <p>234</p> */}
                 </span>
             </div>
         </div>
