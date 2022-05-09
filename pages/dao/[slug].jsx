@@ -543,6 +543,22 @@ function Comment({ comment, address, rating, profile_img, openModel, data }) {
     const [currentRatingState, setcurrentRatingState] = useState('');
 
     let p_img = (profile_img) ? profile_img : "/hero-bg.png"
+
+    useEffect(() => {
+        const updateRating = async () => {
+            if (currentRatingState == 'thumbs_up') {
+                let res = await openMetaMask(true);
+                (!res) && setcurrentRatingState('');
+            }
+            else if (currentRatingState == 'thumbs_down') {
+                let res = await openMetaMask(false);
+                (!res) && setcurrentRatingState('');
+            }
+        }
+
+        updateRating();
+    }, [currentRatingState])
+
     return (
         <div className={styles.comment}>
             <div className={styles.profileName}>
@@ -560,15 +576,15 @@ function Comment({ comment, address, rating, profile_img, openModel, data }) {
             <div className={styles.likes}>
                 <span>
                     <img src="/thumbs-up.png" alt="" onClick={async () => {
-                        let res = await openMetaMask(true)
-                        res && setcurrentRatingState('thumbs_up');
+                        setcurrentRatingState('thumbs_up')
                     }} />
                     <p>{(currentRatingState == 'thumbs_up') ? data.thumbs_up + 1 : data.thumbs_up}</p>
                 </span>
                 <span>
                     <img src="/thumbs-down.png" alt="" onClick={async () => {
-                        let res = await openMetaMask(false)
-                        res && setcurrentRatingState('thumbs_down');
+                        setcurrentRatingState('thumbs_down')
+                        // let res = await openMetaMask(false)
+                        //     (!res) && setcurrentRatingState('');
                     }} />
                     <p>{(currentRatingState == 'thumbs_down') ? data.thumbs_down + 1 : data.thumbs_down}</p>
                 </span>

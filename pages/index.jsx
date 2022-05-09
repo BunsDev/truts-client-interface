@@ -138,13 +138,18 @@ export default function Home() {
               })
             }
           </div>
-          {(Math.ceil(daoList.length / 20) > visibleCardCountDivider) && <button className={styles.seeMoreBtn} onClick={() => {
+          {/* {(Math.ceil(daoList.length / 20) > visibleCardCountDivider) && <button className={styles.seeMoreBtn} onClick={() => {
             setvisibleCardCountDivider((did) => {
               if ((did + 1) <= Math.ceil(daoList.length / 20)) {
                 return did + 1;
               }
               return did
             })
+          }}>
+            See more
+          </button>} */}
+          {<button className={styles.seeMoreBtn} onClick={() => {
+            openNewTab(`${location.href.split('/')[0]}/dao-list`);
           }}>
             See more
           </button>}
