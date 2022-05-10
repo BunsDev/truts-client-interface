@@ -105,7 +105,7 @@ export default function Index() {
     return (
         <>
             <div className={styles.addReview}>
-                <Nav />
+                {/* <Nav /> */}
                 <div>
                     <div className={styles.breadCrum}>
                         <img src="left-arrow.png" alt="" />
@@ -276,7 +276,7 @@ export default function Index() {
                 <div className={styles.daoList}>
                     {
                         dao_list.map((ele, idx) => {
-                            if (idx < 5) {
+                            if (idx < ((window.outerWidth < 428) ? 4 : 5)) {
                                 return <DaoCard data={ele} key={idx + "daolist"} />
                             }
                         })

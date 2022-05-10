@@ -3,13 +3,10 @@
     display: flex;
     flex-direction: column;
     width: 249.85px;
-    //  height: 280.75px;
-    // height: 314px;
     background-color: rgba(107, 107, 107, 0.425);
     border-radius: 25.3785px;
     margin: 23.5px 6.5px;
     overflow: hidden;
-    // box-shadow: 0px 3.17231px 12.6892px rgba(51, 51, 51, 0.397), 0px 3.17231px 3.17231px rgba(51, 51, 51, 0.24);
     animation: appear 0.35s ease-in-out forwards;
     outline: 2px solid rgba(48, 100, 243, 0);
     transition: all 0.25s ease-in-out;
@@ -100,6 +97,86 @@
             font-size: 12px;
             margin: 0;
             margin-left: 4px;
+        }
+    }
+}
+
+@media (max-width: 425px) {
+    .daoCard {
+        width: 164px;
+        height: 193.52px;
+        border-radius: 15.744px;
+        margin: 17px 6.5px;
+    }
+
+    .cardCover {
+        height: 106.93px;
+    }
+
+    .info {
+        height: 86.59px;
+        padding: 10px 10.9px;
+
+        p {
+            font-weight: 500;
+            font-size: 13.0065px;
+
+            img {
+                top: 10px;
+                height: 11px;
+            }
+        }
+
+        .socialIcon {
+            margin-top: 11.5px;
+
+            img {
+                width: 11px;
+                margin-left: 8px;
+                object-fit: contain;
+            }
+
+            p {
+                color: #8c8c8c;
+                font-weight: 500;
+                font-size: 7.872px;
+                margin: 0;
+                margin-left: 4px;
+            }
+        }
+    }
+
+    .rating {
+        .noReviews {
+            font-weight: 400;
+            font-size: 7.872px;
+            margin-left: 8px;
+            margin-top: 8px;
+        }
+    }
+
+    .ratingBox {
+        width: 32.85px;
+        height: 15.25px;
+        margin-top: 9px;
+        align-items: center;
+        position: relative;
+        img {
+            width: 8.32px;
+            height: 7.97px;
+            margin: 0;
+            position: absolute;
+            right: 4px;
+            top: 3.5px;
+        }
+
+        p {
+            font-weight: 500;
+            font-size: 7.872px !important;
+            padding-bottom: 5px !important;
+            position: absolute;
+            top: 2.9px;
+            left: 2px;
         }
     }
 }

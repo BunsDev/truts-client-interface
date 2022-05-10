@@ -79,6 +79,9 @@ function DaoPage() {
 
     const [showAlldials, setshowAlldials] = useState(true);
 
+
+    const [m_btn, setm_btn] = useState(false);
+
     if (!dao_data) {
         return (
             <h1>
@@ -97,6 +100,7 @@ function DaoPage() {
 
     let uniqueCategories = new Set([...dao_data.dao_category])
 
+
     return (
         <>
             <Head>
@@ -105,9 +109,9 @@ function DaoPage() {
                 <link rel="preload" as="image" href="/verified.png"></link>
             </Head>
             <div className={styles.con}>
-                <InfoBar data={dao_data} />
+                {/* <InfoBar data={dao_data} /> */}
                 <WalletModal visible={walletModelVisible} setvisible={setwalletModelVisible} />
-                <Nav />
+                {/* <Nav /> */}
                 <div className={styles.cover}>
                     <img src={(dao_data.dao_cover) ? dao_data.dao_cover : "/dao-cover.png"} alt="" />
                     <div className={styles.gradient} />
@@ -284,7 +288,176 @@ function DaoPage() {
                 </div>
 
             </div>
+            <div className={styles.m_daopage}>
+                <div className={styles.cover}>
+                    <img src={(dao_data.dao_cover) ? dao_data.dao_cover : "/dao-cover.png"} alt="" />
+                    <div className={styles.gradient} />
+                    <div className={styles.daoInfo}>
+                        <h1>{dao_data.dao_name} <img src="/verified.png" alt="" /> </h1>
+                        <span className={styles.subRatingCon}>
+                            <Starrating rating={dao_data.average_rating} />
+                            <div className={styles.subRating}>
+                                {dao_data.review_count} reviews
+                            </div>
+                        </span>
+                        <div className={styles.tags}>
+                            {
+                                [...uniqueCategories].map((cat) => {
+                                    return <span
+                                        onClick={() => {
+                                            openNewTab(`${location.href.split('/')[0]}/dao-list?category=${cat}`)
+                                        }}
+                                        key={"cat" + cat}>{`${cat} DAO`}</span>
+                                })
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div className={styles.m_content}>
+                    <span className={styles.tabs}>
+                        <h3 className={(!m_btn) && styles.selcted_tab} onClick={() => {
+                            setm_btn(false);
+                        }} >Overview</h3>
+                        <h3 className={(m_btn) && styles.selcted_tab} onClick={() => {
+                            setm_btn(true);
+                        }} >Reviews</h3>
+                    </span>
 
+                    {(m_btn) && <div className={styles.review_con}>
+
+                        <button className={styles.writeReviewBtn} onClick={() => {
+                            window.location.href = `../set-review/${dao_data._id}`
+                        }}>
+                            Write a Review
+                        </button>
+
+                        <div className={styles.m_dialCon}>
+                            <div className={styles.m_dial}>
+                                <Dial
+                                    percent={dao_data.question_list_rating.q4} />
+                                <p>Relate to the vibes!</p>
+                            </div>
+                            <div className={styles.m_dial}>
+                                <Dial
+                                    percent={dao_data.question_list_rating.q4} />
+                                <p>says their opinions are been heard</p>
+                            </div>
+                            <div className={styles.m_dial}>
+                                <Dial
+                                    percent={dao_data.question_list_rating.q4} />
+                                <p>Would you recommend to join this DAO</p>
+                            </div>
+                            <div className={styles.m_dial}>
+                                <Dial
+                                    percent={dao_data.question_list_rating.q4} />
+                                <p>DAO’s onboarding experience</p>
+                            </div>
+                            <div className={styles.m_dial}>
+                                <Dial
+                                    percent={dao_data.question_list_rating.q4} />
+                                <p>says DAO  great organizational structure</p>
+                            </div>
+                            <div className={styles.m_dial}>
+                                <Dial
+                                    percent={dao_data.question_list_rating.q4} />
+                                <p>says DAO has great incentives for members</p>
+                            </div>
+                        </div>
+
+                        <div className={styles.reviewCardList}>
+                            {
+                                dao_data.reviews.map((ele, idx) => {
+                                    return <Comment
+                                        key={idx + "comment"}
+                                        comment={ele.review_desc}
+                                        address={ele.public_address}
+                                        rating={ele.rating}
+                                        profile_img={ele.profile_img}
+                                        data={ele}
+                                        openModel={() => {
+                                            setwalletModelVisible(true);
+                                        }}
+                                    />
+                                }).reverse()
+
+                            }
+                        </div>
+                    </div>}
+                    {(!m_btn) && <div className={styles.m_overview}>
+                        <div className={styles.social_icons}>
+                            <span style={{ backgroundColor: "" }}
+                                onClick={() => {
+                                    openNewTab(dao_data.twitter_link);
+                                }}
+                            >
+                                <img src="/twitter-white.png" alt="" />
+                            </span>
+                            <span style={{ backgroundColor: "#4962FE" }}
+                                onClick={() => {
+                                    openNewTab(dao_data.discord_link);
+                                }}
+                            >
+                                <img src="/discord-white.png" alt="" />
+                            </span>
+                            <span style={{ backgroundColor: "#121212" }}
+                                onClick={() => {
+                                    openNewTab(dao_data.web_link);
+                                }}
+                            >
+                                <img src="/web-white.png" alt="" />
+                            </span>
+                            <span style={{ backgroundColor: "#ffffff", border: "1px solid black" }}
+                                onClick={() => {
+                                    //navigator.clipboard.writeText("https://truts.xyz/dao/" + dao_data.slug);
+                                    openNewTab("https://truts.xyz/dao/" + dao_data.slug);
+                                }}
+                            >
+                                <img src="/link_black.png" alt="" />
+                            </span>
+                        </div>
+                        <div className={styles.daoInfoPane} >
+                            {/* <span className={styles.tokenInfo}>
+                                    <div><p></p><h3></h3></div>
+                                    <div><p></p><h3></h3></div>
+                                </span> */}
+                            <span className={styles.qn}>
+                                <h3>What is it?</h3>
+                                <p>Think of them like an internet-native business that`s collectively owned and managed by its members. </p>
+                            </span>
+                            <span className={styles.qn}>
+                                <h3>What problem does it solve?</h3>
+                                <p>DAOs don`t need a central authority. Instead, the group makes decisions collectively, and payments are automatically authorized when votes pass.</p>
+                            </span>
+                            <span className={styles.qn}>
+                                <h3>Vision</h3>
+                                <p>Votes tallied, and outcome implemented automatically without trusted intermediary.</p>
+                            </span>
+                            <span className={styles.qn}>
+                                <h3>Type of DAO</h3>
+                                <p>{[...uniqueCategories][0]} {[...uniqueCategories][1]}</p>
+                            </span>
+                            <span className={styles.qn}>
+                                <h3>URL Slug</h3>
+                                <p>{"truts.xyz/dao/" + dao_data.slug}</p>
+                            </span>
+                        </div>
+
+
+                    </div>
+                    }
+                    <div className={styles.footer}>
+                        <h2 className={styles.footerTitle}>
+                            Love what we are doing? Join DAOverse to build together
+                        </h2>
+                        <span className={styles.socialIcon}>
+                            <img src="/twitter-grey.png" alt="" />
+                            <img src="/discord-grey.png" alt="" />
+                            <img src="/web-grey.png" alt="" />
+                        </span>
+                        <p className={styles.footerSubTitle}>or email us at: xyz@daoverse.com</p>
+                    </div>
+                </div>
+            </div>
         </>
     )
 }
