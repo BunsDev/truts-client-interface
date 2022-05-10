@@ -49,7 +49,6 @@ export default function Index() {
         let id = cookie('target')
         
         try {
-            if(!id) return alert("id fail")
             let res = await axios.get(`${process.env.API}/dao/get-dao-by-id?id=${id}`);
             let user = await axios.get(`${process.env.API}/auth/user?uid=${uid}`)
             let guild_id = res.data.guild_id;
