@@ -47,7 +47,7 @@ export default function Index() {
     const getDetails = async (cookie, uid) => {
 
         let id = cookie('target')
-        
+
         try {
             let res = await axios.get(`${process.env.API}/dao/get-dao-by-id?id=${id}`);
             let user = await axios.get(`${process.env.API}/auth/user?uid=${uid}`)
@@ -146,7 +146,7 @@ export default function Index() {
     return (
         <Provider client={client}>
             <>
-                {(walletPromptVisible) && <MultiWallet setwalletAddress={setwalletAddress} />}
+                {(walletPromptVisible) && <MultiWallet styles={styles} setwalletAddress={setwalletAddress} />}
                 <div className={styles.addReview}>
                     <Nav />
                     <div>

@@ -8,7 +8,7 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 
 //import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
-import styles from './review.module.scss'
+
 
 //chains: [defaultChains, chain.mainnet, chain.optimism]
 const chains = [chain.polygon, chain.polygonMumbai];
@@ -33,7 +33,7 @@ import {
 
 
 
-function MultiWallet({ setwalletAddress }) {
+function MultiWallet({ setwalletAddress, styles }) {
 
     const { currentAccount, setCurrentAccount } = useState('');
     const { data: account, data: accountData } = useAccount();
