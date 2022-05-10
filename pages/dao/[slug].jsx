@@ -218,7 +218,7 @@ function DaoPage() {
                                 openNewTab(dao_data.twitter_link)
                             }} className={styles.twitterBtn} style={{ borderColor: "#1da1f2" }}>
                                 <img src="/twitter-white.png" alt="" />
-                                <p>10K followers</p>
+                                <p>{numFormatter(dao_data.twitter_followers)}</p>
                             </button>
                             <button
                                 onClick={() => {
@@ -252,11 +252,11 @@ function DaoPage() {
                         <div className={styles.daoInfoPane} >
                             <span className={styles.qn}>
                                 <h3>What is it?</h3>
-                                <p>Think of them like an internet-native business that`s collectively owned and managed by its members. </p>
+                                <p>{dao_data.description}</p>
                             </span>
                             <span className={styles.qn}>
                                 <h3>What problem does it solve?</h3>
-                                <p>DAOs don`t need a central authority. Instead, the group makes decisions collectively, and payments are automatically authorized when votes pass.</p>
+                                <p>{dao_data.dao_mission}</p>
                             </span>
                             <span className={styles.qn}>
                                 <h3>Vision</h3>
@@ -423,11 +423,11 @@ function DaoPage() {
                                 </span> */}
                             <span className={styles.qn}>
                                 <h3>What is it?</h3>
-                                <p>Think of them like an internet-native business that`s collectively owned and managed by its members. </p>
+                                <p>{dao_data.description}</p>
                             </span>
                             <span className={styles.qn}>
                                 <h3>What problem does it solve?</h3>
-                                <p>DAOs don`t need a central authority. Instead, the group makes decisions collectively, and payments are automatically authorized when votes pass.</p>
+                                <p>{dao_data.dao_mission}</p>
                             </span>
                             <span className={styles.qn}>
                                 <h3>Vision</h3>
@@ -844,5 +844,14 @@ const openNewTab = (url) => {
     a.click();
 }
 
+function numFormatter(num) {
+    if (num > 999 && num < 1000000) {
+        return (num / 1000).toFixed(1) + 'K'; // convert to K for number from > 1000 < 1 million 
+    } else if (num > 1000000) {
+        return (num / 1000000).toFixed(1) + 'M'; // convert to M for number from > 1 million 
+    } else if (num < 900) {
+        return num; // if value < 1000, nothing to do
+    }
+}
 
 export default DaoPage

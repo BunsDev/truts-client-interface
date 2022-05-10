@@ -28,7 +28,7 @@ function DaoCard({ data, link }) {
 
                     <img style={{ marginLeft: '0' }} src="/web-grey.png" onClick={() => { openNewTab(data.website_link) }} alt="" />
                     <img src="/twitter-grey.png" onClick={() => { openNewTab(data.twitter_link) }} alt="" />
-                    <p>38K</p>
+                    <p>{numFormatter(data.twitter_followers)}</p>
                     <img src="/discord-grey.png" onClick={() => { openNewTab(data.discord_link) }} alt="" />
                     <p>5K</p>
                 </span>
@@ -37,6 +37,15 @@ function DaoCard({ data, link }) {
     )
 }
 
+function numFormatter(num) {
+    if (num > 999 && num < 1000000) {
+        return (num / 1000).toFixed(1) + 'K'; // convert to K for number from > 1000 < 1 million 
+    } else if (num > 1000000) {
+        return (num / 1000000).toFixed(1) + 'M'; // convert to M for number from > 1 million 
+    } else if (num < 900) {
+        return num; // if value < 1000, nothing to do
+    }
+}
 
 
 export default DaoCard
