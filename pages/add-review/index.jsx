@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import DaoCard from '../../components/DaoCard';
 import Nav from '../../components/Nav';
 import axios from 'axios';
-import MultiWallet from './MultiWallet';
+import MultiWallet from '../../utils/MultiWallet';
 
 import { Provider, WagmiProvider, chain, createClient, defaultChains } from 'wagmi'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
