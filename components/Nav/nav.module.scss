@@ -8,9 +8,7 @@
     //border: 1px solid red;
     //margin-top: 20px;
     padding: 0 50px;
-    top: 0; 
-    
-   
+    top: 0;
 
     .logo {
         height: 35.51px;
@@ -168,4 +166,19 @@
 
 .searchCompDisable {
     display: flex;
+}
+
+@media (max-width: 425px) {
+    .nav{
+        height: 54px;
+        padding: 0 10px;
+        ul{
+            display: none;
+        }
+
+        .logo {
+            height: 20.51px;
+            cursor: pointer;
+        }
+    }
 }

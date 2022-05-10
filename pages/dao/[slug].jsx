@@ -109,9 +109,9 @@ function DaoPage() {
                 <link rel="preload" as="image" href="/verified.png"></link>
             </Head>
             <div className={styles.con}>
-                {/* <InfoBar data={dao_data} /> */}
+                <InfoBar data={dao_data} />
                 <WalletModal visible={walletModelVisible} setvisible={setwalletModelVisible} />
-                {/* <Nav /> */}
+                <Nav />
                 <div className={styles.cover}>
                     <img src={(dao_data.dao_cover) ? dao_data.dao_cover : "/dao-cover.png"} alt="" />
                     <div className={styles.gradient} />
@@ -289,6 +289,7 @@ function DaoPage() {
 
             </div>
             <div className={styles.m_daopage}>
+                <Nav />
                 <div className={styles.cover}>
                     <img src={(dao_data.dao_cover) ? dao_data.dao_cover : "/dao-cover.png"} alt="" />
                     <div className={styles.gradient} />

@@ -250,6 +250,7 @@ export default function Home() {
         </section >
       </div >
       <div className={styles.container_mobile}>
+      <Nav data={daoList} topSearchVisible={topSearchVisible} />
         <div className={styles.m_hero}>
           <div className={styles.title}>
             <h3>Review DAOs to</h3>
