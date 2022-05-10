@@ -419,7 +419,7 @@ function SearchComp({ data }) {
           setinputFocus(true);
         }}
         onBlur={() => {
-          setTimeout(() => { setinputFocus(false) }, 0)
+          setTimeout(() => { setinputFocus(false) }, 500)
         }}
       />
       <img className={styles.searchIcon} src="search-blue.png" alt="" />

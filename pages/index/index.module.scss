@@ -866,6 +866,10 @@
 }
 
 .container_mobile {
+    @media (min-width: 428px) {
+        display: none;
+    }
+
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -1079,7 +1083,7 @@
             grid-template-rows: max-content max-content;
             grid-template-areas: "a b" "a c" "a d";
             margin-top: auto;
-    
+
             .profileImg {
                 width: 56px;
                 height: 56px;
@@ -1094,13 +1098,13 @@
                 font-weight: 600;
                 font-size: 16px;
             }
-    
+
             .dao_name {
                 font-weight: 400;
                 font-size: 16px;
                 margin-top: 0;
             }
-    
+
             .ratingComp {
                 margin-top: -8px;
                 img {
@@ -1114,7 +1118,7 @@
         .r2 {
             background: #bbccdf;
         }
-    
+
         .r3 {
             background: #e2ccbc;
         }

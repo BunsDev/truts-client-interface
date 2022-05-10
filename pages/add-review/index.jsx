@@ -105,7 +105,7 @@ export default function Index() {
     return (
         <>
             <div className={styles.addReview}>
-                {/* <Nav /> */}
+                <Nav />
                 <div>
                     <div className={styles.breadCrum}>
                         <img src="left-arrow.png" alt="" />
