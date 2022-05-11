@@ -87,7 +87,7 @@ function SearchComp({ topSearchVisible, data }) {
                     setinputFocus(true);
                 }}
                 onBlur={() => {
-                    setTimeout(() => { setinputFocus(false) }, 0)
+                    setTimeout(() => { setinputFocus(false) }, 500)
                 }}
                 onChange={(e) => { setsearchTerm(e.target.value) }}
                 onClick={() => {

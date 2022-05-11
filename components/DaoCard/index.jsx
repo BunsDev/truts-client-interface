@@ -29,8 +29,8 @@ function DaoCard({ data, link }) {
                     <img style={{ marginLeft: '0' }} src="/web-grey.png" onClick={() => { openNewTab(data.website_link) }} alt="" />
                     <img src="/twitter-grey.png" onClick={() => { openNewTab(data.twitter_link) }} alt="" />
                     <p>{numFormatter(data.twitter_followers)}</p>
-                    <img src="/discord-grey.png" onClick={() => { openNewTab(data.discord_link) }} alt="" />
-                    <p>5K</p>
+                    <img src="/discord-grey.png" onClick={() => { (data.discord_link.length > 1) && openNewTab(data.discord_link) }} alt="" />
+                    <p>{(data.discord_members > 0) ? numFormatter(data.discord_members) : 'n/a'}</p>
                 </span>
             </div>
         </div>
