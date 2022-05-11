@@ -4,6 +4,7 @@ import DaoCard from '../../components/DaoCard';
 import Nav from '../../components/Nav';
 import axios from 'axios';
 import MultiWallet from '../../utils/MultiWallet';
+import Loader from '../../utils/Loader';
 
 import { Provider, WagmiProvider, chain, createClient, defaultChains } from 'wagmi'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
@@ -128,18 +129,14 @@ export default function Index() {
 
     if (!data) {
         return (
-            <h1>
-
-            </h1>
+            <Loader />
         )
     }
 
 
     if (!dao_list) {
         return (
-            <h1>
-
-            </h1>
+            <Loader />
         )
     }
 

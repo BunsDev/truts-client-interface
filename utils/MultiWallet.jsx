@@ -70,10 +70,10 @@ function MultiWallet({ setwalletAddress, styles }) {
     }, [activeConnector])
 
     return (
+        <div className={styles.walletPop}>
+            <div className={styles.walletCon}>
 
-        <div className={styles.walletCon}>
-
-            {/* {!activeConnector ?
+                {/* {!activeConnector ?
                 <div  >
                     {connectors.map((connector) => (
                         <button
@@ -92,27 +92,27 @@ function MultiWallet({ setwalletAddress, styles }) {
                 </div> :
                 <button className="tip-reviewer-button" onClick={disconnect}>{account?.address}</button>
             } */}
-            {
-                <div className={styles.wallets}>
-                    <h1 className={styles.title}>Connect Wallet</h1>
-                    <div className={styles.box}>
-                        {connectors.map((connector) => (
-                            <div className={styles.option} disabled={!connector.ready}
-                                key={connector.id}
-                                onClick={() => connect(connector)}>
-                                <img src={(connector.name == 'MetaMask') ? "/metamask.png" : "/wallet-connect.png"} alt="" />
-                                <p>{connector.name}
-                                    {!connector.ready && ' (unsupported)'}
-                                    {isConnecting &&
-                                        connector.id === pendingConnector?.id &&
-                                        ' (connecting)'}</p>
-                            </div>
-                        ))}
+                {
+                    <div className={styles.wallets}>
+                        <h1 className={styles.title}>Connect Wallet</h1>
+                        <div className={styles.box}>
+                            {connectors.map((connector) => (
+                                <div className={styles.option} disabled={!connector.ready}
+                                    key={connector.id}
+                                    onClick={() => connect(connector)}>
+                                    <img src={(connector.name == 'MetaMask') ? "/metamask.png" : "/wallet-connect.png"} alt="" />
+                                    <p>{connector.name}
+                                        {!connector.ready && ' (unsupported)'}
+                                        {isConnecting &&
+                                            connector.id === pendingConnector?.id &&
+                                            ' (connecting)'}</p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
-
     )
 }
 

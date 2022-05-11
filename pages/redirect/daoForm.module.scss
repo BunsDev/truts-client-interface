@@ -72,6 +72,15 @@
             color: white;
         }
     }
+
+    @media (max-width: 428px) {
+        button{
+            margin-top: 20px;
+        }
+        .btns {
+            flex-direction: column;
+        }
+    }
 }
 
 .sc_tick {
@@ -90,6 +99,9 @@
 //footer
 
 .footer {
+    @media (max-width: 428px) {
+        display: none;
+    }
     display: flex;
     width: 100%;
     height: 531px;
@@ -306,4 +318,22 @@
     background: linear-gradient(90deg, #5e1ed1 0%, rgb(48, 101, 243) 100%);
     color: white;
     margin-top: 64px;
+}
+
+@media (max-width: 428px) {
+    .con {
+        padding-top: 50px;
+    }
+
+    .messageCon {
+        width: 90vw;
+
+        .sc_tick,.sc_oops{
+            margin-top: 60px;
+        }
+
+        p {
+            width: 80vw;
+        }
+    }
 }

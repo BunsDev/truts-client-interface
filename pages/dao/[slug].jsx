@@ -9,6 +9,8 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import Tip from '../../utils/tip';
 
+import Loader from '../../utils/Loader';
+
 const API = process.env.API;
 
 function Starrating({ rating }) {
@@ -84,17 +86,13 @@ function DaoPage() {
 
     if (!dao_data) {
         return (
-            <h1>
-
-            </h1>
+            <Loader />
         )
     }
 
     if (!dao_list) {
         return (
-            <h1>
-
-            </h1>
+            <Loader />
         )
     }
 
