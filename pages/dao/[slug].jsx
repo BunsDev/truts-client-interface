@@ -241,7 +241,7 @@ function DaoPage() {
                                 <p >{dao_data.slug}.xyz</p>
                             </button>
                             <button className={styles.slug} onClick={(e) => {
-                                navigator.clipboard.writeText(`Daoverse.com/dao/${slug}`);
+                                navigator.clipboard.writeText(`truts.xyz/dao/${slug}`);
                                 document.querySelector('#copyBtn').style.background = "url('/sucess.png')";
                                 document.querySelector('#copyText').innerText = "Copied to Clipboard";
                             }} id={"clipboard"} ><span id={"copyBtn"} className={styles.copy} /> <p id={"copyText"} className={styles.copyText}>{"truts.xyz/dao/" + dao_data.slug}</p><span id={"copyBtn"} className={styles.copyIcon} /> </button>
@@ -446,14 +446,14 @@ function DaoPage() {
                     }
                     <div className={styles.footer}>
                         <h2 className={styles.footerTitle}>
-                            Love what we are doing? Join DAOverse to build together
+                            Love what we are doing? Join Truts to build together
                         </h2>
                         <span className={styles.socialIcon}>
                             <img src="/twitter-grey.png" alt="" />
                             <img src="/discord-grey.png" alt="" />
                             <img src="/web-grey.png" alt="" />
                         </span>
-                        <p className={styles.footerSubTitle}>or email us at: xyz@daoverse.com</p>
+                        <p className={styles.footerSubTitle}>or email us at: xyz@truts.xyz</p>
                     </div>
                 </div>
             </div>
