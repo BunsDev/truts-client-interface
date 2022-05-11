@@ -248,26 +248,22 @@ function DaoPage() {
                         </div>
 
                         <div className={styles.daoInfoPane} >
-                            <span className={styles.qn}>
+                            {(dao_data.description) && <span className={styles.qn}>
                                 <h3>What is it?</h3>
                                 <p>{dao_data.description}</p>
-                            </span>
-                            <span className={styles.qn}>
+                            </span>}
+                            {(dao_data.dao_mission) && <span className={styles.qn}>
                                 <h3>What problem does it solve?</h3>
                                 <p>{dao_data.dao_mission}</p>
-                            </span>
+                            </span>}
                             <span className={styles.qn}>
-                                <h3>Vision</h3>
-                                <p>Votes tallied, and outcome implemented automatically without trusted intermediary.</p>
-                            </span>
-                            {/* <span className={styles.qn}>
                                 <h3>Type of DAO</h3>
                                 <p>{[...uniqueCategories][0]} {[...uniqueCategories][1]}</p>
                             </span>
                             <span className={styles.qn}>
                                 <h3>URL Slug</h3>
                                 <p>{"truts.xyz/dao/" + dao_data.slug}</p>
-                            </span> */}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -419,22 +415,18 @@ function DaoPage() {
                                     <div><p></p><h3></h3></div>
                                     <div><p></p><h3></h3></div>
                                 </span> */}
-                            <span className={styles.qn}>
+                            {(dao_data.description.length > 0) && < span className={styles.qn}>
                                 <h3>What is it?</h3>
                                 <p>{dao_data.description}</p>
-                            </span>
-                            <span className={styles.qn}>
+                            </span>}
+                            {(dao_data.dao_mission.length > 0) && <span className={styles.qn}>
                                 <h3>What problem does it solve?</h3>
                                 <p>{dao_data.dao_mission}</p>
-                            </span>
-                            <span className={styles.qn}>
-                                <h3>Vision</h3>
-                                <p>Votes tallied, and outcome implemented automatically without trusted intermediary.</p>
-                            </span>
-                            <span className={styles.qn}>
+                            </span>}
+                            {<span className={styles.qn}>
                                 <h3>Type of DAO</h3>
                                 <p>{[...uniqueCategories][0]} {[...uniqueCategories][1]}</p>
-                            </span>
+                            </span>}
                             <span className={styles.qn}>
                                 <h3>URL Slug</h3>
                                 <p>{"truts.xyz/dao/" + dao_data.slug}</p>
