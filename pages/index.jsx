@@ -88,7 +88,7 @@ export default function Home() {
 
         <section className={styles.homepage}>
           <div id={'sec2'} className={styles.sec2}>
-            <div style={{ gridArea: 'a', background: "url(ha.png)" }} >
+            {/* <div style={{ gridArea: 'a', background: "url(ha.png)" }} >
               <h3 style={{ width: '270px' }}>Earn <span className={styles.text_red}>cool  rewards</span> for reviewing DAOs</h3>
             </div>
             <div style={{ gridArea: 'b', background: "url(hb.png)" }} >
@@ -99,6 +99,30 @@ export default function Home() {
             </div>
             <div style={{ gridArea: 'd', background: "url(hd.png)" }} >
               <h3 style={{ width: '525px' }}>Earn tips for your<span className={styles.text_gold}> genuine reviews</span></h3>
+            </div> */}
+            <div className={styles.r1} style={{ backgroundColor: "#121212" }} >
+              <span>
+                <h3 style={{ color: "#EB6079" }} >250+</h3>
+                <p>Communities listed and verified</p>
+              </span>
+
+              <span style={{
+                border: "1.25px solid #3f3f3f8d", padding: "0 50px", borderTopColor: "#121212",
+                borderBottomColor: "#121212",
+              }} >
+                <h3 style={{ color: "#E1BA9D" }}>1000+</h3>
+                <p>Reviews Posted and Counting</p>
+              </span>
+
+              <span>
+                <h3 style={{ color: "#C09DFF" }}>500+</h3>
+                <p>Individuals joined Web3 using Truts</p>
+              </span>
+            </div>
+            <div className={styles.r2} >
+              <span style={{ backgroundImage: "url('/d_daoinfo_1.png')" }} ></span>
+              <span style={{ backgroundImage: "url('/d_daoinfo_2.png')" }}></span>
+              <span style={{ backgroundImage: "url('/d_daoinfo_3.png')" }}></span>
             </div>
           </div>
 
