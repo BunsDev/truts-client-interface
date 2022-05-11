@@ -230,7 +230,7 @@ function DaoPage() {
                                 openNewTab(dao_data.discord_link)
                             }} className={styles.discordBtn} style={{ borderColor: "#363636" }}>
                                 <img src="/discord-white.png" alt="" />
-                                <p>5K members</p>
+                                <p>{(dao_data.discord_members > 0) ? numFormatter(dao_data.discord_members) : 'n/a'}</p>
                             </button>
                             <button className={styles.webBtn}
                                 onClick={() => {
