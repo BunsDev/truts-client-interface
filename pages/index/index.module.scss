@@ -136,6 +136,69 @@
             width: 422px;
             height: 201px;
             background-size: contain;
+            padding: 32px;
+
+            h3 {
+                color: #f6f6f6;
+                font-family: "Inter";
+                font-weight: 400;
+                font-size: 25px;
+                line-height: 120%;
+                width: 320px;
+                margin: 0;
+            }
+
+            img {
+                position: absolute;
+            }
+
+            .text_red {
+                background: linear-gradient(90deg, #eb6079 0%, #ee5193 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                font-family: "Inter";
+                font-weight: 400;
+                font-size: 25px;
+                line-height: 120%;
+                margin: 0;
+                padding: 0;
+            }
+
+            .text_lpurple {
+                color: #e79ed8;
+                font-family: "Inter";
+                font-weight: 400;
+                font-size: 25px;
+                line-height: 120%;
+                margin: 0;
+                padding: 0;
+                width: 340px;
+                height: min-content;
+            }
+
+            .text_purple {
+                color: #c09dff;
+                font-family: "Inter";
+                font-weight: 400;
+                font-size: 25px;
+                line-height: 120%;
+                margin: 0;
+                height: auto;
+                width: auto;
+                padding: 0;
+            }
+
+            .text_gold {
+                color: #f8ed89;
+                font-family: "Inter";
+                font-weight: 400;
+                font-size: 25px;
+                line-height: 120%;
+                margin: 0;
+                height: auto;
+                width: auto;
+                padding: 0;
+            }
         }
     }
 

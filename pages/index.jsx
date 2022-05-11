@@ -120,9 +120,15 @@ export default function Home() {
               </span>
             </div>
             <div className={styles.r2} >
-              <span style={{ backgroundImage: "url('/d_daoinfo_1.png')" }} ></span>
-              <span style={{ backgroundImage: "url('/d_daoinfo_2.png')" }}></span>
-              <span style={{ backgroundImage: "url('/d_daoinfo_3.png')" }}></span>
+              <span style={{ backgroundImage: "url('/d_daoinfo_1.png')" }}>
+                <h3>100% fully <span className={styles.text_purple}>On-chain Anonymous</span> and Gasless</h3>
+              </span>
+              <span style={{ backgroundImage: "url('/d_daoinfo_2.png')" }}>
+                <h3>Earn tips for your <span className={styles.text_gold}>genuine reviews</span></h3>
+              </span>
+              <span style={{ backgroundImage: "url('/d_daoinfo_3.png')" }}>
+                <h3><span className={styles.text_lpurple}>Discover, Join and Contribute</span>to DAOs</h3>
+              </span>
             </div>
           </div>
 
