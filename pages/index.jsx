@@ -161,7 +161,7 @@ export default function Home() {
               <p className={styles.th4}>Socials</p>
             </div>
             {
-              leaderboard.map((ele, idx) => {
+              daoList.map((ele, idx) => {
                 if (idx < 10) {
                   let medal = '/medal-blank.png';
 

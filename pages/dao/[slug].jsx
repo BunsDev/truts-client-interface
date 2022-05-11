@@ -214,7 +214,7 @@ function DaoPage() {
                         <div className={styles.socials} id={"rightPane"}>
                             <button onClick={() => {
                                 openNewTab(dao_data.twitter_link)
-                            }} className={styles.twitterBtn} style={{ borderColor: "#1da1f2" }}>
+                            }} className={styles.twitterBtn} style={{ borderColor: "#363636" }}>
                                 <img src="/twitter-white.png" alt="" />
                                 <p>{numFormatter(dao_data.twitter_followers)}</p>
                             </button>
@@ -228,7 +228,7 @@ function DaoPage() {
                             </button>
                             <button onClick={() => {
                                 openNewTab(dao_data.discord_link)
-                            }} className={styles.discordBtn} style={{ borderColor: "#4962FE" }}>
+                            }} className={styles.discordBtn} style={{ borderColor: "#363636" }}>
                                 <img src="/discord-white.png" alt="" />
                                 <p>5K members</p>
                             </button>
