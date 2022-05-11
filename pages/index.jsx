@@ -7,6 +7,7 @@ import axios from 'axios';
 import stringSimilarity from "string-similarity";
 import ClipboardJS from 'clipboard'
 import DaoCard from '../components/DaoCard';
+import Loader from '../utils/Loader';
 
 //import addSampleData from './../addSampleData'
 
@@ -31,7 +32,7 @@ export default function Home() {
 
   useEffect(() => {
     getDaolistAPI(setdaoList);
-    getLeaderboard(setleaderboard)
+    // getLeaderboard(setleaderboard)
     //addSampleData();
   }, [])
 
@@ -54,7 +55,7 @@ export default function Home() {
       }
     })
 
-  }, [])
+  }, [daoList])
 
   const [searchTerm, setsearchTerm] = useState("");
 
@@ -64,8 +65,11 @@ export default function Home() {
   //   setvisibleCardCountDivider(Math.ceil(daoList.length / 20))
   // }, [daoList])
 
+
+
   return (
     <>
+      {(daoList.length < 1) && <Loader />}
       <div className={styles.container_desktop}>
         <Head>
           <title>DAOverse</title>
@@ -250,7 +254,7 @@ export default function Home() {
         </section >
       </div >
       <div className={styles.container_mobile}>
-      <Nav data={daoList} topSearchVisible={topSearchVisible} />
+        <Nav data={daoList} topSearchVisible={topSearchVisible} />
         <div className={styles.m_hero}>
           <div className={styles.title}>
             <h3>Review DAOs to</h3>
