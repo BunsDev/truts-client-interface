@@ -933,7 +933,7 @@
         .suggestion {
             padding-top: 20px;
             margin: auto 0;
-            margin-left: 16px;
+            margin-left: 0px;
             display: grid;
             min-height: 100px;
             grid-template-columns: max-content max-content;
@@ -946,7 +946,7 @@
                 width: 50px;
                 height: 50px;
                 border-radius: 100%;
-                margin-right: 24px;
+                margin-right: 10px;
             }
 
             h1,
@@ -970,6 +970,10 @@
                 font-size: 14px;
             }
             border-bottom: 1.5px solid rgb(207, 207, 207);
+        }
+
+        .sug_desc{
+            display: none;
         }
     }
 }
