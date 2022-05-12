@@ -277,9 +277,11 @@
     }
 
     .con {
+        padding: 0;
         padding-top: 90px;
         padding-bottom: 0;
         flex-direction: column;
+
 
         .title,
         .subText {
@@ -296,5 +298,6 @@
         width: 100%;
         flex-wrap: wrap;
         justify-content: center;
+        
     }
 }
