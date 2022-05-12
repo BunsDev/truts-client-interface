@@ -63,7 +63,7 @@ export default function Index() {
                 }
                 else {
                     alert("not a member");
-                    location.href = location.href.split('/')[0]
+                    window.location.href = './'
                 }
             }
         }
