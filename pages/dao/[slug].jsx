@@ -113,7 +113,7 @@ function DaoPage() {
             </Head>
             <div className={styles.con}>
                 <InfoBar data={dao_data} />
-                <WalletModal  visible={walletModelVisible} setvisible={setwalletModelVisible} currentAddress={currentAddress} />
+                <WalletModal visible={walletModelVisible} setvisible={setwalletModelVisible} currentAddress={currentAddress} />
                 <Nav />
                 <div className={styles.cover}>
                     <img src={(dao_data.dao_cover) ? dao_data.dao_cover : "/dao-cover.png"} alt="" />
@@ -154,17 +154,17 @@ function DaoPage() {
                             <span className={styles.dialRow}>
                                 <div name={"q1"} className={styles.dialCon}>
                                     <Dial
-                                        percent={dao_data.question_list_rating.q1} />
+                                        percent={dao_data.reviews.at(-1).resonate_vibes_rate} />
                                     <p>Relate to the vibes!</p>
                                 </div>
                                 <div name={"q2"} className={styles.dialCon}>
                                     <Dial
-                                        percent={dao_data.question_list_rating.q2} />
+                                        percent={dao_data.reviews.at(-1).opinions_matter} />
                                     <p>says their opinions are been heard</p>
                                 </div>
                                 <div name={"q3"} className={styles.dialCon}>
                                     <Dial
-                                        percent={dao_data.question_list_rating.q3} />
+                                        percent={dao_data.reviews.at(-1).friend_recommend} />
                                     <p>Would you recommend to join this DAO</p>
                                 </div>
 
@@ -179,17 +179,19 @@ function DaoPage() {
                             {(!showAlldials) && <span style={(showAlldials) ? { display: 'none' } : null} className={styles.dialRow}>
                                 <div name={"q4"} className={styles.dialCon}>
                                     <Dial
-                                        percent={dao_data.question_list_rating.q4} />
+                                        percent={dao_data.reviews.at(-1).onboarding_exp
+                                        } />
                                     <p>DAO’s onboarding experience</p>
                                 </div>
                                 <div name={"q5"} className={styles.dialCon}>
                                     <Dial
-                                        percent={dao_data.question_list_rating.q5} />
+                                        percent={dao_data.reviews.at(-1).great_org_structure
+                                        } />
                                     <p>says DAO  great organizational structure</p>
                                 </div>
                                 <div name={"q6"} className={styles.dialCon}>
                                     <Dial
-                                        percent={dao_data.question_list_rating.q6} />
+                                        percent={dao_data.reviews.at(-1).great_incentives} />
                                     <p>says DAO has great incentives for members</p>
                                 </div>
                             </span>}
@@ -335,32 +337,32 @@ function DaoPage() {
                         <div className={styles.m_dialCon}>
                             <div className={styles.m_dial}>
                                 <Dial
-                                    percent={dao_data.question_list_rating.q4} />
+                                    percent={dao_data.reviews.at(-1).resonate_vibes_rate} />
                                 <p>Relate to the vibes!</p>
                             </div>
                             <div className={styles.m_dial}>
                                 <Dial
-                                    percent={dao_data.question_list_rating.q4} />
+                                    percent={dao_data.reviews.at(-1).opinions_matter} />
                                 <p>says their opinions are been heard</p>
                             </div>
                             <div className={styles.m_dial}>
                                 <Dial
-                                    percent={dao_data.question_list_rating.q4} />
+                                    percent={dao_data.reviews.at(-1).friend_recommend} />
                                 <p>Would you recommend to join this DAO</p>
                             </div>
                             <div className={styles.m_dial}>
                                 <Dial
-                                    percent={dao_data.question_list_rating.q4} />
+                                    percent={dao_data.reviews.at(-1).onboarding_exp} />
                                 <p>DAO’s onboarding experience</p>
                             </div>
                             <div className={styles.m_dial}>
                                 <Dial
-                                    percent={dao_data.question_list_rating.q4} />
+                                    percent={dao_data.reviews.at(-1).great_org_structure} />
                                 <p>says DAO  great organizational structure</p>
                             </div>
                             <div className={styles.m_dial}>
                                 <Dial
-                                    percent={dao_data.question_list_rating.q4} />
+                                    percent={dao_data.reviews.at(-1).great_incentives} />
                                 <p>says DAO has great incentives for members</p>
                             </div>
                         </div>
