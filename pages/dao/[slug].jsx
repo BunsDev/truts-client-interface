@@ -154,17 +154,17 @@ function DaoPage() {
                             <span className={styles.dialRow}>
                                 <div name={"q1"} className={styles.dialCon}>
                                     <Dial
-                                        percent={dao_data.reviews.at(-1).resonate_vibes_rate} />
+                                        percent={dao_data.reviews?.at(-1)?.resonate_vibes_rate || 50} />
                                     <p>Relate to the vibes!</p>
                                 </div>
                                 <div name={"q2"} className={styles.dialCon}>
                                     <Dial
-                                        percent={dao_data.reviews.at(-1).opinions_matter} />
+                                        percent={dao_data.reviews?.at(-1)?.opinions_matter || 50} />
                                     <p>says their opinions are been heard</p>
                                 </div>
                                 <div name={"q3"} className={styles.dialCon}>
                                     <Dial
-                                        percent={dao_data.reviews.at(-1).friend_recommend} />
+                                        percent={dao_data.reviews?.at(-1)?.friend_recommend || 50} />
                                     <p>Would you recommend to join this DAO</p>
                                 </div>
 
@@ -179,19 +179,19 @@ function DaoPage() {
                             {(!showAlldials) && <span style={(showAlldials) ? { display: 'none' } : null} className={styles.dialRow}>
                                 <div name={"q4"} className={styles.dialCon}>
                                     <Dial
-                                        percent={dao_data.reviews.at(-1).onboarding_exp
+                                        percent={dao_data.reviews?.at(-1)?.onboarding_exp || 50
                                         } />
                                     <p>DAO’s onboarding experience</p>
                                 </div>
                                 <div name={"q5"} className={styles.dialCon}>
                                     <Dial
-                                        percent={dao_data.reviews.at(-1).great_org_structure
+                                        percent={dao_data.reviews?.at(-1)?.great_org_structure || 50
                                         } />
                                     <p>says DAO  great organizational structure</p>
                                 </div>
                                 <div name={"q6"} className={styles.dialCon}>
                                     <Dial
-                                        percent={dao_data.reviews.at(-1).great_incentives} />
+                                        percent={dao_data.reviews?.at(-1)?.great_incentives || 50} />
                                     <p>says DAO has great incentives for members</p>
                                 </div>
                             </span>}
@@ -337,32 +337,32 @@ function DaoPage() {
                         <div className={styles.m_dialCon}>
                             <div className={styles.m_dial}>
                                 <Dial
-                                    percent={dao_data.reviews.at(-1).resonate_vibes_rate} />
+                                    percent={dao_data.reviews?.at(-1)?.resonate_vibes_rate || 50} />
                                 <p>Relate to the vibes!</p>
                             </div>
                             <div className={styles.m_dial}>
                                 <Dial
-                                    percent={dao_data.reviews.at(-1).opinions_matter} />
+                                    percent={dao_data.reviews?.at(-1)?.opinions_matter || 50} />
                                 <p>says their opinions are been heard</p>
                             </div>
                             <div className={styles.m_dial}>
                                 <Dial
-                                    percent={dao_data.reviews.at(-1).friend_recommend} />
+                                    percent={dao_data.reviews?.at(-1)?.friend_recommend || 50} />
                                 <p>Would you recommend to join this DAO</p>
                             </div>
                             <div className={styles.m_dial}>
                                 <Dial
-                                    percent={dao_data.reviews.at(-1).onboarding_exp} />
+                                    percent={dao_data.reviews?.at(-1)?.onboarding_exp || 50} />
                                 <p>DAO’s onboarding experience</p>
                             </div>
                             <div className={styles.m_dial}>
                                 <Dial
-                                    percent={dao_data.reviews.at(-1).great_org_structure} />
+                                    percent={dao_data.reviews?.at(-1)?.great_org_structure || 50} />
                                 <p>says DAO  great organizational structure</p>
                             </div>
                             <div className={styles.m_dial}>
                                 <Dial
-                                    percent={dao_data.reviews.at(-1).great_incentives} />
+                                    percent={dao_data.reviews?.at(-1)?.great_incentives || 50} />
                                 <p>says DAO has great incentives for members</p>
                             </div>
                         </div>
@@ -714,7 +714,7 @@ function Comment({ comment, address, rating, profile_img, openModel, data }) {
 
     const [currentRatingState, setcurrentRatingState] = useState('');
 
-    let p_img = (profile_img) ? profile_img : "/hero-bg.png"
+    let p_img = (profile_img) ? profile_img : "/hero-bg.jpg"
 
     useEffect(() => {
         const updateRating = async () => {
