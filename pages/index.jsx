@@ -321,17 +321,18 @@ export default function Home() {
           <div className={styles.m_daoList}>
             {
               daoList.map((ele, idx) => {
-                if (idx < (20 * visibleCardCountDivider))
-                  if (selectedTab == 'all') {
-                    return (
-                      <DaoCard link={ele.slug} data={ele} key={'c' + idx + selectedTab} />
-                    )
-                  } else {
-                    if (ele.dao_category.includes(selectedTab)) {
-                      return <DaoCard link={ele.slug} data={ele} key={'c' + idx + selectedTab} />
-                    }
+                if (selectedTab == 'all') {
+                  return (
+                    <DaoCard link={ele.slug} data={ele} key={'c' + idx + selectedTab} />
+                  )
+                } else {
+                  if (ele.dao_category.includes(selectedTab)) {
+                    return <DaoCard link={ele.slug} data={ele} key={'c' + idx + selectedTab} />
                   }
-              })
+                }
+              }).filter((ele) => {
+                if (ele) return true
+              }).reverse().splice(0, 20)
             }
             {<button className={styles.seeMoreBtn} onClick={() => {
               openNewTab(`${location.href.split('/')[0]}/dao-list`);

@@ -62,7 +62,8 @@ export default function Index() {
                     setdata(res.data);
                 }
                 else {
-                    alert("not a member")
+                    alert("not a member");
+                    location.href = location.href.split('/')[0]
                 }
             }
         }
