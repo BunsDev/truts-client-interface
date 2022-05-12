@@ -141,7 +141,7 @@ export default function Home() {
 
             <div className={styles.tagtabs} >
               {
-                ['all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal']
+                ['all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Event']
                   .map((tag) => {
                     let class_list = styles.tab;
                     if (tag == selectedTab) { class_list = class_list + ' ' + styles.selected }
@@ -311,7 +311,7 @@ export default function Home() {
             setselectedTab(e.target.value)
           }} >
             {
-              ['all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal'].map((ele, idx) => {
+              ['all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Event'].map((ele, idx) => {
                 return (
                   <option key={"idx" + idx} value={ele}>{ele}</option>
                 )

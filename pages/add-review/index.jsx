@@ -33,7 +33,7 @@ export default function Index() {
     const [data, setdata] = useState(null);
     const [dao_list, setdao_list] = useState(null);
 
-
+    const [id, setid] = useState(null);
 
     useEffect(() => {
         let cookie = window.getCookie = function (name) {
@@ -41,6 +41,7 @@ export default function Index() {
             if (match) return match[2];
         }
         let uid = window.location.href.split('=')[1];
+
         getDetails(cookie, uid)
     }, [])
 
@@ -48,7 +49,7 @@ export default function Index() {
     const getDetails = async (cookie, uid) => {
 
         let id = cookie('target')
-
+        setid(id);
         try {
             let res = await axios.get(`${process.env.API}/dao/get-dao-by-id?id=${id}`);
             let user = await axios.get(`${process.env.API}/auth/user?uid=${uid}`)
@@ -59,6 +60,9 @@ export default function Index() {
                 });
 
                 if (guild_list.includes(guild_id)) {
+                    setdata(res.data);
+                }
+                else if (id == '627c85db8ffffe001142935d') {
                     setdata(res.data);
                 }
                 else {
@@ -122,7 +126,12 @@ export default function Index() {
             "guild_id": guild_id,
             "public_address": public_address,
         }
-        window.location.href = `${API}/review/add-review?data=${JSON.stringify(postData)}`
+        if (id == '627c85db8ffffe001142935d') {
+            window.location.href = `${API}/review/add-review-event?data=${JSON.stringify(postData)}`
+        }
+        else {
+            window.location.href = `${API}/review/add-review?data=${JSON.stringify(postData)}`
+        }
     }
 
 
