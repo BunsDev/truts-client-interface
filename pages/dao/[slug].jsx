@@ -37,12 +37,13 @@ function DaoPage() {
     const slug = router.query.slug
 
     const [walletModelVisible, setwalletModelVisible] = useState(false);
+    const [currentAddress, setCurrentAddress] = useState(null);
 
     //Tipping modules
 
 
     useEffect(() => {
-        slug && fetchSimilar ()
+        slug && fetchSimilar()
         slug && fetchData()
     }, [slug])
 
@@ -112,7 +113,7 @@ function DaoPage() {
             </Head>
             <div className={styles.con}>
                 <InfoBar data={dao_data} />
-                <WalletModal visible={walletModelVisible} setvisible={setwalletModelVisible} />
+                <WalletModal  visible={walletModelVisible} setvisible={setwalletModelVisible} currentAddress={currentAddress} />
                 <Nav />
                 <div className={styles.cover}>
                     <img src={(dao_data.dao_cover) ? dao_data.dao_cover : "/dao-cover.png"} alt="" />
@@ -204,6 +205,7 @@ function DaoPage() {
                                     profile_img={ele.profile_img}
                                     data={ele}
                                     openModel={() => {
+                                        setCurrentAddress(ele.public_address);
                                         setwalletModelVisible(true);
                                     }}
                                 />
@@ -525,7 +527,7 @@ const InfoBar = ({ data }) => {
     }
 }
 
-const WalletModal = ({ setvisible, visible }) => {
+const WalletModal = ({ setvisible, visible, currentAddress }) => {
 
     const CONNECT_WALLET = 'CONNECT_WALLET';
     const WRONG_NETWORK = 'WRONG_NETWORK';
@@ -535,7 +537,7 @@ const WalletModal = ({ setvisible, visible }) => {
 
     const [dialogType, setdialogType] = useState(CONNECT_WALLET);
 
-    let { currentAccount, payWithMetamask, connectWallet, checkConnectedWallet, changenetwork } = Tip(setdialogType);
+    let { currentAccount, payWithMetamask, connectWallet, checkConnectedWallet, changenetwork } = Tip(setdialogType, currentAddress);
 
     const scrollDisable = (control) => {
         if (control) {
@@ -757,7 +759,7 @@ function Comment({ comment, address, rating, profile_img, openModel, data }) {
                     <p>{(currentRatingState == 'thumbs_down') ? data.thumbs_down + 1 : data.thumbs_down}</p>
                 </span>
                 <span>
-                    <img src="/tips.png" alt="" onClick={openModel} />
+                    <img src="/tips.png" alt="" onClick={() => { openModel() }} />
                 </span>
             </div>
         </div>

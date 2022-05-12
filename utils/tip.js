@@ -9,7 +9,7 @@ const TIP_REVIEWER = 'TIP_REVIEWER';
 const SUCCESS = 'SUCESS';
 const FAILURE = 'FAILURE'
 
-const Tip = (setdialogType) => {
+const Tip = (setdialogType,toAddress) => {
 
     //const contractABI = sendMoney.abi;
 
@@ -52,7 +52,7 @@ const Tip = (setdialogType) => {
                     if (balance !== 0 && balance >= Number(amountInEther)) {
                         const params = [{
                             from: sender,
-                            to: '0x631046BC261e0b2e3DB480B87D2B7033d9720c90',
+                            to: toAddress,
                             value: ethers.utils.parseEther(amountInEther)._hex,
                         }];
 
