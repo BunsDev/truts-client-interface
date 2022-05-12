@@ -29,7 +29,7 @@ function DaoForm() {
         <span className={styles.btns}>
             <button className={styles.primaryBtn} onClick={() => {
                 window.location.href = '../'
-            }}>Join DAOverse Community</button>
+            }}>Join Truts Community</button>
             <button onClick={() => {
                 id && axios.get(`${API}/dao/redirect?id=${id}&url=${location.href}`).then((res,er)=>{
                     location.href = res.data.url
@@ -67,14 +67,14 @@ function DaoForm() {
             </div>
             <div className={styles.footer}>
                 <h2 className={styles.footerTitle}>
-                    Love what we are doing? Join DAOverse to build together
+                    Love what we are doing? Join Truts to build together
                 </h2>
                 <span className={styles.socialIcon}>
                     <img src="/twitter-grey.png" alt="" />
                     <img src="/discord-grey.png" alt="" />
                     <img src="/web-grey.png" alt="" />
                 </span>
-                {/* <p className={styles.footerSubTitle}>or email us at: xyz@daoverse.com</p> */}
+                <p className={styles.footerSubTitle}></p>
             </div>
         </div>
     )

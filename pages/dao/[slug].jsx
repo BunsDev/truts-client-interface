@@ -449,7 +449,7 @@ function DaoPage() {
                             <img src="/discord-grey.png" alt="" />
                             <img src="/web-grey.png" alt="" />
                         </span>
-                        <p className={styles.footerSubTitle}>or email us at: xyz@truts.xyz</p>
+                        <p className={styles.footerSubTitle}></p>
                     </div>
                 </div>
             </div>

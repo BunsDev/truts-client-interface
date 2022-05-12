@@ -75,7 +75,7 @@ function DaoForm() {
             <Nav />
             <form className={styles.form} onSubmit={(e) => { e.preventDefault(); submitForm() }}>
                 <h1 className={styles.title}>Application for listing your DAO</h1>
-                <p className={styles.subtitle}>Please fill the basic information of your DAO to list your DAO on DAOverse. </p>
+                <p className={styles.subtitle}>Please fill the basic information of your DAO to list your DAO on Truts. </p>
 
                 <span className={styles.input}>
                     <p>What’s the name of your DAO?</p>
@@ -212,14 +212,14 @@ function DaoForm() {
 
             <div className={styles.footer}>
                 <h2 className={styles.footerTitle}>
-                    Love what we are doing? Join DAOverse to build together
+                    Love what we are doing? Join Truts to build together
                 </h2>
                 <span className={styles.socialIcon}>
                     <img src="/twitter-grey.png" alt="" />
                     <img src="/discord-grey.png" alt="" />
                     <img src="/web-grey.png" alt="" />
                 </span>
-                <p className={styles.footerSubTitle}>or email us at: xyz@daoverse.com</p>
+                <p className={styles.footerSubTitle}></p>
             </div>
         </div>
     )

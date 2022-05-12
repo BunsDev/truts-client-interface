@@ -273,14 +273,14 @@ export default function Home() {
           </div>
           <div className={styles.footer}>
             <h2 className={styles.footerTitle}>
-              Love what we are doing? Join DAOverse to build together
+              Love what we are doing? Join Truts to build together
             </h2>
             <span className={styles.socialIcon}>
               <img src="/twitter-grey.png" alt="" />
               <img src="/discord-grey.png" alt="" />
               <img src="/web-grey.png" alt="" />
             </span>
-            <p className={styles.footerSubTitle}>or email us at: xyz@daoverse.com</p>
+            <p className={styles.footerSubTitle}></p>
           </div>
         </section >
       </div >
@@ -428,14 +428,14 @@ export default function Home() {
           </div>
           <div className={styles.footer}>
             <h2 className={styles.footerTitle}>
-              Love what we are doing? Join DAOverse to build together
+              Love what we are doing? Join Truts to build together
             </h2>
             <span className={styles.socialIcon}>
               <img src="/twitter-grey.png" alt="" />
               <img src="/discord-grey.png" alt="" />
               <img src="/web-grey.png" alt="" />
             </span>
-            <p className={styles.footerSubTitle}>or email us at: xyz@daoverse.com</p>
+            <p className={styles.footerSubTitle}></p>
           </div>
         </div>
       </div>
