@@ -260,7 +260,7 @@ export default function Home() {
                 </div>
               </div>
               <div className={styles.reviewCard + ' ' + styles.r3}>
-                <p>Superteam is a community that helps and uplifts all it's members and solana ecosystem. They help you grow both financially and socially. It's not a DAO it's a place where you make friends for life. The best part is there's opportunity for people from all the areas be it dev, design, marketing, content or memes. Would definitely recommend everyone to have this super experience. WAGMI.</p>
+                <p>Superteam is a community that helps and uplifts all it`s members and solana ecosystem. They help you grow both financially and socially. It`s not a DAO it`s a place where you make friends for life. The best part is there`s opportunity for people from all the areas be it dev, design, marketing, content or memes. Would definitely recommend everyone to have this super experience. WAGMI.</p>
                 <div className={styles.profile}>
                   <img className={styles.commaFloat} src="/comma-float.png" alt="" />
                   <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
