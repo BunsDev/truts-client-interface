@@ -154,17 +154,17 @@ function DaoPage() {
                             <span className={styles.dialRow}>
                                 <div name={"q1"} className={styles.dialCon}>
                                     <Dial
-                                        percent={dao_data.reviews?.at(-1)?.resonate_vibes_rate || 50} />
+                                        percent={getAverageRating(dao_data?.reviews, 'resonate_vibes_rate')} />
                                     <p>Relate to the vibes!</p>
                                 </div>
                                 <div name={"q2"} className={styles.dialCon}>
                                     <Dial
-                                        percent={dao_data.reviews?.at(-1)?.opinions_matter || 50} />
+                                        percent={getAverageRating(dao_data?.reviews, 'opinions_matter')} />
                                     <p>says their opinions are been heard</p>
                                 </div>
                                 <div name={"q3"} className={styles.dialCon}>
                                     <Dial
-                                        percent={dao_data.reviews?.at(-1)?.friend_recommend || 50} />
+                                        percent={getAverageRating(dao_data?.reviews, 'friend_recommend')} />
                                     <p>Would you recommend to join this DAO</p>
                                 </div>
 
@@ -179,19 +179,19 @@ function DaoPage() {
                             {(!showAlldials) && <span style={(showAlldials) ? { display: 'none' } : null} className={styles.dialRow}>
                                 <div name={"q4"} className={styles.dialCon}>
                                     <Dial
-                                        percent={dao_data.reviews?.at(-1)?.onboarding_exp || 50
+                                        percent={getAverageRating(dao_data?.reviews, 'onboarding_exp')
                                         } />
                                     <p>DAO’s onboarding experience</p>
                                 </div>
                                 <div name={"q5"} className={styles.dialCon}>
                                     <Dial
-                                        percent={dao_data.reviews?.at(-1)?.great_org_structure || 50
+                                        percent={getAverageRating(dao_data?.reviews, 'great_org_structure')
                                         } />
                                     <p>says DAO  great organizational structure</p>
                                 </div>
                                 <div name={"q6"} className={styles.dialCon}>
                                     <Dial
-                                        percent={dao_data.reviews?.at(-1)?.great_incentives || 50} />
+                                        percent={getAverageRating(dao_data?.reviews, 'great_incentives')} />
                                     <p>says DAO has great incentives for members</p>
                                 </div>
                             </span>}
@@ -337,32 +337,32 @@ function DaoPage() {
                         <div className={styles.m_dialCon}>
                             <div className={styles.m_dial}>
                                 <Dial
-                                    percent={dao_data.reviews?.at(-1)?.resonate_vibes_rate || 50} />
+                                    percent={getAverageRating(dao_data?.reviews, 'resonate_vibes_rate')} />
                                 <p>Relate to the vibes!</p>
                             </div>
                             <div className={styles.m_dial}>
                                 <Dial
-                                    percent={dao_data.reviews?.at(-1)?.opinions_matter || 50} />
+                                    percent={getAverageRating(dao_data?.reviews, 'opinions_matter')} />
                                 <p>says their opinions are been heard</p>
                             </div>
                             <div className={styles.m_dial}>
                                 <Dial
-                                    percent={dao_data.reviews?.at(-1)?.friend_recommend || 50} />
+                                    percent={getAverageRating(dao_data?.reviews, 'friend_recommend')} />
                                 <p>Would you recommend to join this DAO</p>
                             </div>
                             <div className={styles.m_dial}>
                                 <Dial
-                                    percent={dao_data.reviews?.at(-1)?.onboarding_exp || 50} />
+                                    percent={getAverageRating(dao_data?.reviews, 'onboarding_exp')} />
                                 <p>DAO’s onboarding experience</p>
                             </div>
                             <div className={styles.m_dial}>
                                 <Dial
-                                    percent={dao_data.reviews?.at(-1)?.great_org_structure || 50} />
+                                    percent={getAverageRating(dao_data?.reviews, 'great_org_structure')} />
                                 <p>says DAO  great organizational structure</p>
                             </div>
                             <div className={styles.m_dial}>
                                 <Dial
-                                    percent={dao_data.reviews?.at(-1)?.great_incentives || 50} />
+                                    percent={getAverageRating(dao_data?.reviews, 'great_incentives')} />
                                 <p>says DAO has great incentives for members</p>
                             </div>
                         </div>
@@ -459,6 +459,20 @@ function DaoPage() {
             </div>
         </>
     )
+}
+
+const getAverageRating = (list, key) => {
+    let avg = 50;
+    let sum = 0;
+    if (list?.length > 0) {
+        list.forEach((ele) => {
+            sum = sum + ele[key];
+            console.log(sum)
+        })
+        avg = Math.ceil(sum / list.length);
+    }
+
+    return avg;
 }
 
 const InfoBar = ({ data }) => {

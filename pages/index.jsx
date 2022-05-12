@@ -240,33 +240,33 @@ export default function Home() {
             </h1>
             <div className={styles.reviewCon}>
               <div className={styles.reviewCard + ' ' + styles.r1}>
-                <p>Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint.</p>
+                <p>SuperteamDAO is a crazy community, being build by crazy people, helping Web3 flourish alll around, making solana a global enabler for web3. Super cool floks backing super cool projects. Definitely community to be part off. 🚀🚀</p>
                 <div className={styles.profile}>
                   <img className={styles.commaFloat} src="/comma-float.png" alt="" />
-                  <img style={{ gridArea: 'a' }} className={styles.profileImg} src="https://assets-global.website-files.com/5ec7dad2e6f6295a9e2a23dd/5edfa7c6f978e75372dc332e_profilephoto1.jpeg" alt="" />
-                  <p>Van Goh</p>
-                  <p className={styles.dao_name}>Uniswap</p>
-                  <Starrating rating={4} />
+                  <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
+                  <p>0x...f4b1</p>
+                  <p className={styles.dao_name}>SuperteamDAO</p>
+                  <Starrating rating={5} />
                 </div>
               </div>
               <div className={styles.reviewCard + ' ' + styles.r2}>
-                <p>Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint.</p>
+                <p>Yooo Memers, The OG Lords of memes at one place. Crazy community for crazy people. Find your vibe here at one place. Post memes and engage and share it with memers... Definitely a place to be for GFD🚀 folks..</p>
                 <div className={styles.profile}>
                   <img className={styles.commaFloat} src="/comma-float.png" alt="" />
-                  <img style={{ gridArea: 'a' }} className={styles.profileImg} src="https://assets-global.website-files.com/5ec7dad2e6f6295a9e2a23dd/5edfa7c6f978e75372dc332e_profilephoto1.jpeg" alt="" />
-                  <p>Van Goh</p>
-                  <p className={styles.dao_name}>Uniswap</p>
+                  <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
+                  <p>0x...e631</p>
+                  <p className={styles.dao_name}>MemeDAO</p>
                   <Starrating rating={4} />
                 </div>
               </div>
               <div className={styles.reviewCard + ' ' + styles.r3}>
-                <p>Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint.</p>
+                <p>Superteam is a community that helps and uplifts all it's members and solana ecosystem. They help you grow both financially and socially. It's not a DAO it's a place where you make friends for life. The best part is there's opportunity for people from all the areas be it dev, design, marketing, content or memes. Would definitely recommend everyone to have this super experience. WAGMI.</p>
                 <div className={styles.profile}>
                   <img className={styles.commaFloat} src="/comma-float.png" alt="" />
-                  <img style={{ gridArea: 'a' }} className={styles.profileImg} src="https://assets-global.website-files.com/5ec7dad2e6f6295a9e2a23dd/5edfa7c6f978e75372dc332e_profilephoto1.jpeg" alt="" />
-                  <p>Van Goh</p>
-                  <p className={styles.dao_name}>Uniswap</p>
-                  <Starrating rating={4} />
+                  <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
+                  <p>0x...35dc</p>
+                  <p className={styles.dao_name}>SuperteamDAO</p>
+                  <Starrating rating={5} />
                 </div>
               </div>
             </div>
@@ -416,7 +416,7 @@ export default function Home() {
               </div>
             </div>
             <div className={styles.reviewCard + ' ' + styles.r3}>
-              <p>Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint.</p>
+              <p>Yooo Memers, The OG Lords of memes at one place. Crazy community for crazy people. Find your vibe here at one place. Post memes and engage and share it with memers... Definitely a place to be for GFD🚀 folks..</p>
               <div className={styles.profile}>
                 <img className={styles.commaFloat} src="/comma-float.png" alt="" />
                 <img style={{ gridArea: 'a' }} className={styles.profileImg} src="https://assets-global.website-files.com/5ec7dad2e6f6295a9e2a23dd/5edfa7c6f978e75372dc332e_profilephoto1.jpeg" alt="" />
