@@ -283,7 +283,7 @@ export default function Index() {
                                 </div>
                             </div>
                             <div className={styles.reviewCard + ' ' + styles.r1}>
-                                <p>Yooo Memers, The OG Lords of memes at one place. Crazy community for crazy people. Find your vibe here at one place. Post memes and engage and share it with memers... Definitely a place to be for GFD🚀 folks..</p>
+                                <p>Yooo Memers, The OG Lords of memes at one place. Crazy community for crazy people. Find your vibe here at one place. Post memes and engage and share it with memers... Definitely a place to be for the🚀 folks..</p>
                                 <div className={styles.profile}>
                                     <img className={styles.commaFloat} src="/comma-float.png" alt="" />
                                     <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />

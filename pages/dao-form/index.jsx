@@ -21,6 +21,14 @@ let formObject = {
     "additional_details": "string"
 }
 
+const openNewTab = (url) => {
+    if (url.length < 1) return
+    let a = document.createElement('a');
+    a.target = '_blank';
+    a.href = url;
+    a.click();
+  }
+
 function DaoForm() {
 
     const [formData, setFormData] = useState({});
@@ -215,10 +223,10 @@ function DaoForm() {
                     Love what we are doing? Join Truts to build together
                 </h2>
                 <span className={styles.socialIcon}>
-                    <img src="/twitter-grey.png" alt="" />
-                    <img src="/discord-grey.png" alt="" />
-                    <img src="/web-grey.png" alt="" />
-                </span>
+              <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
+              {/* <img src="/discord-grey.png" alt="" /> */}
+              <img onClick={() => { openNewTab('https://truts.xyz') }} src="/web-grey.png" alt="" />
+            </span>
                 <p className={styles.footerSubTitle}></p>
             </div>
         </div>

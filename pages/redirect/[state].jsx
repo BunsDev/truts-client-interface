@@ -4,6 +4,14 @@ import Nav from '../../components/Nav'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 
+const openNewTab = (url) => {
+    if (url.length < 1) return
+    let a = document.createElement('a');
+    a.target = '_blank';
+    a.href = url;
+    a.click();
+  }
+
 const API = process.env.API;
 
 function DaoForm() {
@@ -31,7 +39,7 @@ function DaoForm() {
                 window.location.href = '../'
             }}>Join Truts Community</button>
             <button onClick={() => {
-                id && axios.get(`${API}/dao/redirect?id=${id}&url=${location.href}`).then((res,er)=>{
+                id && axios.get(`${API}/dao/redirect?id=${id}&url=${location.href}`).then((res, er) => {
                     location.href = res.data.url
                 })
             }}>See Related Reviews</button>
@@ -70,9 +78,9 @@ function DaoForm() {
                     Love what we are doing? Join Truts to build together
                 </h2>
                 <span className={styles.socialIcon}>
-                    <img src="/twitter-grey.png" alt="" />
-                    <img src="/discord-grey.png" alt="" />
-                    <img src="/web-grey.png" alt="" />
+                    <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
+                    {/* <img src="/discord-grey.png" alt="" /> */}
+                    <img onClick={() => { openNewTab('https://truts.xyz') }} src="/web-grey.png" alt="" />
                 </span>
                 <p className={styles.footerSubTitle}></p>
             </div>

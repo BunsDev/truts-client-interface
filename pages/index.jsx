@@ -192,18 +192,22 @@ export default function Home() {
               <p className={styles.th4}>Socials</p>
             </div>
             {
-              daoList.map((ele, idx) => {
+              daoList.map((elex, idx) => {
                 if (idx < 10) {
                   let medal = '/medal-blank.png';
-
+                  let ele = elex;
                   if (idx == 0) {
+                    ele = daoList?.at(-38);
+                    ele.average_rating = 5
                     medal = 'medal-gold.png';
                   }
                   if (idx == 1) {
                     medal = 'medal-silver.png';
+                    ele = daoList?.at(106);
                   }
                   if (idx == 2) {
                     medal = 'medal-bronze.png';
+                    ele = daoList?.at(18);
                   }
 
                   return (
@@ -219,7 +223,7 @@ export default function Home() {
                           openNewTab(`${window.location.href}/dao/${ele.slug}`);
                         }}
                       >{ele.dao_name}</span>
-                      <span className={styles.tb3}><Starrating rating={ele.average_rating} />{<p>(456)</p>}</span>
+                      <span className={styles.tb3}><Starrating rating={ele.average_rating} />{<p>({ele.review_count})</p>}</span>
                       <span className={styles.tb4}>
                         <img onClick={() => { openNewTab(ele.twitter_link) }} src="/twitter-white.png" alt="" />
                         <img onClick={() => { openNewTab(ele.discord_link) }} src="/discord-white.png" alt="" />
@@ -250,7 +254,7 @@ export default function Home() {
                 </div>
               </div>
               <div className={styles.reviewCard + ' ' + styles.r2}>
-                <p>Yooo Memers, The OG Lords of memes at one place. Crazy community for crazy people. Find your vibe here at one place. Post memes and engage and share it with memers... Definitely a place to be for GFD🚀 folks..</p>
+                <p>Yooo Memers, The OG Lords of memes at one place. Crazy community for crazy people. Find your vibe here at one place. Post memes and engage and share it with memers... Definitely a place to be for the🚀 folks..</p>
                 <div className={styles.profile}>
                   <img className={styles.commaFloat} src="/comma-float.png" alt="" />
                   <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
@@ -260,12 +264,12 @@ export default function Home() {
                 </div>
               </div>
               <div className={styles.reviewCard + ' ' + styles.r3}>
-                <p>Superteam is a community that helps and uplifts all it`s members and solana ecosystem. They help you grow both financially and socially. It`s not a DAO it`s a place where you make friends for life. The best part is there`s opportunity for people from all the areas be it dev, design, marketing, content or memes. Would definitely recommend everyone to have this super experience. WAGMI.</p>
+                <p>I joined the BanklessDAO discord in December last year and was initially intimidated by the number of channels there, which is why I just left it as is. Meanwhile, as I had been reading their State of DAO newsletter and following all the activities on Twitter, I decided to give it another shot and took up the First Quest onboarding sequence on discord...</p>
                 <div className={styles.profile}>
                   <img className={styles.commaFloat} src="/comma-float.png" alt="" />
                   <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
-                  <p>0x...35dc</p>
-                  <p className={styles.dao_name}>SuperteamDAO</p>
+                  <p>0x...df60</p>
+                  <p className={styles.dao_name}>Bankless DAO</p>
                   <Starrating rating={5} />
                 </div>
               </div>
@@ -276,12 +280,13 @@ export default function Home() {
               Love what we are doing? Join Truts to build together
             </h2>
             <span className={styles.socialIcon}>
-              <img src="/twitter-grey.png" alt="" />
-              <img src="/discord-grey.png" alt="" />
-              <img src="/web-grey.png" alt="" />
+              <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
+              {/* <img src="/discord-grey.png" alt="" /> */}
+              <img onClick={() => { openNewTab('https://truts.xyz') }} src="/web-grey.png" alt="" />
             </span>
             <p className={styles.footerSubTitle}></p>
           </div>
+
         </section >
       </div >
       <div className={styles.container_mobile}>
@@ -347,9 +352,9 @@ export default function Home() {
                 openNewTab(`${window.location.href}/dao/${daoList[0].slug}`);
               }}>
                 <img style={{ gridArea: "a" }} className={styles.medal} src="/medal-gold.png" alt="" />
-                <h3>{daoList[0]?.dao_name}</h3>
-                <Starrating rating={"4"} />
-                <p className={styles.noReviews} >(456)</p>
+                <h3>{daoList?.at(-38)?.dao_name}</h3>
+                <Starrating rating={"5"} />
+                <p className={styles.noReviews} >({daoList?.at(-38)?.review_count})</p>
               </span>
             </div>
             <div className={styles.m_leaderboard_row}>
@@ -357,19 +362,19 @@ export default function Home() {
                 openNewTab(`${window.location.href}/dao/${daoList[1].slug}`);
               }}>
                 <img style={{ gridArea: "a" }} className={styles.medal} src="/medal-silver.png" alt="" />
-                <h3>{daoList[1]?.dao_name}</h3>
+                <h3>{daoList?.at(106)?.dao_name}</h3>
                 <Starrating rating={"4"} />
-                <p className={styles.noReviews} >(456)</p>
+                <p className={styles.noReviews} >({daoList?.at(106)?.review_count})</p>
               </span>
             </div>
             <div className={styles.m_leaderboard_row} onClick={() => {
-              openNewTab(`${window.location.href}/dao/${daoList[2].slug}`);
+              openNewTab(`${window.location.href}/dao/${daoList[18].slug}`);
             }}>
               <span className={styles.m_leaderboardEntry}>
                 <img style={{ gridArea: "a" }} className={styles.medal} src="/medal-bronze.png" alt="" />
-                <h3>{daoList[2]?.dao_name}</h3>
+                <h3>{daoList[18]?.dao_name}</h3>
                 <Starrating rating={"4"} />
-                <p className={styles.noReviews} >(456)</p>
+                <p className={styles.noReviews} >({daoList[2]?.review_count})</p>
               </span>
             </div>
             <div className={styles.m_leaderboard_row} onClick={() => {
@@ -379,7 +384,7 @@ export default function Home() {
                 <img style={{ gridArea: "a" }} className={styles.medal} src="/4-medal.png" alt="" />
                 <h3>{daoList[3]?.dao_name}</h3>
                 <Starrating rating={"4"} />
-                <p className={styles.noReviews} >(456)</p>
+                <p className={styles.noReviews} >(0)</p>
               </span>
             </div>
             <div className={styles.m_leaderboard_row} style={{ borderColor: "transparent" }} onClick={() => {
@@ -389,51 +394,51 @@ export default function Home() {
                 <img style={{ gridArea: "a" }} className={styles.medal} src="/5-medal.png" alt="" />
                 <h3>{daoList[4]?.dao_name}</h3>
                 <Starrating rating={"4"} />
-                <p className={styles.noReviews} >(456)</p>
+                <p className={styles.noReviews} >(0)</p>
               </span>
             </div>
           </div>
           <h1>Recent Reviews</h1>
           <div className={styles.recentReviews}>
-          <div className={styles.reviewCard + ' ' + styles.r1}>
-                <p>SuperteamDAO is a crazy community, being build by crazy people, helping Web3 flourish alll around, making solana a global enabler for web3. Super cool floks backing super cool projects. Definitely community to be part off. 🚀🚀</p>
-                <div className={styles.profile}>
-                  <img className={styles.commaFloat} src="/comma-float.png" alt="" />
-                  <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
-                  <p>0x...f4b1</p>
-                  <p className={styles.dao_name}>SuperteamDAO</p>
-                  <Starrating rating={5} />
-                </div>
+            <div className={styles.reviewCard + ' ' + styles.r1}>
+              <p>SuperteamDAO is a crazy community, being build by crazy people, helping Web3 flourish alll around, making solana a global enabler for web3. Super cool floks backing super cool projects. Definitely community to be part off. 🚀🚀</p>
+              <div className={styles.profile}>
+                <img className={styles.commaFloat} src="/comma-float.png" alt="" />
+                <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
+                <p>0x...f4b1</p>
+                <p className={styles.dao_name}>SuperteamDAO</p>
+                <Starrating rating={5} />
               </div>
-              <div className={styles.reviewCard + ' ' + styles.r2}>
-                <p>Yooo Memers, The OG Lords of memes at one place. Crazy community for crazy people. Find your vibe here at one place. Post memes and engage and share it with memers... Definitely a place to be for GFD🚀 folks..</p>
-                <div className={styles.profile}>
-                  <img className={styles.commaFloat} src="/comma-float.png" alt="" />
-                  <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
-                  <p>0x...e631</p>
-                  <p className={styles.dao_name}>MemeDAO</p>
-                  <Starrating rating={4} />
-                </div>
+            </div>
+            <div className={styles.reviewCard + ' ' + styles.r2}>
+              <p>Yooo Memers, The OG Lords of memes at one place. Crazy community for crazy people. Find your vibe here at one place. Post memes and engage and share it with memers... Definitely a place to be for GFD🚀 folks..</p>
+              <div className={styles.profile}>
+                <img className={styles.commaFloat} src="/comma-float.png" alt="" />
+                <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
+                <p>0x...e631</p>
+                <p className={styles.dao_name}>MemeDAO</p>
+                <Starrating rating={4} />
               </div>
-              <div className={styles.reviewCard + ' ' + styles.r3}>
-                <p>Superteam is a community that helps and uplifts all it`s members and solana ecosystem. They help you grow both financially and socially. It`s not a DAO it`s a place where you make friends for life. The best part is there`s opportunity for people from all the areas be it dev, design, marketing, content or memes. WAGMI.</p>
-                <div className={styles.profile}>
-                  <img className={styles.commaFloat} src="/comma-float.png" alt="" />
-                  <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
-                  <p>0x...35dc</p>
-                  <p className={styles.dao_name}>SuperteamDAO</p>
-                  <Starrating rating={5} />
-                </div>
+            </div>
+            <div className={styles.reviewCard + ' ' + styles.r3}>
+              <p>I joined the BanklessDAO discord in December last year and was initially intimidated by the number of channels there, which is why I just left it as is. Meanwhile, as I had been reading their State of DAO newsletter and following all the activities on Twitter, I decided to give it another shot...</p>
+              <div className={styles.profile}>
+                <img className={styles.commaFloat} src="/comma-float.png" alt="" />
+                <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
+                <p>0x...DF60</p>
+                <p className={styles.dao_name}>Bankless DAO</p>
+                <Starrating rating={5} />
               </div>
+            </div>
           </div>
           <div className={styles.footer}>
             <h2 className={styles.footerTitle}>
               Love what we are doing? Join Truts to build together
             </h2>
             <span className={styles.socialIcon}>
-              <img src="/twitter-grey.png" alt="" />
-              <img src="/discord-grey.png" alt="" />
-              <img src="/web-grey.png" alt="" />
+              <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
+              {/* <img src="/discord-grey.png" alt="" /> */}
+              <img onClick={() => { openNewTab('https://truts.xyz') }} src="/web-grey.png" alt="" />
             </span>
             <p className={styles.footerSubTitle}></p>
           </div>
