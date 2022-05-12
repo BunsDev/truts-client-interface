@@ -274,48 +274,48 @@ export default function Index() {
                         <h3>Recent reviews</h3>
                         <div className={styles.scrollBar}>
                             <div className={styles.reviewCard + ' ' + styles.r1}>
-                                <p>Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint.</p>
+                                <p>SuperteamDAO is a crazy community, being build by crazy people, helping Web3 flourish alll around, making solana a global enabler for web3. Super cool floks backing super cool projects. Definitely community to be part off. 🚀🚀</p>
                                 <div className={styles.profile}>
                                     <img className={styles.commaFloat} src="/comma-float.png" alt="" />
-                                    <img style={{ gridArea: 'a' }} className={styles.profileImg} src="https://assets-global.website-files.com/5ec7dad2e6f6295a9e2a23dd/5edfa7c6f978e75372dc332e_profilephoto1.jpeg" alt="" />
-                                    <p>Van Goh</p>
-                                    <Starrating rating={4} />
+                                    <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
+                                    <p>0x...f4b1</p>
+                                    <Starrating rating={5} />
                                 </div>
                             </div>
                             <div className={styles.reviewCard + ' ' + styles.r1}>
-                                <p>Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint.</p>
+                                <p>Yooo Memers, The OG Lords of memes at one place. Crazy community for crazy people. Find your vibe here at one place. Post memes and engage and share it with memers... Definitely a place to be for GFD🚀 folks..</p>
                                 <div className={styles.profile}>
                                     <img className={styles.commaFloat} src="/comma-float.png" alt="" />
-                                    <img style={{ gridArea: 'a' }} className={styles.profileImg} src="https://assets-global.website-files.com/5ec7dad2e6f6295a9e2a23dd/5edfa7c6f978e75372dc332e_profilephoto1.jpeg" alt="" />
-                                    <p>Van Goh</p>
-                                    <Starrating rating={4} />
+                                    <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
+                                    <p>0x...e631</p>
+                                    <Starrating rating={5} />
                                 </div>
                             </div>
                             <div className={styles.reviewCard + ' ' + styles.r1}>
-                                <p>Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint.</p>
+                                <p>Superteam is a community that helps and uplifts all it`s members and solana ecosystem. They help you grow both financially and socially. It`s not a DAO it`s a place where you make friends for life. The best part is there`s opportunity for people from all the areas be it dev, design, marketing, content or memes. WAGMI.</p>
                                 <div className={styles.profile}>
                                     <img className={styles.commaFloat} src="/comma-float.png" alt="" />
-                                    <img style={{ gridArea: 'a' }} className={styles.profileImg} src="https://assets-global.website-files.com/5ec7dad2e6f6295a9e2a23dd/5edfa7c6f978e75372dc332e_profilephoto1.jpeg" alt="" />
-                                    <p>Van Goh</p>
-                                    <Starrating rating={4} />
+                                    <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
+                                    <p>0x...c130</p>
+                                    <Starrating rating={5} />
                                 </div>
                             </div>
                             <div className={styles.reviewCard + ' ' + styles.r1}>
-                                <p>Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint.</p>
+                                <p>Superteam DAO is a super awesome community. Superteam folks are always buidling cool stuff for the Solana ecosystem. Everyone contribute their absolute best in every way possible. As a part of the community, I can guarantee a great potential to learn and explore the web3 ecosystem. </p>
                                 <div className={styles.profile}>
                                     <img className={styles.commaFloat} src="/comma-float.png" alt="" />
-                                    <img style={{ gridArea: 'a' }} className={styles.profileImg} src="https://assets-global.website-files.com/5ec7dad2e6f6295a9e2a23dd/5edfa7c6f978e75372dc332e_profilephoto1.jpeg" alt="" />
-                                    <p>Van Goh</p>
-                                    <Starrating rating={4} />
+                                    <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
+                                    <p>0x...z707</p>
+                                    <Starrating rating={5} />
                                 </div>
                             </div>
                             <div className={styles.reviewCard + ' ' + styles.r1}>
-                                <p>Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint. Sunt qui esse pariatur duis deserunt mollit dolore cillum minim tempor enim. Elit aute irure tempor cupidatat incididunt sint.</p>
+                                <p>Superteam is a super high-quality DAO. Nobody ever feels that they are the smartest in the room, which clearly means the Members are in the right place!</p>
                                 <div className={styles.profile}>
                                     <img className={styles.commaFloat} src="/comma-float.png" alt="" />
-                                    <img style={{ gridArea: 'a' }} className={styles.profileImg} src="https://assets-global.website-files.com/5ec7dad2e6f6295a9e2a23dd/5edfa7c6f978e75372dc332e_profilephoto1.jpeg" alt="" />
-                                    <p>Van Goh</p>
-                                    <Starrating rating={4} />
+                                    <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
+                                    <p>0x...fAce</p>
+                                    <Starrating rating={5} />
                                 </div>
                             </div>
                         </div>
