@@ -374,7 +374,7 @@ export default function Home() {
                 <img style={{ gridArea: "a" }} className={styles.medal} src="/medal-bronze.png" alt="" />
                 <h3>{daoList[18]?.dao_name}</h3>
                 <Starrating rating={"4"} />
-                <p className={styles.noReviews} >({daoList[2]?.review_count})</p>
+                <p className={styles.noReviews} >({daoList[18]?.review_count})</p>
               </span>
             </div>
             <div className={styles.m_leaderboard_row} onClick={() => {
