@@ -4,10 +4,20 @@ import Nav from '../../components/Nav'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 
-
+const API = process.env.API;
 
 function DaoForm() {
 
+    const [id, setid] = useState(null);
+
+    useEffect(() => {
+        let cookie = window.getCookie = function (name) {
+            var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+            if (match) return match[2];
+        }
+        let id = cookie('target')
+        setid(id);
+    }, [])
 
     const router = useRouter()
     const state = router.query.state
@@ -21,7 +31,9 @@ function DaoForm() {
                 window.location.href = '../'
             }}>Join DAOverse Community</button>
             <button onClick={() => {
-                window.location.href = '../'
+                id && axios.get(`${API}/dao/redirect?id=${id}&url=${location.href}`).then((res,er)=>{
+                    location.href = res.data.url
+                })
             }}>See Related Reviews</button>
         </span>
 
@@ -62,7 +74,7 @@ function DaoForm() {
                     <img src="/discord-grey.png" alt="" />
                     <img src="/web-grey.png" alt="" />
                 </span>
-                <p className={styles.footerSubTitle}>or email us at: xyz@daoverse.com</p>
+                {/* <p className={styles.footerSubTitle}>or email us at: xyz@daoverse.com</p> */}
             </div>
         </div>
     )

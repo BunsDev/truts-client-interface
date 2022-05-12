@@ -49,8 +49,35 @@ function DaoList() {
     return (
         <div className={styles.con}>
             <Nav />
-            <h1>Our DAO Library</h1>
-            <p>Discover our 500+ DAOs across 7 different categories</p>
+            <h1 className={styles.title}>Our DAO Library</h1>
+            <p className={styles.subText}>Explore our 250+ DAOs across different categories</p>
+            <div className={styles.m_filters}>
+                <select onChange={(e) => {
+                    setselectedTab(e.target.value);
+                }} name="" id="">
+                    {[
+                        'all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal'
+                    ].map((ele, idx) => {
+                        return (
+                            <option key={ele + idx} value={ele}>{ele}</option>
+                        )
+                    })
+                    }
+                </select>
+
+                <select name="" id="">
+                    {[
+                        'Ratings (High to Low)',
+                        'Ratings (Low to High)',
+                        'Sort by name (A-Z)'
+                    ].map((ele, idx) => {
+                        return (
+                            <option key={ele + idx} value={ele}>{ele}</option>
+                        )
+                    })
+                    }
+                </select>
+            </div>
             <div className={styles.col2}>
                 <div className={styles.leftNav}>
                     <Filter list={[
@@ -65,6 +92,7 @@ function DaoList() {
                         'all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal'
                     ]} selectedTab={selectedTab} setselectedTab={setselectedTab} />
                 </div>
+
                 <div className={styles.cardCon}>
                     {
                         dao_list.map((ele, idx) => {
@@ -101,7 +129,7 @@ function DaoList() {
                 </span>
                 <p className={styles.footerSubTitle}>or email us at: xyz@daoverse.com</p>
             </div>
-        </div>
+        </div >
     )
 }
 

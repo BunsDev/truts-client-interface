@@ -535,8 +535,8 @@ const rankToSearch = (searchTerm, data) => {
       >
         <img style={{ gridArea: "a" }} src={value.dao_logo} alt="" />
         <h1 style={{ gridArea: "b" }}>{value.dao_name}</h1>
-        <h2 style={{ gridArea: "c" }}>quick brief about project</h2>
-        <p style={{ gridArea: "d" }}>128 reviews</p>
+        <h2 style={{ gridArea: "c" }}>{value.description.slice(0, 50)}{(value.description.length > 40) ? '...' : ''}</h2>
+        <p style={{ gridArea: "d" }}>{value.review_count} reviews</p>
       </div>)
     }
   })

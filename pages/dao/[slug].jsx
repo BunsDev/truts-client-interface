@@ -42,11 +42,27 @@ function DaoPage() {
 
 
     useEffect(() => {
+        slug && fetchSimilar ()
         slug && fetchData()
     }, [slug])
 
     const [dao_data, setdao_data] = useState(null);
     const [dao_list, setdao_list] = useState(null);
+
+    const fetchSimilar = async () => {
+        try {
+            const db_res = await axios.get(`${API}/dao/similar`)
+            if (db_res.data) {
+                setdao_list(db_res.data)
+            }
+            else {
+                alert("network error");
+            }
+        }
+        catch (er) {
+            console.log(er);
+        }
+    }
 
     const fetchData = async () => {
 
@@ -65,18 +81,6 @@ function DaoPage() {
             console.log(er);
         }
 
-        try {
-            const db_res = await axios.get(`${API}/dao/similar`)
-            if (db_res.data) {
-                setdao_list(db_res.data)
-            }
-            else {
-                alert("network error");
-            }
-        }
-        catch (er) {
-            console.log(er);
-        }
     }
 
     const [showAlldials, setshowAlldials] = useState(true);

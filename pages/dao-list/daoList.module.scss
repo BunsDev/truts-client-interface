@@ -24,7 +24,7 @@
     display: flex;
     width: fit-content;
     height: max-content;
-   // padding: 80px 70px;
+    // padding: 80px 70px;
 }
 
 .cardCon {
@@ -112,6 +112,8 @@
     border-radius: 16px;
     height: fit-content;
     margin-top: 24px;
+   
+
 
     .filterHead {
         display: flex;
@@ -132,7 +134,11 @@
     }
 
     .filterBody {
+        max-height: 25vw;
+        overflow-y: auto;
+        padding-right: 10px;
         span {
+           
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -163,6 +169,23 @@
                 }
             }
         }
+
+        
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.301);
+        background-color: #f5f5f5;
+        border-radius: 15px;
+    }
+
+    &::-webkit-scrollbar {
+        width: 6px;
+        background-color: #f5f5f5;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #00000046;
+        border-radius: 15px;
+    }
     }
 }
 
@@ -205,5 +228,73 @@
             margin: 0 4px;
             margin-top: 0;
         }
+    }
+
+    @media (max-width: 428px) {
+        width: 95vw;
+        height: 177px;
+        margin-bottom: 15px;
+        border-radius: 7.90805px;
+
+        .footerTitle {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 120%;
+            width: 210px;
+        }
+
+        .footerSubTitle {
+            font-size: 10px;
+            line-height: 12px;
+        }
+    }
+}
+
+.m_filters {
+    display: none;
+}
+
+@media (max-width: 428px) {
+    .m_filters {
+        display: flex;
+        width: 80vw;
+        justify-content: space-between;
+        select {
+            min-width: 50px;
+            height: 30px;
+            border: 1.25px solid #888888;
+            font-weight: 500;
+            font-size: 14px;
+            border-radius: 5px;
+            margin-top: 12px;
+            padding: 0 5px;
+            color: rgb(0, 0, 0);
+            background-color: white;
+            // margin-right: auto;
+            // margin-left: 4vw;
+            margin-bottom: 10px;
+        }
+    }
+
+    .con {
+        padding-top: 90px;
+        padding-bottom: 0;
+        flex-direction: column;
+
+        .title,
+        .subText {
+            text-align: center;
+            width: 90vw;
+        }
+    }
+
+    .leftNav {
+        display: none;
+    }
+
+    .cardCon {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 }

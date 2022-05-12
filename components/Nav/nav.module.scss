@@ -103,9 +103,10 @@
     }
 
     .suggestion {
+        cursor: pointer;
         padding-top: 35px;
         margin: auto 0;
-        margin-left: 16px;
+        padding-left: 16px;
         display: grid;
         min-height: 162px;
         grid-template-columns: max-content max-content;
@@ -144,6 +145,10 @@
             font-size: 14px;
         }
         border-bottom: 1.5px solid rgb(207, 207, 207);
+
+        &:hover {
+            background-color: rgba(85, 143, 252, 0.103);
+        }
     }
 }
 
@@ -171,10 +176,10 @@
 }
 
 @media (max-width: 425px) {
-    .nav{
+    .nav {
         height: 54px;
         padding: 0 10px;
-        ul{
+        ul {
             display: none;
         }
 
