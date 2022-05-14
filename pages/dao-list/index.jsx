@@ -50,7 +50,7 @@ function DaoList() {
         <div className={styles.con}>
             <Nav />
             <h1 className={styles.title}>Our DAO Library</h1>
-            <p className={styles.subText}>Explore our 250+ DAOs across different categories</p>
+            {/* <p className={styles.subText}>Explore our 250+ DAOs across different categories</p> */}
             <div className={styles.m_filters}>
                 <select onChange={(e) => {
                     setselectedTab(e.target.value);

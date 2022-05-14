@@ -13,6 +13,7 @@
         font-weight: 700;
         font-size: 48px;
         margin: 0;
+        margin-bottom: 70px;
     }
     .subText {
         font-weight: 400;
@@ -277,6 +278,10 @@
         padding-top: 90px;
         padding-bottom: 0;
         flex-direction: column;
+        
+        .title{
+            margin-bottom: 40px;
+        }
 
         .title,
         .subText {
