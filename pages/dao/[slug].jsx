@@ -699,7 +699,14 @@ function Comment({ comment, address, rating, profile_img, openModel, data }) {
 
     const openMetaMask = async (type) => {
         let ethereum = window.ethereum
+        if (!ethereum) {
+            alert("wallet error! unable fetch public address");
+            return false
+        }
         let accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+        if (!accounts) {
+            return false
+        }
         console.log(accounts);
         let res = await addRating(accounts[0], type)
         return res;
