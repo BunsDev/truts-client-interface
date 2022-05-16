@@ -870,6 +870,7 @@
             justify-content: space-around;
             margin-bottom: 24px;
             margin-top: 10px;
+   
             span {
                 display: flex;
                 width: 73.75px;
@@ -882,6 +883,7 @@
                 img {
                     width: 25px;
                     object-fit: contain;
+                    cursor: pointer;
                 }
             }
         }
@@ -945,6 +947,7 @@
                 width: 29.25px;
                 margin: 0 4px;
                 margin-top: 0;
+                cursor: pointer;
             }
         }
 
