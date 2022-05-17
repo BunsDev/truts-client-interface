@@ -32,7 +32,7 @@ export default function Home() {
 
   useEffect(() => {
     getDaolistAPI(setdaoList);
-    // getLeaderboard(setleaderboard)
+    getLeaderboard(setleaderboard)
     //addSampleData();
   }, [])
 
@@ -60,11 +60,6 @@ export default function Home() {
   const [searchTerm, setsearchTerm] = useState("");
 
   const [visibleCardCountDivider, setvisibleCardCountDivider] = useState(1);
-
-  // useEffect(() => {
-  //   setvisibleCardCountDivider(Math.ceil(daoList.length / 20))
-  // }, [daoList])
-
 
 
   return (
@@ -192,22 +187,18 @@ export default function Home() {
               <p className={styles.th4}>Socials</p>
             </div>
             {
-              daoList.map((elex, idx) => {
+              leaderboard.map((elex, idx) => {
                 if (idx < 10) {
                   let medal = '/medal-blank.png';
                   let ele = elex;
                   if (idx == 0) {
-                    ele = daoList?.at(-38);
-                    ele.average_rating = 5
                     medal = 'medal-gold.png';
                   }
                   if (idx == 1) {
                     medal = 'medal-silver.png';
-                    ele = daoList?.at(106);
                   }
                   if (idx == 2) {
                     medal = 'medal-bronze.png';
-                    ele = daoList?.at(18);
                   }
 
                   return (
@@ -515,7 +506,7 @@ const getDaolistAPI = async (setter) => {
 
 //get Leaderboard
 const getLeaderboard = async (setter) => {
-  let url = `${API}/dao/get-dao-list`;
+  let url = `${API}/dao/leaderboard`;
   let res = await axios.get(url);
   console.log(res.data)
   setter(res.data);
