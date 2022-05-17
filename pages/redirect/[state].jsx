@@ -10,7 +10,7 @@ const openNewTab = (url) => {
     a.target = '_blank';
     a.href = url;
     a.click();
-  }
+}
 
 const API = process.env.API;
 
@@ -29,6 +29,8 @@ function DaoForm() {
 
     const router = useRouter()
     const state = router.query.state
+
+    console.log(state)
 
     let success = <>
         <img src="/sucess_tick.png" className={styles.sc_tick} alt="" />
@@ -58,6 +60,18 @@ function DaoForm() {
 
     </>
 
+
+    let duplicate_review = <>
+        <img src="/oops.png" className={styles.sc_oops} alt="" />
+        <p>Oops, Review already exist by this User</p>
+        <span className={styles.btns}>
+            <button onClick={() => {
+                window.location.href = '../'
+            }}>Try again</button>
+        </span>
+
+    </>
+
     if (!state) {
         return (
             <h1>
@@ -71,7 +85,7 @@ function DaoForm() {
         <div className={styles.con}>
             <Nav />
             <div className={styles.messageCon}>
-                {(state == 'success') ? success : failed}
+                {(state == 'success') ? success : ((state == 'duplicate_review') ? duplicate_review : failed)}
             </div>
             <div className={styles.footer}>
                 <h2 className={styles.footerTitle}>
