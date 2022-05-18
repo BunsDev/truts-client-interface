@@ -82,16 +82,16 @@ function DaoForm() {
         <div className={styles.con}>
             <Nav />
             <form className={styles.form} onSubmit={(e) => { e.preventDefault(); submitForm() }}>
-                <h1 className={styles.title}>Application for listing your DAO</h1>
-                <p className={styles.subtitle}>Please fill the basic information of your DAO to list your DAO on Truts. </p>
+                <h1 className={styles.title}>Fill these details to list your Community</h1>
+                <p className={styles.subtitle}>Please fill the required information to list your DAO on Truts</p>
 
                 <span className={styles.input}>
-                    <p>What’s the name of your DAO?</p>
+                    <p>Name of the Community</p>
                     <input required name={'dao_name'} type="text" onChange={formHandler} />
                 </span>
 
                 <span className={styles.input} id={"catlist"}>
-                    <p>What’s the category of your DAO? <small>(Enter ` <strong>,</strong> ` to add a Category)</small> </p>
+                    <p>Category of your DAO (example: Service, Collectors, DeFi) <small>(Enter ` <strong>,</strong> ` to add a Category)</small> </p>
                     <div className={styles.categoryInput}>
                         {
                             <>
@@ -143,7 +143,7 @@ function DaoForm() {
 
                 <div className={styles.uploadImage}>
                     <label htmlFor={'logo'}>
-                        <p>Upload DAO’s logo</p>
+                        <p>Upload the community logo</p>
                         <img src={(imgSrc.logo.length > 0) ? imgSrc.logo : "/upload-placeholder.png"} alt="" />
                         <input id="logo" name={'dao_logo'} type="file" onChange={(e) => {
                             let imgFile = e.target.files[0];
@@ -159,7 +159,7 @@ function DaoForm() {
                         }} />
                     </label>
                     <label htmlFor={'cover'}>
-                        <p>Upload DAO’s cover image</p>
+                        <p>Upload the community`s Cover </p>
                         <img src={(imgSrc.cover.length > 0) ? imgSrc.cover : "/upload-placeholder.png"} alt="" />
                         <input id="cover" name={'dao_cover'} type="file" onChange={(e) => {
                             let imgFile = e.target.files[0];
@@ -176,12 +176,12 @@ function DaoForm() {
                     </label>
                 </div>
                 <span className={styles.input}>
-                    <p>What’s the mission statement for your DAO?</p>
+                    <p>Whats your community`s mission statement?</p>
                     <input required name={'dao_mission'} placeholder='Please keep it within 1 or 2 lines' type="text" onChange={formHandler} />
                 </span>
 
                 <span className={styles.input}>
-                    <p>Brief description for your DAO</p>
+                    <p>A brief description of the community</p>
                     <textarea required name={'description'} placeholder='Please keep it within 1 or 2 lines' type="text" onChange={formHandler} />
                 </span>
 
@@ -220,7 +220,7 @@ function DaoForm() {
 
             <div className={styles.footer}>
                 <h2 className={styles.footerTitle}>
-                    Love what we are doing? Join Truts to build together
+                    Love what we do? Truts your guts and build with us now!
                 </h2>
                 <span className={styles.socialIcon}>
               <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />

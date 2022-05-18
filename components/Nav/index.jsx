@@ -44,7 +44,7 @@ function Nav({ topSearchVisible, data, outline }) {
                 }} >Add a dao</li>
                 <li onClick={() => {
                     openNewTab(`${location.href.split('/')[0]}/dao-list`)
-                }}>Discover DAOs</li>
+                }}>Discorver Communities</li>
                 <li>
                     <button onClick={async (e) => {
                         if (!wallet) {

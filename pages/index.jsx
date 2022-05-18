@@ -75,7 +75,7 @@ export default function Home({ leaderboard, daoList }) {
         <div className={styles.hero}>
           <Nav data={daoList} topSearchVisible={topSearchVisible} />
           <div className={styles.title}>
-            <h3>Review DAOs to</h3>
+            <h3>Review web3 communities</h3>
             <h3 className={styles.titleBlue}>Earn Rewards!</h3>
           </div>
           <p className={styles.subTitle}>Search your DAOs to unlock rewards for learning, contributing and reviewing DAOs Anonymously!</p>
@@ -118,7 +118,7 @@ export default function Home({ leaderboard, daoList }) {
 
           <div className={styles.sec3}>
             <div className={styles.sec3Title}>
-              <h1>Our DAO Library</h1>
+              <h1>Our wall of reviews</h1>
               {/* <p>We are adding more DAOs everyday. If you don’t see a DAO below and want us to list it here, </p>
             <p className={styles.blueText}>please submit your request here 🡥</p> */}
             </div>
@@ -257,7 +257,7 @@ export default function Home({ leaderboard, daoList }) {
           </div>
           <div className={styles.footer}>
             <h2 className={styles.footerTitle}>
-              Love what we are doing? Join Truts to build together
+              Love what we do? Truts your guts and build with us now!
             </h2>
             <span className={styles.socialIcon}>
               <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
@@ -273,7 +273,7 @@ export default function Home({ leaderboard, daoList }) {
         <Nav data={daoList} topSearchVisible={topSearchVisible} />
         <div className={styles.m_hero}>
           <div className={styles.title}>
-            <h3>Review DAOs to</h3>
+            <h3>Review web3 communities</h3>
             <h3 className={styles.titleBlue}>Earn Rewards!</h3>
             <p className={styles.subTitle}>Search your DAOs to unlock rewards for learning, contributing and reviewing DAOs Anonymously!</p>
             <SearchComp data={daoList} />
@@ -291,7 +291,7 @@ export default function Home({ leaderboard, daoList }) {
           />
         </div>
         <div className={styles.m_daoListContainer}>
-          <h1>Our DAO Library</h1>
+          <h1>Our wall of reviews</h1>
           <select onChange={(e) => {
             setselectedTab(e.target.value)
           }} >
@@ -413,7 +413,7 @@ export default function Home({ leaderboard, daoList }) {
           </div>
           <div className={styles.footer}>
             <h2 className={styles.footerTitle}>
-              Love what we are doing? Join Truts to build together
+              Love what we do? Truts your guts and build with us now!
             </h2>
             <span className={styles.socialIcon}>
               <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />

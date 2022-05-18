@@ -49,8 +49,8 @@ function DaoList() {
     return (
         <div className={styles.con}>
             <Nav />
-            <h1 className={styles.title}>Our DAO Library</h1>
-            {/* <p className={styles.subText}>Explore our 250+ DAOs across different categories</p> */}
+            <h1 className={styles.title}>Our community library</h1>
+            <p className={styles.subText}>Explore our 250+ communities and find the one that fits you</p>
             <div className={styles.m_filters}>
                 <select onChange={(e) => {
                     setselectedTab(e.target.value);
@@ -120,7 +120,7 @@ function DaoList() {
             </div>
             <div className={styles.footer}>
                 <h2 className={styles.footerTitle}>
-                    Love what we are doing? Join Truts to build together
+                    Love what we do? Truts your guts and build with us now!
                 </h2>
                 <span className={styles.socialIcon}>
                     <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
