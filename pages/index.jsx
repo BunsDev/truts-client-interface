@@ -21,25 +21,25 @@ const openNewTab = (url) => {
 
 const API = process.env.API
 
-export default function Home({ leaderboard, daoList }) {
+export default function Home() {
 
   const [selectedTab, setselectedTab] = useState('all');
   const [topSearchVisible, settopSearchVisible] = useState(false);
 
-  // data states
-  // const [daoList, setdaoList] = useState([]);
-  // const [leaderboard, setleaderboard] = useState([])
+  //data states
+  const [daoList, setdaoList] = useState([]);
+  const [leaderboard, setleaderboard] = useState([])
 
-  // useEffect(() => {
-  //   const fetchPageData = async () => {
-  //     let dao_list = await getDaolistAPI();
-  //     let leader_board = await getLeaderboard()
-  //     setdaoList(dao_list);
-  //     setleaderboard(leader_board);
-  //   }
-  //   fetchPageData();
-  //   //addSampleData();
-  // }, [])
+  useEffect(() => {
+    const fetchPageData = async () => {
+      let dao_list = await getDaolistAPI();
+      let leader_board = await getLeaderboard()
+      setdaoList(dao_list);
+      setleaderboard(leader_board);
+    }
+    fetchPageData();
+    //addSampleData();
+  }, [])
 
 
   useEffect(() => {
@@ -429,14 +429,14 @@ export default function Home({ leaderboard, daoList }) {
 }
 
 //SSR HOME PAGE
-export async function getServerSideProps(ctx) {
-  // Fetch data from external API
-  let dao_list = await getDaolistAPI();
-  let leader_board = await getLeaderboard()
+// export async function getServerSideProps(ctx) {
+//   // Fetch data from external API
+//   let dao_list = await getDaolistAPI();
+//   let leader_board = await getLeaderboard()
 
-  // Pass data to the page via props
-  return { props: { daoList: dao_list, leaderboard: leader_board } }
-}
+//   // Pass data to the page via props
+//   return { props: { daoList: dao_list, leaderboard: leader_board } }
+// }
 
 
 function SearchComp({ data }) {
