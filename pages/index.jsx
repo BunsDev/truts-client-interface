@@ -10,7 +10,7 @@ import DaoCard from '../components/DaoCard';
 import Loader from '../utils/Loader';
 
 //import addSampleData from './../addSampleData'
-
+//build
 const openNewTab = (url) => {
   if (url.length < 1) return
   let a = document.createElement('a');
