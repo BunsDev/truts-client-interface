@@ -10,7 +10,7 @@ import DaoCard from '../components/DaoCard';
 import Loader from '../utils/Loader';
 
 //import addSampleData from './../addSampleData'
-
+//build
 const openNewTab = (url) => {
   if (url.length < 1) return
   let a = document.createElement('a');
@@ -22,22 +22,28 @@ const openNewTab = (url) => {
 const API = process.env.API
 
 export default function Home() {
+
   const [selectedTab, setselectedTab] = useState('all');
-  const [searchVisible, setSearchVisible] = useState(false);
   const [topSearchVisible, settopSearchVisible] = useState(false);
 
-  // data states
+  //data states
   const [daoList, setdaoList] = useState([]);
   const [leaderboard, setleaderboard] = useState([])
 
   useEffect(() => {
-    getDaolistAPI(setdaoList);
-    getLeaderboard(setleaderboard)
-    //addSampleData();git a
+    const fetchPageData = async () => {
+      let dao_list = await getDaolistAPI();
+      let leader_board = await getLeaderboard()
+      setdaoList(dao_list);
+      setleaderboard(leader_board);
+    }
+    fetchPageData();
+    //addSampleData();
   }, [])
 
 
   useEffect(() => {
+    //Floating search bar
     let sec2 = document.querySelector('#sec2');
 
     window.addEventListener('scroll', (e) => {
@@ -57,11 +63,6 @@ export default function Home() {
 
   }, [daoList])
 
-  const [searchTerm, setsearchTerm] = useState("");
-
-  const [visibleCardCountDivider, setvisibleCardCountDivider] = useState(1);
-
-
   return (
     <>
       {(daoList.length < 1) && <Loader />}
@@ -74,7 +75,7 @@ export default function Home() {
         <div className={styles.hero}>
           <Nav data={daoList} topSearchVisible={topSearchVisible} />
           <div className={styles.title}>
-            <h3>Review DAOs to</h3>
+            <h3>Review web3 communities</h3>
             <h3 className={styles.titleBlue}>Earn Rewards!</h3>
           </div>
           <p className={styles.subTitle}>Search your DAOs to unlock rewards for learning, contributing and reviewing DAOs Anonymously!</p>
@@ -83,18 +84,6 @@ export default function Home() {
 
         <section className={styles.homepage}>
           <div id={'sec2'} className={styles.sec2}>
-            {/* <div style={{ gridArea: 'a', background: "url(ha.png)" }} >
-              <h3 style={{ width: '270px' }}>Earn <span className={styles.text_red}>cool  rewards</span> for reviewing DAOs</h3>
-            </div>
-            <div style={{ gridArea: 'b', background: "url(hb.png)" }} >
-              <h3 style={{ width: '240px' }}><span className={styles.text_lpurple}>Discover, Join and Contribute</span> to DAOs </h3>
-            </div>
-            <div style={{ gridArea: 'c', background: "url(hc.png)" }} >
-              <h3 style={{ width: '525px' }}>100% fully<span className={styles.text_purple}> On-chain</span> and <span className={styles.text_purple}>Anonymous</span></h3>
-            </div>
-            <div style={{ gridArea: 'd', background: "url(hd.png)" }} >
-              <h3 style={{ width: '525px' }}>Earn tips for your<span className={styles.text_gold}> genuine reviews</span></h3>
-            </div> */}
             <div className={styles.r1} style={{ backgroundColor: "#121212" }} >
               <span>
                 <h3 style={{ color: "#EB6079" }} >250+</h3>
@@ -129,7 +118,7 @@ export default function Home() {
 
           <div className={styles.sec3}>
             <div className={styles.sec3Title}>
-              <h1>Our DAO Library</h1>
+              <h1>Our wall of reviews</h1>
               {/* <p>We are adding more DAOs everyday. If you don’t see a DAO below and want us to list it here, </p>
             <p className={styles.blueText}>please submit your request here 🡥</p> */}
             </div>
@@ -268,7 +257,7 @@ export default function Home() {
           </div>
           <div className={styles.footer}>
             <h2 className={styles.footerTitle}>
-              Love what we are doing? Join Truts to build together
+              Love what we do? Truts your guts and build with us now!
             </h2>
             <span className={styles.socialIcon}>
               <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
@@ -284,7 +273,7 @@ export default function Home() {
         <Nav data={daoList} topSearchVisible={topSearchVisible} />
         <div className={styles.m_hero}>
           <div className={styles.title}>
-            <h3>Review DAOs to</h3>
+            <h3>Review web3 communities</h3>
             <h3 className={styles.titleBlue}>Earn Rewards!</h3>
             <p className={styles.subTitle}>Search your DAOs to unlock rewards for learning, contributing and reviewing DAOs Anonymously!</p>
             <SearchComp data={daoList} />
@@ -302,7 +291,7 @@ export default function Home() {
           />
         </div>
         <div className={styles.m_daoListContainer}>
-          <h1>Our DAO Library</h1>
+          <h1>Our wall of reviews</h1>
           <select onChange={(e) => {
             setselectedTab(e.target.value)
           }} >
@@ -424,7 +413,7 @@ export default function Home() {
           </div>
           <div className={styles.footer}>
             <h2 className={styles.footerTitle}>
-              Love what we are doing? Join Truts to build together
+              Love what we do? Truts your guts and build with us now!
             </h2>
             <span className={styles.socialIcon}>
               <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
@@ -439,12 +428,16 @@ export default function Home() {
   )
 }
 
+//SSR HOME PAGE
+// export async function getServerSideProps(ctx) {
+//   // Fetch data from external API
+//   let dao_list = await getDaolistAPI();
+//   let leader_board = await getLeaderboard()
 
-export async function getServerSideProps(context) {
-  return {
-    props: {}, // will be passed to the page component as props
-  }
-}
+//   // Pass data to the page via props
+//   return { props: { daoList: dao_list, leaderboard: leader_board } }
+// }
+
 
 function SearchComp({ data }) {
   const [searchTerm, setsearchTerm] = useState("");
@@ -476,6 +469,8 @@ function SearchComp({ data }) {
 
 
 
+
+
 function Starrating({ rating }) {
   return (
     <div className={styles.ratingComp}>
@@ -501,7 +496,7 @@ const getDaolistAPI = async (setter) => {
   let url = `${API}/dao/get-dao-list`;
   let res = await axios.get(url);
   console.log(res.data)
-  setter(res.data);
+  return res.data;
 }
 
 //get Leaderboard
@@ -509,7 +504,7 @@ const getLeaderboard = async (setter) => {
   let url = `${API}/dao/leaderboard`;
   let res = await axios.get(url);
   console.log(res.data)
-  setter(res.data);
+  return res.data
 }
 
 const rankToSearch = (searchTerm, data) => {
