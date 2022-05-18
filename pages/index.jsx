@@ -33,7 +33,7 @@ export default function Home() {
   useEffect(() => {
     getDaolistAPI(setdaoList);
     getLeaderboard(setleaderboard)
-    //addSampleData();
+    //addSampleData();git a
   }, [])
 
 

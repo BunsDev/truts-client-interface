@@ -1,6 +1,7 @@
 import styles from './daocard.module.scss'
 import Starrating from '../Starrating'
 
+
 const openNewTab = (url) => {
     if (url.length < 1) return
     let a = document.createElement('a');
@@ -8,6 +9,7 @@ const openNewTab = (url) => {
     a.href = url;
     a.click();
 }
+
 
 function DaoCard({ data, link }) {
     let cover = (data.dao_cover) ? data.dao_cover : "https://assets.hongkiat.com/uploads/minimalist-dekstop-wallpapers/4k/original/14.jpg?3";
@@ -17,7 +19,11 @@ function DaoCard({ data, link }) {
         }}>
             <img className={styles.cardCover} src={cover} alt="" />
             <div className={styles.info}>
-                <p>{data.dao_name} <img src="/verified.png" alt="" /> </p>
+                <p className={styles.daoName}>{limitText(data.dao_name)} <img src="/verified.png" alt="" />
+                    {(data.dao_name.length >= 18) && <div className={styles.toolTip}>
+                        {data.dao_name}
+                    </div>}
+                </p>
                 <span className={styles.rating}>
                     <div className={styles.ratingBox}>
                         <p>{"4.0"}</p> <img src="/star-filled.png" alt="" />
@@ -35,6 +41,12 @@ function DaoCard({ data, link }) {
             </div>
         </div>
     )
+}
+
+function limitText(text) {
+    if (text.length < 18) return text;
+    let snippedText = text.substring(0, 18);
+    return snippedText + "..."
 }
 
 function numFormatter(num) {

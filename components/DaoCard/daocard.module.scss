@@ -15,6 +15,37 @@
     }
 }
 
+.nameToolTip {
+    position: relative;
+}
+
+.daoName {
+    position: relative;
+
+    &:hover {
+        .toolTip {
+            display: flex;
+        }
+    }
+}
+
+.toolTip {
+    display: none;
+    position: absolute;
+    align-items: center;
+    padding: 5px 10px;
+    width: fit-content;
+    height: fit-content;
+    background-color: rgb(0, 0, 0);
+    position: absolute;
+    top: -130%;
+    border-radius: 5px;
+    font-size: 80%;
+    font-weight: 300;
+    color: rgb(255, 255, 255);
+    outline: 2.8px solid rgba(255, 255, 255, 0.247);
+}
+
 .rating {
     display: flex;
     align-items: center;
