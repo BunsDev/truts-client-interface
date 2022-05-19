@@ -41,10 +41,10 @@ function Nav({ topSearchVisible, data, outline }) {
             <ul>
                 <li onClick={() => {
                     openNewTab(`${location.href.split('/')[0]}/dao-form`)
-                }} >Add a dao</li>
+                }} >Add a Dao</li>
                 <li onClick={() => {
                     openNewTab(`${location.href.split('/')[0]}/dao-list`)
-                }}>Discorver Communities</li>
+                }}>Discover Communities</li>
                 <li>
                     <button onClick={async (e) => {
                         if (!wallet) {

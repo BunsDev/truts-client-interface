@@ -118,7 +118,7 @@ export default function Home() {
 
           <div className={styles.sec3}>
             <div className={styles.sec3Title}>
-              <h1>Our wall of reviews</h1>
+              <h1>Our wall of communities</h1>
               {/* <p>We are adding more DAOs everyday. If you don’t see a DAO below and want us to list it here, </p>
             <p className={styles.blueText}>please submit your request here 🡥</p> */}
             </div>
@@ -291,7 +291,7 @@ export default function Home() {
           />
         </div>
         <div className={styles.m_daoListContainer}>
-          <h1>Our wall of reviews</h1>
+          <h1>Our wall of communities</h1>
           <select onChange={(e) => {
             setselectedTab(e.target.value)
           }} >
