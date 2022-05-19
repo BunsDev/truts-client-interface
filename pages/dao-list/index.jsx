@@ -49,7 +49,7 @@ function DaoList() {
         <div className={styles.con}>
             <Nav />
             <h1 className={styles.title}>Our community library</h1>
-            <p className={styles.subText}>Explore our 400+ communities and find the one that fits you</p>
+            <p className={styles.subText}>Explore our 300+ communities and find the one that fits you</p>
             <div className={styles.m_filters}>
                 <select onChange={(e) => {
                     setselectedTab(e.target.value);
