@@ -75,10 +75,10 @@ export default function Home() {
         <div className={styles.hero}>
           <Nav data={daoList} topSearchVisible={topSearchVisible} />
           <div className={styles.title}>
-            <h3>Review web3 communities</h3>
+            <h3>Review web3 communities,</h3>
             <h3 className={styles.titleBlue}>Earn Rewards!</h3>
           </div>
-          <p className={styles.subTitle}>Search your DAOs to unlock rewards for learning, contributing and reviewing DAOs Anonymously!</p>
+          <p className={styles.subTitle}>Discover cool communities Learn, Contribute and Earn with communities you love and Truts</p>
           <SearchComp data={daoList} />
         </div>
 
@@ -86,7 +86,7 @@ export default function Home() {
           <div id={'sec2'} className={styles.sec2}>
             <div className={styles.r1} style={{ backgroundColor: "#121212" }} >
               <span>
-                <h3 style={{ color: "#EB6079" }} >250+</h3>
+                <h3 style={{ color: "#EB6079" }} >400+</h3>
                 <p>Communities listed and verified</p>
               </span>
 
@@ -105,7 +105,7 @@ export default function Home() {
             </div>
             <div className={styles.r2} >
               <span style={{ backgroundImage: "url('/d_daoinfo_1.png')" }}>
-                <h3>100% fully <span className={styles.text_purple}>On-chain Anonymous</span> and Gasless</h3>
+                <h3>100% fully <span className={styles.text_purple}>On-chain, Anonymous</span> and Gasless</h3>
               </span>
               <span style={{ backgroundImage: "url('/d_daoinfo_2.png')" }}>
                 <h3>Earn tips for your <span className={styles.text_gold}>genuine reviews</span></h3>
@@ -257,7 +257,7 @@ export default function Home() {
           </div>
           <div className={styles.footer}>
             <h2 className={styles.footerTitle}>
-              Love what we do? Truts your guts and build with us now!
+              Love what we do? Truts your guts and join us now!
             </h2>
             <span className={styles.socialIcon}>
               <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
@@ -273,9 +273,9 @@ export default function Home() {
         <Nav data={daoList} topSearchVisible={topSearchVisible} />
         <div className={styles.m_hero}>
           <div className={styles.title}>
-            <h3>Review web3 communities</h3>
+            <h3>Review web3 communities,</h3>
             <h3 className={styles.titleBlue}>Earn Rewards!</h3>
-            <p className={styles.subTitle}>Search your DAOs to unlock rewards for learning, contributing and reviewing DAOs Anonymously!</p>
+            <p className={styles.subTitle}>Discover cool communities; Learn, Contribute and Earn with communities you love and Truts</p>
             <SearchComp data={daoList} />
           </div>
         </div>
@@ -413,7 +413,7 @@ export default function Home() {
           </div>
           <div className={styles.footer}>
             <h2 className={styles.footerTitle}>
-              Love what we do? Truts your guts and build with us now!
+              Love what we do? Truts your guts and join us now!
             </h2>
             <span className={styles.socialIcon}>
               <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />

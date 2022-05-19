@@ -89,7 +89,7 @@ function DaoForm() {
             </div>
             <div className={styles.footer}>
                 <h2 className={styles.footerTitle}>
-                    Love what we do? Truts your guts and build with us now!
+                    Love what we do? Truts your guts and join us now!
                 </h2>
                 <span className={styles.socialIcon}>
                     <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />

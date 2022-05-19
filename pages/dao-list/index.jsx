@@ -4,6 +4,7 @@ import Nav from '../../components/Nav/';
 import { useState, useEffect } from 'react';
 import DaoCard from '../../components/DaoCard';
 import axios from 'axios';
+import Loader from '../../utils/Loader';
 
 const API = process.env.API;
 
@@ -40,9 +41,7 @@ function DaoList() {
 
     if (!dao_list) {
         return (
-            <h1>
-
-            </h1>
+            <Loader />
         )
     }
 
@@ -50,7 +49,7 @@ function DaoList() {
         <div className={styles.con}>
             <Nav />
             <h1 className={styles.title}>Our community library</h1>
-            <p className={styles.subText}>Explore our 250+ communities and find the one that fits you</p>
+            <p className={styles.subText}>Explore our 400+ communities and find the one that fits you</p>
             <div className={styles.m_filters}>
                 <select onChange={(e) => {
                     setselectedTab(e.target.value);
@@ -120,7 +119,7 @@ function DaoList() {
             </div>
             <div className={styles.footer}>
                 <h2 className={styles.footerTitle}>
-                    Love what we do? Truts your guts and build with us now!
+                    Love what we do? Truts your guts and join us now!
                 </h2>
                 <span className={styles.socialIcon}>
                     <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
