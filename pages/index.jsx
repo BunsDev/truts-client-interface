@@ -293,11 +293,11 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
           </select>
           <div className={styles.m_daoList}>
             {
-                daoList[selectedTab].map((ele, idx) => {
-                  return (
-                    <DaoCard link={ele.slug} data={ele} key={'c' + idx + selectedTab} />
-                  )
-                }).splice(0, 20)
+              daoList[selectedTab].map((ele, idx) => {
+                return (
+                  <DaoCard link={ele.slug} data={ele} key={'c' + idx + selectedTab} />
+                )
+              }).splice(0, 20)
             }
             {<button className={styles.seeMoreBtn} onClick={() => {
               openNewTab(`${location.href.split('/')[0]}/dao-list`);
@@ -386,11 +386,11 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
 //SSR DATA HOME PAGE
 export async function getServerSideProps(ctx) {
   // Fetch data from external API
-  let dao_list = await getDaolistAPI();
-  let leader_board = await getLeaderboard()
-
+  let res = await Promise.all(
+    [getDaolistAPI(), getLeaderboard()]
+  )
   // Pass data to the page via props
-  return { props: { daoList_ssr: dao_list, leaderboard_ssr: leader_board } }
+  return { props: { daoList_ssr: res[0], leaderboard_ssr: res[1] } }
 }
 
 // API CALLS
@@ -420,7 +420,7 @@ const getLeaderboard = async (setter) => {
 
 const getDynamicCategoryDaoList = async (setter) => {
   CATEGORY_LIST.forEach((cat) => {
-    if(cat == 'all') return
+    if (cat == 'all') return
     let url = `${API}/dao/similar?category=${cat}&page=1&limit=20`;
     axios.get(url).then((res) => {
       setter((prev) => {
