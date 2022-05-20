@@ -26,7 +26,7 @@ function DaoList() {
         try {
             const db_res = await axios.get(`${API}/dao/get-dao-list`)
             if (db_res.data) {
-                setdao_list(db_res.data)
+                setdao_list(db_res.data.results)
             }
             else {
                 alert("network error");

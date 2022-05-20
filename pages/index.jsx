@@ -495,15 +495,15 @@ function Starrating({ rating }) {
 const getDaolistAPI = async (setter) => {
   let url = `${API}/dao/get-dao-list`;
   let res = await axios.get(url);
-  console.log(res.data)
-  return res.data;
+  //console.log(res.data)
+  return res.data.results;
 }
 
 //get Leaderboard
 const getLeaderboard = async (setter) => {
   let url = `${API}/dao/leaderboard`;
   let res = await axios.get(url);
-  console.log(res.data)
+  //console.log(res.data)
   return res.data
 }
 
