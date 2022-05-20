@@ -20,27 +20,23 @@ const openNewTab = (url) => {
 }
 
 const API = process.env.API
+const CATEGORY_LIST = ['all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Event']
 
-export default function Home() {
+
+export default function Home({ daoList_ssr, leaderboard_ssr }) {
 
   const [selectedTab, setselectedTab] = useState('all');
   const [topSearchVisible, settopSearchVisible] = useState(false);
 
   //data states
-  const [daoList, setdaoList] = useState([]);
-  const [leaderboard, setleaderboard] = useState([])
+  const [daoList, setdaoList] = useState(daoList_ssr);
+  const [leaderboard, setleaderboard] = useState(leaderboard_ssr)
+
+  console.log(daoList);
 
   useEffect(() => {
-    const fetchPageData = async () => {
-      let dao_list = await getDaolistAPI();
-      let leader_board = await getLeaderboard()
-      setdaoList(dao_list);
-      setleaderboard(leader_board);
-    }
-    fetchPageData();
-    //addSampleData();
+    getDynamicCategoryDaoList(setdaoList);
   }, [])
-
 
   useEffect(() => {
     //Floating search bar
@@ -125,7 +121,7 @@ export default function Home() {
 
             <div className={styles.tagtabs} >
               {
-                ['all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Event']
+                CATEGORY_LIST
                   .map((tag) => {
                     let class_list = styles.tab;
                     if (tag == selectedTab) { class_list = class_list + ' ' + styles.selected }
@@ -143,19 +139,11 @@ export default function Home() {
             <div className={styles.daoListContainer}>
               {/* List of daos */}
               {
-                daoList.map((ele, idx) => {
-                  if (selectedTab == 'all') {
-                    return (
-                      <DaoCard link={ele.slug} data={ele} key={'c' + idx + selectedTab} />
-                    )
-                  } else {
-                    if (ele.dao_category.includes(selectedTab)) {
-                      return <DaoCard link={ele.slug} data={ele} key={'c' + idx + selectedTab} />
-                    }
-                  }
-                }).filter((ele) => {
-                  if (ele) return true
-                }).reverse().splice(0, 20)
+                daoList[selectedTab].map((ele, idx) => {
+                  return (
+                    <DaoCard link={ele.slug} data={ele} key={'c' + idx + selectedTab} />
+                  )
+                }).splice(0, 20)
               }
             </div>
             {<button className={styles.seeMoreBtn} onClick={() => {
@@ -296,7 +284,7 @@ export default function Home() {
             setselectedTab(e.target.value)
           }} >
             {
-              ['all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Event'].map((ele, idx) => {
+              CATEGORY_LIST.map((ele, idx) => {
                 return (
                   <option key={"idx" + idx} value={ele}>{ele}</option>
                 )
@@ -305,19 +293,11 @@ export default function Home() {
           </select>
           <div className={styles.m_daoList}>
             {
-              daoList.map((ele, idx) => {
-                if (selectedTab == 'all') {
+                daoList[selectedTab].map((ele, idx) => {
                   return (
                     <DaoCard link={ele.slug} data={ele} key={'c' + idx + selectedTab} />
                   )
-                } else {
-                  if (ele.dao_category.includes(selectedTab)) {
-                    return <DaoCard link={ele.slug} data={ele} key={'c' + idx + selectedTab} />
-                  }
-                }
-              }).filter((ele) => {
-                if (ele) return true
-              }).reverse().splice(0, 20)
+                }).splice(0, 20)
             }
             {<button className={styles.seeMoreBtn} onClick={() => {
               openNewTab(`${location.href.split('/')[0]}/dao-list`);
@@ -327,56 +307,31 @@ export default function Home() {
           </div>
           <h1>Our DAO Leaderboard</h1>
           <div className={styles.leaderboard}>
-            <div className={styles.m_leaderboard_row}>
-              <span className={styles.m_leaderboardEntry} onClick={() => {
-                openNewTab(`${window.location.href}/dao/${daoList[0].slug}`);
-              }}>
-                <img style={{ gridArea: "a" }} className={styles.medal} src="/medal-gold.png" alt="" />
-                <h3>{daoList?.at(-38)?.dao_name}</h3>
-                <Starrating rating={"5"} />
-                <p className={styles.noReviews} >({daoList?.at(-38)?.review_count})</p>
-              </span>
-            </div>
-            <div className={styles.m_leaderboard_row}>
-              <span className={styles.m_leaderboardEntry} onClick={() => {
-                openNewTab(`${window.location.href}/dao/${daoList[1].slug}`);
-              }}>
-                <img style={{ gridArea: "a" }} className={styles.medal} src="/medal-silver.png" alt="" />
-                <h3>{daoList?.at(106)?.dao_name}</h3>
-                <Starrating rating={"4"} />
-                <p className={styles.noReviews} >({daoList?.at(106)?.review_count})</p>
-              </span>
-            </div>
-            <div className={styles.m_leaderboard_row} onClick={() => {
-              openNewTab(`${window.location.href}/dao/${daoList[18].slug}`);
-            }}>
-              <span className={styles.m_leaderboardEntry}>
-                <img style={{ gridArea: "a" }} className={styles.medal} src="/medal-bronze.png" alt="" />
-                <h3>{daoList[18]?.dao_name}</h3>
-                <Starrating rating={"4"} />
-                <p className={styles.noReviews} >({daoList[18]?.review_count})</p>
-              </span>
-            </div>
-            <div className={styles.m_leaderboard_row} onClick={() => {
-              openNewTab(`${window.location.href}/dao/${daoList[3].slug}`);
-            }}>
-              <span className={styles.m_leaderboardEntry}>
-                <img style={{ gridArea: "a" }} className={styles.medal} src="/4-medal.png" alt="" />
-                <h3>{daoList[3]?.dao_name}</h3>
-                <Starrating rating={"4"} />
-                <p className={styles.noReviews} >(0)</p>
-              </span>
-            </div>
-            <div className={styles.m_leaderboard_row} style={{ borderColor: "transparent" }} onClick={() => {
-              openNewTab(`${window.location.href}/dao/${daoList[4].slug}`);
-            }}>
-              <span className={styles.m_leaderboardEntry}>
-                <img style={{ gridArea: "a" }} className={styles.medal} src="/5-medal.png" alt="" />
-                <h3>{daoList[4]?.dao_name}</h3>
-                <Starrating rating={"4"} />
-                <p className={styles.noReviews} >(0)</p>
-              </span>
-            </div>
+            {
+              leaderboard.map((ele, idx) => {
+                let medal;
+                switch (idx) {
+                  case 0: medal = "/medal-gold.png"; break;
+                  case 1: medal = "/medal-silver.png"; break;
+                  case 2: medal = "/medal-bronze.png"; break;
+                  case 3: medal = "/4-medal.png"; break;
+                  case 4: medal = "/5-medal.png"; break;
+                  default: "/medal-blank.png"
+                }
+                return (
+                  <div key={idx + "l"} className={styles.m_leaderboard_row}>
+                    <span className={styles.m_leaderboardEntry} onClick={() => {
+                      openNewTab(`${window.location.href}/dao/${ele.slug}`);
+                    }}>
+                      <img style={{ gridArea: "a" }} className={styles.medal} src={medal} alt="" />
+                      <h3>{ele?.dao_name}</h3>
+                      <Starrating rating={ele.average_rating} />
+                      <p className={styles.noReviews} >({ele?.review_count})</p>
+                    </span>
+                  </div>
+                )
+              }).splice(0, 5)
+            }
           </div>
           <h1>Recent Reviews</h1>
           <div className={styles.recentReviews}>
@@ -428,15 +383,53 @@ export default function Home() {
   )
 }
 
-//SSR HOME PAGE
-// export async function getServerSideProps(ctx) {
-//   // Fetch data from external API
-//   let dao_list = await getDaolistAPI();
-//   let leader_board = await getLeaderboard()
+//SSR DATA HOME PAGE
+export async function getServerSideProps(ctx) {
+  // Fetch data from external API
+  let dao_list = await getDaolistAPI();
+  let leader_board = await getLeaderboard()
 
-//   // Pass data to the page via props
-//   return { props: { daoList: dao_list, leaderboard: leader_board } }
-// }
+  // Pass data to the page via props
+  return { props: { daoList_ssr: dao_list, leaderboard_ssr: leader_board } }
+}
+
+// API CALLS
+
+//get list of daos
+const getDaolistAPI = async (setter) => {
+  //gets initial 20 doas
+  let url = `${API}/dao/get-dao-list?limit=20&page=1`;
+  let res = await axios.get(url);
+  let dao_data_obj = {};
+  CATEGORY_LIST.forEach((ele) => {
+    dao_data_obj[ele] = [];
+  })
+  dao_data_obj['all'] = res.data.results
+  return dao_data_obj;
+}
+
+//get Leaderboard
+const getLeaderboard = async (setter) => {
+  let url = `${API}/dao/leaderboard`;
+  let res = await axios.get(url);
+  //console.log(res.data)
+  return res.data
+}
+
+//get 20 Dynamic category based Daos  
+
+const getDynamicCategoryDaoList = async (setter) => {
+  CATEGORY_LIST.forEach((cat) => {
+    if(cat == 'all') return
+    let url = `${API}/dao/similar?category=${cat}&page=1&limit=20`;
+    axios.get(url).then((res) => {
+      setter((prev) => {
+        prev[cat] = res.data.results;
+        return { ...prev }
+      })
+    });
+  })
+}
 
 
 function SearchComp({ data }) {
@@ -489,23 +482,6 @@ function Starrating({ rating }) {
   )
 }
 
-// Api calls
-
-//get list of daos
-const getDaolistAPI = async (setter) => {
-  let url = `${API}/dao/get-dao-list`;
-  let res = await axios.get(url);
-  //console.log(res.data)
-  return res.data.results;
-}
-
-//get Leaderboard
-const getLeaderboard = async (setter) => {
-  let url = `${API}/dao/leaderboard`;
-  let res = await axios.get(url);
-  //console.log(res.data)
-  return res.data
-}
 
 const rankToSearch = (searchTerm, data) => {
   let List = data.map((ele, idx) => {
