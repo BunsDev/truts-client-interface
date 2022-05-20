@@ -712,6 +712,8 @@ function Comment({ comment, address, rating, profile_img, openModel, data }) {
         return res;
     }
 
+    const [wrapText, setwrapText] = useState(true);
+
     const addRating = async (wallet_address, type) => {
         try {
             let res = await axios.post(`${API}/review/rate-review`, {
@@ -764,8 +766,11 @@ function Comment({ comment, address, rating, profile_img, openModel, data }) {
                 <Starrating rating={rating} />
             </div>
             <p className={styles.commentText}>
-                {comment}
+                {(comment.length >= 400) ? ((wrapText) ? (comment.substring(0, 400) + '....') : comment) : comment}
             </p>
+            {(comment.length >= 400) && <button className={styles.read_more} onClick={() => {
+                setwrapText(!wrapText);
+            }} >{(wrapText) ? "Read more" : "Show less"}</button>}
             <div className={styles.likes}>
                 <span>
                     <img src="/thumbs-up.png" alt="" onClick={async () => {

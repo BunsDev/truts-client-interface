@@ -225,11 +225,29 @@
     width: 100%;
     margin-top: 24px;
 
+    .read_more {
+        border: none;
+        background: none;
+        color: gray;
+        width: fit-content;
+        margin-right: 0;
+        margin-left: 52px;
+        padding: 0;
+        margin-top: 10px;
+        font-weight: 500;
+        font-size: 14px;
+
+        &:hover{
+            color: #1248d9;
+        }
+    }
+
     .commentText {
         width: 682px;
         margin: 0;
         margin-top: 16px;
         margin-left: 52px;
+        white-space: pre-wrap;
     }
 
     .profileName {
@@ -299,6 +317,10 @@
             font-size: 16px;
         }
 
+        .read_more{
+            margin-left: 0;
+        }
+
         .likes {
             margin-left: 0;
         }
@@ -334,7 +356,7 @@
         align-items: center;
         justify-content: center;
         padding: 0 26.5px;
-        background-color: #363636;;
+        background-color: #363636;
         border: 1.5px solid #363636;
         transition: all 0.25s ease-in-out;
         img {
@@ -870,7 +892,7 @@
             justify-content: space-around;
             margin-bottom: 24px;
             margin-top: 10px;
-   
+
             span {
                 display: flex;
                 width: 73.75px;
