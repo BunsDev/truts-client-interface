@@ -1,8 +1,12 @@
 import styles from './nav.module.scss'
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import stringSimilarity from "string-similarity";
 import { useEffect } from 'react';
+import _ from 'lodash'
+import axios from 'axios'
 
+
+const API = process.env.API
 
 const openNewTab = (url) => {
     if (url.length < 1) return
@@ -67,7 +71,7 @@ Nav.defaultProps = {
     outline: false
 }
 
-function SearchComp({ topSearchVisible, data }) {
+function SearchComp({ topSearchVisible }) {
 
     const [suggestionVisible, setsuggestionVisible] = useState(false)
 
@@ -77,6 +81,21 @@ function SearchComp({ topSearchVisible, data }) {
     if (topSearchVisible) {
         search_style = styles.searchComp + ' ' + styles.searchCompDisable
     }
+
+    const [data, setdata] = useState([]);
+
+    const fetchData = async (term) => {
+        if (!(term.length > 0)) return
+        console.log('search --> ', term)
+        let res = await axios.get(`${API}/search/${term}`);
+        (res.data.length > 0) && setdata([...res.data]);
+    }
+
+    let throttleFetch = useCallback(
+        _.debounce(term => fetchData(term), 500),
+        [],
+    )
+
 
     const [inputFocus, setinputFocus] = useState(false);
 
@@ -89,7 +108,7 @@ function SearchComp({ topSearchVisible, data }) {
                 onBlur={() => {
                     setTimeout(() => { setinputFocus(false) }, 500)
                 }}
-                onChange={(e) => { setsearchTerm(e.target.value) }}
+                onChange={(e) => { setsearchTerm(e.target.value); throttleFetch(e.target.value) }}
                 onClick={() => {
                     setsuggestionVisible(true);
                 }} />
@@ -97,26 +116,19 @@ function SearchComp({ topSearchVisible, data }) {
             {(suggestionVisible && inputFocus) &&
                 <div className={styles.suggestionCon} key="nav">
                     {
-                        rankToSearch(searchTerm, data)
+                        <RankToSearch data={data} />
                     }
                 </div>}
         </div>
     )
 }
 
-const rankToSearch = (searchTerm, data) => {
-    let List = data.map((ele, idx) => {
-        let rank = Math.max(stringSimilarity.compareTwoStrings(searchTerm, ele.dao_name.toLowerCase()), stringSimilarity.compareTwoStrings(searchTerm, ele.dao_name))
-        return [rank, idx]
-    });
+const RankToSearch = ({ data }) => {
+    if (data?.length < 0) {
+        return []
+    }
 
-    let ranklist = List.sort((a, b) => { return a[0] - b[0] }).reverse();
-
-    let searchlist = ranklist.map((ele) => {
-        return data[ele[1]]
-    })
-
-    return searchlist.map((value, idx) => {
+    return data.map((value, idx) => {
         if (idx < 5) {
             return (<div key={value.dao_name}
                 className={styles.suggestion}
@@ -124,7 +136,7 @@ const rankToSearch = (searchTerm, data) => {
             >
                 <img style={{ gridArea: "a" }} src={value.dao_logo} alt="" />
                 <h1 style={{ gridArea: "b" }}>{value.dao_name}</h1>
-                <h2 style={{ gridArea: "c" }}>{value.description.slice(0, 50)}{(value.description.length > 40) ? '...' : ''}</h2>
+                <h2 className={styles.sug_desc} style={{ gridArea: "c" }}>{value.dao_mission.slice(0, 50)}{(value.dao_mission.length > 10) ? '...' : ''}</h2>
                 <p style={{ gridArea: "d" }}>{value.review_count} reviews</p>
             </div>)
         }

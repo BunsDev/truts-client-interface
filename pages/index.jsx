@@ -2,13 +2,14 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from './index/index.module.scss'
 import Nav from '../components/Nav';
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useCallback } from 'react';
 import axios from 'axios';
 import stringSimilarity from "string-similarity";
 import ClipboardJS from 'clipboard'
 import DaoCard from '../components/DaoCard';
 import Loader from '../utils/Loader';
-
+import _ from 'lodash'
+ 
 //import addSampleData from './../addSampleData'
 //build
 const openNewTab = (url) => {
@@ -31,8 +32,6 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
   //data states
   const [daoList, setdaoList] = useState(daoList_ssr);
   const [leaderboard, setleaderboard] = useState(leaderboard_ssr)
-
-  console.log(daoList);
 
   useEffect(() => {
     getDynamicCategoryDaoList(setdaoList);
@@ -432,15 +431,29 @@ const getDynamicCategoryDaoList = async (setter) => {
 }
 
 
-function SearchComp({ data }) {
+function SearchComp() {
   const [searchTerm, setsearchTerm] = useState("");
   const [inputFocus, setinputFocus] = useState(false);
+
+  const [data, setdata] = useState([]);
+
+  const fetchData = async (term) => {
+    if(!(term.length > 0)) return
+    console.log('search --> ', term)
+    let res = await axios.get(`${API}/search/${term}`);
+    (res.data.length > 0) && setdata([...res.data]);
+  }
+
+  let throttleFetch = useCallback(
+    _.debounce(term => fetchData(term), 500),
+    [],
+  )
 
   return (
     <div className={styles.searchComp}>
       <input value={searchTerm}
         placeholder={'Search your DAO here'}
-        type="text" onChange={(e) => { setsearchTerm(e.target.value) }}
+        type="text" onChange={(e) => { setsearchTerm(e.target.value); throttleFetch(e.target.value) }}
         onFocus={() => {
           setinputFocus(true);
         }}
@@ -452,7 +465,7 @@ function SearchComp({ data }) {
       <div className={styles.suggestionCon}>
         <div className={styles.suggestionCon} key={"home"}>
           {
-            (searchTerm.length > 0 && inputFocus) && rankToSearch(searchTerm, data)
+            (searchTerm.length > 0 && inputFocus) && <RankToSearch data={data} />
           }
         </div>
       </div>
@@ -483,19 +496,12 @@ function Starrating({ rating }) {
 }
 
 
-const rankToSearch = (searchTerm, data) => {
-  let List = data.map((ele, idx) => {
-    let rank = Math.max(stringSimilarity.compareTwoStrings(searchTerm, ele.dao_name.toLowerCase()), stringSimilarity.compareTwoStrings(searchTerm, ele.dao_name))
-    return [rank, idx]
-  });
+const RankToSearch = ({ data }) => {
+  if (data?.length < 0) {
+    return []
+  }
 
-  let ranklist = List.sort((a, b) => { return a[0] - b[0] }).reverse();
-
-  let searchlist = ranklist.map((ele) => {
-    return data[ele[1]]
-  })
-
-  return searchlist.map((value, idx) => {
+  return data.map((value, idx) => {
     if (idx < 5) {
       return (<div key={value.dao_name}
         className={styles.suggestion}
@@ -503,7 +509,7 @@ const rankToSearch = (searchTerm, data) => {
       >
         <img style={{ gridArea: "a" }} src={value.dao_logo} alt="" />
         <h1 style={{ gridArea: "b" }}>{value.dao_name}</h1>
-        <h2 className={styles.sug_desc} style={{ gridArea: "c" }}>{value.description.slice(0, 50)}{(value.description.length > 10) ? '...' : ''}</h2>
+        <h2 className={styles.sug_desc} style={{ gridArea: "c" }}>{value.dao_mission.slice(0, 50)}{(value.dao_mission.length > 10) ? '...' : ''}</h2>
         <p style={{ gridArea: "d" }}>{value.review_count} reviews</p>
       </div>)
     }
