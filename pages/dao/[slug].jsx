@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'
 import Tip from '../../utils/tip';
 
 import Loader from '../../utils/Loader';
+import LoadingCard from '../../components/LoadingCard';
 
 const API = process.env.API;
 
@@ -31,7 +32,7 @@ function Starrating({ rating }) {
     )
 }
 //
-function DaoPage() {
+function DaoPage({ dao_data }) {
 
     const router = useRouter()
     const slug = router.query.slug
@@ -43,17 +44,18 @@ function DaoPage() {
 
 
     useEffect(() => {
-        slug && fetchSimilar()
-        slug && fetchData()
-    }, [slug])
+        fetchSimilar()
+    }, [])
 
-    const [dao_data, setdao_data] = useState(null);
-    const [dao_list, setdao_list] = useState(null);
+    const [dao_list, setdao_list] = useState([]);
+
+    console.log(dao_data)
 
     const fetchSimilar = async () => {
         try {
-            const db_res = await axios.get(`${API}/dao/similar`)
+            const db_res = await axios.get(`${API}/dao/similar?limit=5&page=1&category=${dao_data.dao_category[0]}`)
             if (db_res.data) {
+                console.log(db_res.data.results)
                 setdao_list(db_res.data.results)
             }
             else {
@@ -65,24 +67,6 @@ function DaoPage() {
         }
     }
 
-    const fetchData = async () => {
-
-        console.log(slug);
-        try {
-            const res = await axios.get(`${API}/dao/get-dao-by-slug?slug=${slug}`)
-            console.log(res.data)
-            if (res.data.status) {
-                setdao_data(res.data.data)
-            }
-            else {
-                alert("DAO NOT FOUND");
-            }
-        }
-        catch (er) {
-            console.log(er);
-        }
-
-    }
 
     const [showAlldials, setshowAlldials] = useState(true);
 
@@ -90,12 +74,6 @@ function DaoPage() {
     const [m_btn, setm_btn] = useState(false);
 
     if (!dao_data) {
-        return (
-            <Loader />
-        )
-    }
-
-    if (!dao_list) {
         return (
             <Loader />
         )
@@ -279,14 +257,21 @@ function DaoPage() {
             <div className={styles.footer}>
                 <h3>Other similar DAOs</h3>
                 <div className={styles.daoList}>
-                    {
+                    {(dao_list.length > 0) ?
                         dao_list.map((ele, idx) => {
                             if (idx < 5) {
                                 return <DaoCard link={ele.slug} data={ele} key={idx + "daolist"} />
                             }
                         })
+                        :
+                        <>
+                            <LoadingCard />
+                            <LoadingCard />
+                            <LoadingCard />
+                            <LoadingCard />
+                            <LoadingCard />
+                        </>
                     }
-
                 </div>
 
             </div>
@@ -467,7 +452,6 @@ const getAverageRating = (list, key) => {
     if (list?.length > 0) {
         list.forEach((ele) => {
             sum = sum + ele[key];
-            console.log(sum)
         })
         avg = Math.ceil(sum / list.length);
     }
@@ -792,6 +776,33 @@ function Comment({ comment, address, rating, profile_img, openModel, data }) {
             </div>
         </div>
     )
+}
+
+//SSR DATA DAO PAGE
+export async function getServerSideProps(ctx) {
+    let { slug } = ctx.query
+    // Fetch data from external API
+    let res = await fetchData(slug)
+    // Pass data to the page via props
+    return { props: { dao_data: res } }
+}
+
+const fetchData = async (slug) => {
+    console.log(slug);
+    try {
+        const res = await axios.get(`${API}/dao/get-dao-by-slug?slug=${slug}`)
+        console.log(res.data)
+        if (res.data.status) {
+            return res.data.data
+        }
+        else {
+            alert("DAO NOT FOUND");
+            return []
+        }
+    }
+    catch (er) {
+        console.log(er);
+    }
 }
 
 function Dial({ percent }) {
