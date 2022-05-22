@@ -26,7 +26,7 @@ function DaoCard({ data, link }) {
                     </p>
                     <span className={styles.rating}>
                         <div className={styles.ratingBox}>
-                            <p>{"4.0"}</p> <img src="/star-filled.png" alt="" />
+                            <p>{(data.average_rating.length >= 2) ? data.average_rating : data.average_rating+".0"}</p> <img src="/star-filled.png" alt="" />
                         </div>
                         <p className={styles.noReviews}>{data.review_count} reviews</p>
                     </span>
