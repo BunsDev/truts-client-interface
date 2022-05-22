@@ -12,6 +12,7 @@ import Tip from '../../utils/tip';
 import Loader from '../../utils/Loader';
 import LoadingCard from '../../components/LoadingCard';
 
+
 const API = process.env.API;
 
 function Starrating({ rating }) {
@@ -80,7 +81,6 @@ function DaoPage({ dao_data }) {
     }
 
     let uniqueCategories = new Set([...dao_data.dao_category])
-
 
     return (
         <>
@@ -791,18 +791,17 @@ const fetchData = async (slug) => {
     console.log(slug);
     try {
         const res = await axios.get(`${API}/dao/get-dao-by-slug?slug=${slug}`)
-        console.log(res.data)
         if (res.data.status) {
-            return res.data.data
+            return JSON.parse(JSON.stringify(res.data.data))
         }
         else {
             alert("DAO NOT FOUND");
-            return []
         }
     }
     catch (er) {
         console.log(er);
     }
+    return null
 }
 
 function Dial({ percent }) {

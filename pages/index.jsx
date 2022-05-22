@@ -445,7 +445,7 @@ function SearchComp() {
   }
 
   let throttleFetch = useCallback(
-    _.debounce(term => fetchData(term), 500),
+    _.debounce(term => fetchData(term),100),
     [],
   )
 

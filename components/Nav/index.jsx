@@ -4,7 +4,7 @@ import stringSimilarity from "string-similarity";
 import { useEffect } from 'react';
 import _ from 'lodash'
 import axios from 'axios'
-
+import Link from 'next/link'
 
 const API = process.env.API
 
@@ -40,7 +40,9 @@ function Nav({ topSearchVisible, data, outline }) {
 
     return (
         <div className={search_style} style={(outline) ? { borderBottom: '1px solid rgb(209, 209, 209)' } : null}>
-            <img className={styles.logo} onClick={() => { window.location.href = '/' }} src="/logo.png" alt="" />
+            <Link href={'/'}>
+                <img className={styles.logo} src="/logo.png" alt="" />
+            </Link>
             <SearchComp data={data} topSearchVisible={topSearchVisible} />
             <ul>
                 <li onClick={() => {
@@ -92,7 +94,7 @@ function SearchComp({ topSearchVisible }) {
     }
 
     let throttleFetch = useCallback(
-        _.debounce(term => fetchData(term), 500),
+        _.debounce(term => fetchData(term), 100),
         [],
     )
 
