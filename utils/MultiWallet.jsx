@@ -29,6 +29,7 @@ import {
     useEnsAvatar,
     useEnsName,
     useSendTransaction,
+    useSignMessage
 } from 'wagmi';
 
 
@@ -62,10 +63,21 @@ function MultiWallet({ setwalletAddress, styles }) {
         </div>
     </>
 
+    const { data_sign, isError, isLoading, isSuccess, signMessage } = useSignMessage({
+        message: 'Please sign the message to post the Review',
+    })
+
+
     useEffect(() => {
-        if (activeConnector) {
+        if (isSuccess) {
             setwalletAddress(account?.address);
             disconnect();
+        }
+    }, [isSuccess])
+
+    useEffect(() => {
+        if (activeConnector) {
+            signMessage();
         }
     }, [activeConnector])
 

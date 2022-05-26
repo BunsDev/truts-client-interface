@@ -127,9 +127,11 @@ export default function Index() {
             "public_address": public_address,
         }
         if (id == '627c85db8ffffe001142935d') {
+         
             window.location.href = `${API}/review/add-review-event?data=${JSON.stringify(postData)}`
         }
         else {
+
             window.location.href = `${API}/review/add-review?data=${JSON.stringify(postData)}`
         }
     }

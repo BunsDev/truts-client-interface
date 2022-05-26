@@ -18,6 +18,15 @@ const openNewTab = (url) => {
 
 const openMetaMask = async () => {
     let ethereum = window.ethereum
+    await window.ethereum.request({
+        method: "wallet_requestPermissions",
+        params: [
+            {
+                eth_accounts: {}
+            }
+        ]
+    });
+
     let accounts = await ethereum.request({ method: 'eth_requestAccounts' })
     console.log(accounts);
     return accounts[0]
@@ -52,20 +61,34 @@ function Nav({ topSearchVisible, data, outline }) {
                     openNewTab(`${location.href.split('/')[0]}/dao-list`)
                 }}>Discover Communities</li>
                 <li>
-                    <button onClick={async (e) => {
-                        if (!wallet) {
-                            let res = await openMetaMask();
-                            window.localStorage.setItem('wallet', res);
-                            setwallet(res);
-                        }
-                        else {
-                            window.localStorage.removeItem('wallet');
-                            setwallet(null);
-                        }
-                    }} >{(wallet) ? wallet.slice(0, 5) + "..." + wallet.slice(-4, -1) : "Connect wallet"}</button>
+                    {(wallet) ?
+                        < button
+                            className={styles.disconnectWallet}
+                            onClick={async (e) => {
+                                window.localStorage.removeItem('wallet');
+                                setwallet(null);
+                            }} >
+                            {wallet.slice(0, 5) + "..." + wallet.slice(-4, -1)}
+                        </button> :
+                        < button
+                            onClick={async (e) => {
+                                if (!wallet) {
+                                    let res = await openMetaMask();
+                                    window.localStorage.setItem('wallet', res);
+                                    setwallet(res);
+                                }
+                                else {
+                                    window.localStorage.removeItem('wallet');
+                                    setwallet(null);
+                                }
+                            }} >
+                            {"Connect wallet"}
+                        </button>
+                    }
+
                 </li>
             </ul>
-        </div>
+        </div >
     )
 }
 
