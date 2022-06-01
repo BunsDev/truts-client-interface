@@ -64,8 +64,8 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
       <div className={styles.container_desktop}>
         <Head>
           <title>Truts</title>
-          <meta name="description" content="discover web3 communities effectively" />
-          <link rel="icon" href="/favicon.ico" />
+          <meta name="description" content="Discover web3 communities that vibes with you from a list of thousands of communities across different categories (service, investment, media, social) and know all about them" />
+          <link rel="icon" href="/favicon.png" />
         </Head>
         <div className={styles.hero}>
           <Nav data={daoList} topSearchVisible={topSearchVisible} />
@@ -73,7 +73,7 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
             <h3>Review web3 communities,</h3>
             <h3 className={styles.titleBlue}>Earn Rewards!</h3>
           </div>
-          <p className={styles.subTitle}>Discover web3 communities that vibes with you from a list of thousands of communities across different categories (service, investment, media, social) and know all about them</p>
+          <p className={styles.subTitle}>Discover cool communities Learn, Contribute and Earn with communities you love and Truts</p>
           <SearchComp data={daoList} />
         </div>
 
