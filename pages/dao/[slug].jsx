@@ -210,7 +210,7 @@ function DaoPage({ dao_data }) {
                                 }}
                                 className={styles.webBtn}>
                                 <img src="/web-outline.png" alt="" />
-                                <p >{dao_data.slug}.com</p>
+                                <p >{(dao_data.website_link?.length > 1) ? shortenUrl(dao_data.website_link) : "n/a"}</p>
                             </button>
                             <button onClick={() => {
                                 openNewTab(dao_data.discord_link)
@@ -224,7 +224,7 @@ function DaoPage({ dao_data }) {
                                 }}
                             >
                                 <img src="/web-outline.png" alt="" />
-                                <p >{dao_data.slug}.xyz</p>
+                                <p >{(dao_data.website_link?.length > 1) ? "mirror" : "n/a"}</p>
                             </button>
                             <button className={styles.slug} onClick={(e) => {
                                 navigator.clipboard.writeText(`truts.xyz/dao/${slug}`);
@@ -777,6 +777,7 @@ function Comment({ comment, address, rating, profile_img, openModel, data }) {
     )
 }
 
+
 //SSR DATA DAO PAGE
 export async function getServerSideProps(ctx) {
     let { slug } = ctx.query
@@ -884,6 +885,16 @@ function numFormatter(num) {
         return (num / 1000000).toFixed(1) + 'M'; // convert to M for number from > 1 million 
     } else if (num < 900) {
         return num; // if value < 1000, nothing to do
+    }
+}
+
+const shortenUrl = (url) => {
+    let new_url = url.replace('https://', '').replace('http://', '').replace('www.','').replace('/','');
+    if(new_url.length <= 18){
+        return new_url
+    }
+    else{
+        return "website"
     }
 }
 
