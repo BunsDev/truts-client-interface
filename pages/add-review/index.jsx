@@ -328,7 +328,7 @@ export default function Index() {
                     <div className={styles.daoList}>
                         {
                             dao_list.map((ele, idx) => {
-                                if (idx < ((window.outerWidth < 428) ? 4 : 5)) {
+                                if (idx < ((window.outerWidth < 428) ? 3 : 4)) {
                                     return <DaoCard data={ele} key={idx + "daolist"} />
                                 }
                             })

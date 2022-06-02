@@ -259,13 +259,12 @@ function DaoPage({ dao_data }) {
                 <div className={styles.daoList}>
                     {(dao_list.length > 0) ?
                         dao_list.map((ele, idx) => {
-                            if (idx < 5) {
+                            if (idx < 4) {
                                 return <DaoCard link={ele.slug} data={ele} key={idx + "daolist"} />
                             }
                         })
                         :
                         <>
-                            <LoadingCard />
                             <LoadingCard />
                             <LoadingCard />
                             <LoadingCard />

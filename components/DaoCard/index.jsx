@@ -45,7 +45,7 @@ function DaoCard({ data, link }) {
 }
 
 function limitText(text) {
-    if (text.length < 18) return text;
+    if (text.length < 22) return text;
     let snippedText = text.substring(0, 18);
     return snippedText + "..."
 }
