@@ -224,7 +224,7 @@ function DaoPage({ dao_data }) {
                                 }}
                             >
                                 <img src="/web-outline.png" alt="" />
-                                <p >{(dao_data.website_link?.length > 1) ? "mirror" : "n/a"}</p>
+                                <p >{(dao_data.website_link?.length > 1) ? "Mirror" : "n/a"}</p>
                             </button>
                             <button className={styles.slug} onClick={(e) => {
                                 navigator.clipboard.writeText(`truts.xyz/dao/${slug}`);
@@ -894,7 +894,7 @@ const shortenUrl = (url) => {
         return new_url
     }
     else{
-        return "website"
+        return "Website"
     }
 }
 
