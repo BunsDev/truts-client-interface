@@ -155,15 +155,18 @@ const RankToSearch = ({ data }) => {
 
     return data.map((value, idx) => {
         if (idx < 5) {
-            return (<div key={value.dao_name}
-                className={styles.suggestion}
-                onClick={() => { openNewTab(`${window.location.href}/dao/${value.slug}`); }}
-            >
-                <img style={{ gridArea: "a" }} src={value.dao_logo} alt="" />
-                <h1 style={{ gridArea: "b" }}>{value.dao_name}</h1>
-                <h2 className={styles.sug_desc} style={{ gridArea: "c" }}>{value.dao_mission.slice(0, 50)}{(value.dao_mission.length > 10) ? '...' : ''}</h2>
-                <p style={{ gridArea: "d" }}>{value.review_count} reviews</p>
-            </div>)
+            return (
+                <Link href={`/dao/${value.slug}`}>
+                    <div key={value.dao_name}
+                        className={styles.suggestion}
+                    >
+                        <img style={{ gridArea: "a" }} src={value.dao_logo} alt="" />
+                        <h1 style={{ gridArea: "b" }}>{value.dao_name}</h1>
+                        <h2 className={styles.sug_desc} style={{ gridArea: "c" }}>{value.dao_mission.slice(0, 50)}{(value.dao_mission.length > 10) ? '...' : ''}</h2>
+                        <p style={{ gridArea: "d" }}>{value.review_count} reviews</p>
+                    </div>
+                </Link>
+            )
         }
     })
 }

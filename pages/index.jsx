@@ -2,14 +2,15 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from './index/index.module.scss'
 import Nav from '../components/Nav';
-import { useState, useEffect,useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import stringSimilarity from "string-similarity";
 import ClipboardJS from 'clipboard'
 import DaoCard from '../components/DaoCard';
 import Loader from '../utils/Loader';
 import _ from 'lodash'
- 
+import Link from 'next/link'
+
 //import addSampleData from './../addSampleData'
 //build
 const openNewTab = (url) => {
@@ -438,14 +439,14 @@ function SearchComp() {
   const [data, setdata] = useState([]);
 
   const fetchData = async (term) => {
-    if(!(term.length > 0)) return
+    if (!(term.length > 0)) return
     console.log('search --> ', term)
     let res = await axios.get(`${API}/search/${term}`);
     (res.data.length > 0) && setdata([...res.data]);
   }
 
   let throttleFetch = useCallback(
-    _.debounce(term => fetchData(term),100),
+    _.debounce(term => fetchData(term), 100),
     [],
   )
 
@@ -503,15 +504,18 @@ const RankToSearch = ({ data }) => {
 
   return data.map((value, idx) => {
     if (idx < 5) {
-      return (<div key={value.dao_name}
-        className={styles.suggestion}
-        onClick={() => { openNewTab(`${window.location.href}/dao/${value.slug}`); }}
-      >
-        <img style={{ gridArea: "a" }} src={value.dao_logo} alt="" />
-        <h1 style={{ gridArea: "b" }}>{value.dao_name}</h1>
-        <h2 className={styles.sug_desc} style={{ gridArea: "c" }}>{value.dao_mission.slice(0, 50)}{(value.dao_mission.length > 10) ? '...' : ''}</h2>
-        <p style={{ gridArea: "d" }}>{value.review_count} reviews</p>
-      </div>)
+      return (
+        <Link href={`/dao/${value.slug}`}>
+          <div key={value.dao_name}
+            className={styles.suggestion}
+          >
+            <img style={{ gridArea: "a" }} src={value.dao_logo} alt="" />
+            <h1 style={{ gridArea: "b" }}>{value.dao_name}</h1>
+            <h2 className={styles.sug_desc} style={{ gridArea: "c" }}>{value.dao_mission.slice(0, 50)}{(value.dao_mission.length > 10) ? '...' : ''}</h2>
+            <p style={{ gridArea: "d" }}>{value.review_count} reviews</p>
+          </div>
+        </Link>
+      )
     }
   })
 }

@@ -47,7 +47,7 @@ function DaoList() {
 
     return (
         <div className={styles.con}>
-            <Nav />
+            <Nav data={dao_list} topSearchVisible={true} />
             <h1 className={styles.title}>Our community library</h1>
             <p className={styles.subText}>Explore our 300+ communities and find the one that fits you</p>
             <div className={styles.m_filters}>
