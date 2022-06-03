@@ -92,7 +92,7 @@ function DaoPage({ dao_data }) {
             <div className={styles.con}>
                 <InfoBar data={dao_data} />
                 <WalletModal visible={walletModelVisible} setvisible={setwalletModelVisible} currentAddress={currentAddress} />
-                <Nav />
+                <Nav topSearchVisible={true} outline={false}  />
                 <div className={styles.cover}>
                     <img src={(dao_data.dao_cover) ? dao_data.dao_cover : "/dao-cover.png"} alt="" />
                     <div className={styles.gradient} />

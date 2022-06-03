@@ -32,7 +32,7 @@ const openMetaMask = async () => {
     return accounts[0]
 }
 
-function Nav({ topSearchVisible, data, outline }) {
+function Nav({ topSearchVisible, outline }) {
     let search_style = styles.nav;
     if (topSearchVisible) {
         search_style = styles.nav + ' ' + styles.topNavSearch
@@ -52,7 +52,7 @@ function Nav({ topSearchVisible, data, outline }) {
             <Link href={'/'}>
                 <img className={styles.logo} src="/logo.png" alt="" />
             </Link>
-            <SearchComp data={data} topSearchVisible={topSearchVisible} />
+            <SearchComp topSearchVisible={topSearchVisible} />
             <ul>
                 <li onClick={() => {
                     openNewTab(`${location.href.split('/')[0]}/dao-form`)
@@ -137,7 +137,7 @@ function SearchComp({ topSearchVisible }) {
                 onClick={() => {
                     setsuggestionVisible(true);
                 }} />
-            <img className={styles.searchIcon} src="search-icon.png" alt="" />
+            <img className={styles.searchIcon} src="/search-icon.png" alt="" />
             {(suggestionVisible && inputFocus) &&
                 <div className={styles.suggestionCon} key="nav">
                     {
