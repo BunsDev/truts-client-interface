@@ -48,7 +48,7 @@ function Nav({ topSearchVisible, outline }) {
     }, [])
 
     return (
-        <div className={search_style} style={(outline) ? { borderBottom: '1px solid rgb(209, 209, 209)' } : null}>
+        <div className={search_style} style={(outline) ? { borderBottom: '1px solid rgb(209, 209, 209)' } : {}}>
             <Link href={'/'}>
                 <img className={styles.logo} src="/logo.png" alt="" />
             </Link>
