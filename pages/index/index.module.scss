@@ -318,12 +318,14 @@
             height: 38px;
             display: flex;
             width: max-content;
-            line-height: 0;
+            line-height: auto;
             justify-content: center;
             align-items: center;
             text-transform: capitalize;
             margin: 0 16px;
             cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         .selected {

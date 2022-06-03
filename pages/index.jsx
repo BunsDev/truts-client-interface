@@ -22,7 +22,7 @@ const openNewTab = (url) => {
 }
 
 const API = process.env.API
-const CATEGORY_LIST = ['all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Event']
+const CATEGORY_LIST = ['all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'DAO Tools', 'Sports']
 
 
 export default function Home({ daoList_ssr, leaderboard_ssr }) {
