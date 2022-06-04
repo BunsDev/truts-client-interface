@@ -126,13 +126,21 @@ export default function Index() {
             "guild_id": guild_id,
             "public_address": public_address,
         }
-        if (id == '627c85db8ffffe001142935d') {
-         
-            window.location.href = `${API}/review/add-review-event?data=${JSON.stringify(postData)}`
+        if (id == '6287dcc3f711c412fb9e1074') {
+            let review_send = await axios.post(`${API}/review/add-review-event`, postData);
+            if (review_send.status == 200) {
+                console.log(review_send.data);
+                let data = { id: review_send.data.db._id, dao_name: review_send.data.db.dao_name, guild_id: review_send.data.db.guild_id, public_address: review_send.data.db.public_address };
+                window.location.href = `${API}/review/authorize-review-event?data=${JSON.stringify(data)}`
+            }
         }
         else {
-
-            window.location.href = `${API}/review/add-review?data=${JSON.stringify(postData)}`
+            let review_send = await axios.post(`${API}/review/add-review`, postData);
+            if (review_send.status == 200) {
+                console.log(review_send.data);
+                let data = { id: review_send.data.db._id, dao_name: review_send.data.db.dao_name, guild_id: review_send.data.db.guild_id, public_address: review_send.data.db.public_address };
+                window.location.href = `${API}/review/authorize-review?data=${JSON.stringify(data)}`
+            }
         }
     }
 
@@ -266,7 +274,7 @@ export default function Index() {
                                     <p>I confirm this review is about my own genuine experience. I am eligible to leave this review, and have not been offered any incentive or payment to leave a review for this company.</p>
                                 </div>
                                 <button className={styles.btnFilled} onClick={() => {
-                                    tc && postReview(formData, data.dao_name, data.guild_id);
+                                    (formData.rating > 0) ? (tc ? postReview(formData, data.dao_name, data.guild_id) : alert("Please check the terms and conditions")) : alert("Please add Rating");
                                 }} >Post the review</button>
                             </div>
                         </div>

@@ -92,7 +92,7 @@ function DaoPage({ dao_data }) {
             <div className={styles.con}>
                 <InfoBar data={dao_data} />
                 <WalletModal visible={walletModelVisible} setvisible={setwalletModelVisible} currentAddress={currentAddress} />
-                <Nav topSearchVisible={true} outline={false}  />
+                <Nav topSearchVisible={true} outline={false} />
                 <div className={styles.cover}>
                     <img src={(dao_data.dao_cover) ? dao_data.dao_cover : "/dao-cover.png"} alt="" />
                     <div className={styles.gradient} />
@@ -177,6 +177,7 @@ function DaoPage({ dao_data }) {
 
                         {
                             dao_data.reviews.map((ele, idx) => {
+                                if (ele?.authorized) { if (ele.authorized == false) { return null } }
                                 return <Comment
                                     key={idx + "comment"}
                                     comment={ele.review_desc}
@@ -889,11 +890,11 @@ function numFormatter(num) {
 }
 
 const shortenUrl = (url) => {
-    let new_url = url.replace('https://', '').replace('http://', '').replace('www.','').replace('/','');
-    if(new_url.length <= 18){
+    let new_url = url.replace('https://', '').replace('http://', '').replace('www.', '').replace('/', '');
+    if (new_url.length <= 18) {
         return new_url
     }
-    else{
+    else {
         return "Website"
     }
 }
