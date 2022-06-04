@@ -32,7 +32,7 @@ export default function Index() {
     const [tc, settc] = useState(false);
     const [data, setdata] = useState(null);
     const [dao_list, setdao_list] = useState(null);
-
+    const [loading, setloading] = useState(false)
     const [id, setid] = useState(null);
 
     useEffect(() => {
@@ -127,6 +127,7 @@ export default function Index() {
             "public_address": public_address,
         }
         if (id == '6287dcc3f711c412fb9e1074') {
+            setloading(true);
             let review_send = await axios.post(`${API}/review/add-review-event`, postData);
             if (review_send.status == 200) {
                 console.log(review_send.data);
@@ -135,6 +136,7 @@ export default function Index() {
             }
         }
         else {
+            setloading(true);
             let review_send = await axios.post(`${API}/review/add-review`, postData);
             if (review_send.status == 200) {
                 console.log(review_send.data);
@@ -163,6 +165,7 @@ export default function Index() {
     return (
         <Provider client={client}>
             <>
+                {loading && <Loader />}
                 {(walletPromptVisible) && <MultiWallet styles={styles} setwalletAddress={setwalletAddress} />}
                 <div className={styles.addReview}>
                     <Nav />
