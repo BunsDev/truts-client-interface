@@ -88,6 +88,7 @@ function DaoPage({ dao_data }) {
                 <title>{dao_data.dao_name}</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                 <link rel="preload" as="image" href="/verified.png"></link>
+                <meta name="description" content={dao_data.dao_mission || dao_data.description} />
             </Head>
             <div className={styles.con}>
                 <InfoBar data={dao_data} />
