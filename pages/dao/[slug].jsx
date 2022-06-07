@@ -112,7 +112,7 @@ function DaoPage({ dao_data }) {
                                         onClick={() => {
                                             openNewTab(`${location.href.split('/')[0]}/dao-list?category=${cat}`)
                                         }}
-                                        key={"cat" + cat}>{`${cat} DAO`}</span>
+                                        key={"cat" + cat}>{`${cat}`}</span>
                                 })
                             }
                         </div>
