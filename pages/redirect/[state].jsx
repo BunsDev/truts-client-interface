@@ -34,17 +34,12 @@ function DaoForm() {
 
     let success = <>
         <img src="/sucess_tick.png" className={styles.sc_tick} alt="" />
-        <p>Congratulations! You have successfully submitted . Now sit back and relax. If we need more information, we will reach out to you. Otherwise, you are all set :)</p>
+        <p>Thank you for reviewing with us. Join Truts discord community to get exclusive rewards and opportunities.</p>
 
         <span className={styles.btns}>
             <button className={styles.primaryBtn} onClick={() => {
-                window.location.href = '../'
+                openNewTab('https://discord.com/invite/96nAdBJ2Kj');
             }}>Join Truts Community</button>
-            <button onClick={() => {
-                id && axios.get(`${API}/dao/redirect?id=${id}&url=${location.href}`).then((res, er) => {
-                    location.href = res.data.url
-                })
-            }}>See Related Reviews</button>
         </span>
 
     </>

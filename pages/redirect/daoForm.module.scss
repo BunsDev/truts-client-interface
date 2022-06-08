@@ -59,6 +59,8 @@
         margin: 0 auto;
     }
     .primaryBtn {
+        font-size: 16px;
+        width: 371px;
         background: linear-gradient(90deg, #5e1ed1 0%, #3065f3 100%);
         color: white;
         &:hover {
@@ -74,8 +76,12 @@
     }
 
     @media (max-width: 428px) {
-        button{
+        button {
             margin-top: 20px;
+            width: auto;
+        }
+        .primaryBtn {
+            width: auto;
         }
         .btns {
             flex-direction: column;
@@ -328,7 +334,8 @@
     .messageCon {
         width: 90vw;
 
-        .sc_tick,.sc_oops{
+        .sc_tick,
+        .sc_oops {
             margin-top: 60px;
         }
 
