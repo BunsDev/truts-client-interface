@@ -277,6 +277,7 @@ export default function Index() {
                                     <p>I confirm this review is about my own genuine experience. I am eligible to leave this review, and have not been offered any incentive or payment to leave a review for this company.</p>
                                 </div>
                                 <button className={styles.btnFilled} onClick={() => {
+                                    if (reviewDesc.length < 1) { return (alert("Please Tell us about your experience with the Community")); }
                                     (formData.rating > 0) ? (tc ? postReview(formData, data.dao_name, data.guild_id) : alert("Please check the terms and conditions")) : alert("Please add Rating");
                                 }} >Post the review</button>
                             </div>

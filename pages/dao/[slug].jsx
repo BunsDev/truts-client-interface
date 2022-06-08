@@ -178,7 +178,6 @@ function DaoPage({ dao_data }) {
 
                         {
                             dao_data.reviews.map((ele, idx) => {
-                                if (ele?.authorized) { if (ele.authorized == false) { return null } }
                                 return <Comment
                                     key={idx + "comment"}
                                     comment={ele.review_desc}
