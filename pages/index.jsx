@@ -82,7 +82,7 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
           <div id={'sec2'} className={styles.sec2}>
             <div className={styles.r1} style={{ backgroundColor: "#121212" }} >
               <span>
-                <h3 style={{ color: "#EB6079" }} >400+</h3>
+                <h3 style={{ color: "#EB6079" }} >450+</h3>
                 <p>Communities listed and verified</p>
               </span>
 
