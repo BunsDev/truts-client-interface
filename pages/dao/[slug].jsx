@@ -50,7 +50,7 @@ function DaoPage({ dao_data }) {
 
     const [dao_list, setdao_list] = useState([]);
 
-    console.log(dao_data)
+  
 
     const fetchSimilar = async () => {
         try {
@@ -885,7 +885,7 @@ function numFormatter(num) {
         return (num / 1000).toFixed(1) + 'K'; // convert to K for number from > 1000 < 1 million 
     } else if (num > 1000000) {
         return (num / 1000000).toFixed(1) + 'M'; // convert to M for number from > 1 million 
-    } else if (num < 900) {
+    } else if (num <= 999) {
         return num; // if value < 1000, nothing to do
     }
 }
