@@ -50,7 +50,7 @@ function DaoPage({ dao_data }) {
 
     const [dao_list, setdao_list] = useState([]);
 
-  
+
 
     const fetchSimilar = async () => {
         try {
@@ -236,22 +236,22 @@ function DaoPage({ dao_data }) {
                         </div>
 
                         <div className={styles.daoInfoPane} >
-                            {(dao_data.description) && <span className={styles.qn}>
+                            {<span className={styles.qn}>
                                 <h3>What is it?</h3>
-                                <p>{dao_data.description}</p>
+                                {(dao_data.description) && <p>{dao_data.description}</p>}
                             </span>}
                             {(dao_data.dao_mission) && <span className={styles.qn}>
-                                <h3>What problem does it solve?</h3>
-                                <p>{dao_data.dao_mission}</p>
+                                {/* <h3>What problem does it solve?</h3> */}
+                                {(dao_data.dao_mission != dao_data.description) && <p>{dao_data.dao_mission}</p>}
                             </span>}
-                            <span className={styles.qn}>
+                            {/* <span className={styles.qn}>
                                 <h3>Type of DAO</h3>
                                 <p>{[...uniqueCategories][0]} {[...uniqueCategories][1]}</p>
                             </span>
                             <span className={styles.qn}>
                                 <h3>URL Slug</h3>
                                 <p>{"truts.xyz/dao/" + dao_data.slug}</p>
-                            </span>
+                            </span> */}
                         </div>
                     </div>
                 </div>
