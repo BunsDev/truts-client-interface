@@ -107,7 +107,7 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
                 <h3>Earn tips for your <span className={styles.text_gold}>genuine reviews</span></h3>
               </span>
               <span style={{ backgroundImage: "url('/d_daoinfo_3.png')" }}>
-                <h3><span className={styles.text_lpurple}>Discover, Join and Contribute</span>to DAOs</h3>
+                <h3><span className={styles.text_lpurple}>Discover, Join and Contribute</span>to Communities</h3>
               </span>
             </div>
           </div>
