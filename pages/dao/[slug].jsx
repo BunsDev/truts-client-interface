@@ -129,7 +129,7 @@ function DaoPage({ dao_data }) {
                                 }}>Add a Review</button>
                             </div>
                         </div>
-                        <div className={styles.dials} >
+                        <div className={styles.dials} key={dao_data.dao_name} >
                             <span className={styles.dialRow}>
                                 <div name={"q1"} className={styles.dialCon}>
                                     <Dial
