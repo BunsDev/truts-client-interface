@@ -49,7 +49,7 @@ function Nav({ topSearchVisible, outline }) {
 
     return (
         <div className={search_style} style={(outline) ? { borderBottom: '1px solid rgb(209, 209, 209)' } : {}}>
-            <Link href={'/'}>
+            <Link href={'/'} passHref>
                 <img className={styles.logo} src="/logo.png" alt="" />
             </Link>
             <SearchComp topSearchVisible={topSearchVisible} />
@@ -57,9 +57,9 @@ function Nav({ topSearchVisible, outline }) {
                 {/* <li onClick={() => {
                     openNewTab(`${location.href.split('/')[0]}/dao-form`)
                 }} >Add a Dao</li> */}
-                <li onClick={() => {
-                    openNewTab(`${location.href.split('/')[0]}/dao-list`)
-                }}>Discover Communities</li>
+                <Link href={'/dao-list'} passHref>
+                    <li>Discover Communities</li>
+                </Link>
                 <li>
                     {(wallet) ?
                         < button
