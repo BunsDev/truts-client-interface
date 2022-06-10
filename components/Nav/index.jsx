@@ -43,6 +43,7 @@ function Nav({ topSearchVisible, outline }) {
     useEffect(() => {
         let wallet = window.localStorage.getItem('wallet');
         if (wallet) {
+            console.log(wallet);
             setwallet(wallet);
         }
     }, [])

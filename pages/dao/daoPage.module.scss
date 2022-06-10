@@ -6,7 +6,7 @@
     background-color: #f6f6f6;
     flex-direction: column;
 
-    @media (max-width: 428px) {
+    @media (max-width: 470px) {
         display: none;
     }
 }
@@ -21,7 +21,7 @@
     position: relative;
     overflow: hidden;
 
-    @media (max-width: 428px) {
+    @media (max-width: 470px) {
         margin-top: 54px;
     }
 
@@ -71,7 +71,7 @@
         }
     }
 
-    @media (max-width: 428px) {
+    @media (max-width: 470px) {
         left: 2px;
         bottom: 0;
         transform: scale(0.75) translateX(-12%);
@@ -305,7 +305,7 @@
         }
     }
 
-    @media (max-width: 428px) {
+    @media (max-width: 470px) {
         width: 92vw;
 
         .commentText {
@@ -491,7 +491,7 @@
     background-image: url("/footer-bg.png");
     background-size: cover;
 
-    @media (max-width: 428px) {
+    @media (max-width: 470px) {
         display: none;
     }
 
@@ -804,7 +804,7 @@
 }
 
 .m_daopage {
-    @media (min-width: 428px) {
+    @media (min-width: 470px) {
         display: none;
     }
 
@@ -974,7 +974,7 @@
             }
         }
 
-        @media (max-width: 428px) {
+        @media (max-width: 470px) {
             width: 95vw;
             height: 177px;
             margin-bottom: 15px;

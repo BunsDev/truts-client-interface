@@ -235,7 +235,7 @@
     padding-right: 0;
     flex-direction: column;
 
-    @media (max-width: 428px) {
+    @media (max-width: 470px) {
         display: none;
     }
 
@@ -347,7 +347,7 @@
     }
 }
 
-@media (max-width: 428px) {
+@media (max-width: 470px) {
     .footer {
         height: auto;
         padding: 0;

@@ -75,7 +75,7 @@
         }
     }
 
-    @media (max-width: 428px) {
+    @media (max-width: 470px) {
         button {
             margin-top: 20px;
             width: auto;
@@ -105,7 +105,7 @@
 //footer
 
 .footer {
-    @media (max-width: 428px) {
+    @media (max-width: 470px) {
         display: none;
     }
     display: flex;
@@ -326,7 +326,7 @@
     margin-top: 64px;
 }
 
-@media (max-width: 428px) {
+@media (max-width: 470px) {
     .con {
         padding-top: 50px;
     }
