@@ -24,7 +24,20 @@ const infuraId = "7cedc93bca594509a5abbaae985320a6"
 const chains = [chain.polygon, chain.polygonMumbai];
 const defaultChain = chain.mainnet
 
+import {
+    useAccount,
+    useConnect,
+    useDisconnect,
+    useEnsName,
+    useSignMessage,
+    useNetwork,
+    useSendTransaction,
+} from 'wagmi';
+
+
 const API = process.env.API
+
+
 
 export default function Index() {
 
@@ -43,6 +56,9 @@ export default function Index() {
         let uid = window.location.href.split('=')[1];
 
         getDetails(cookie, uid)
+        if (!window.Buffer) {
+            window.Buffer = Buffer;
+        }
     }, [])
 
 
@@ -107,19 +123,24 @@ export default function Index() {
         "great_incentives": 0,
     })
 
-    const [walletPromptVisible, setwalletPromptVisible] = useState(false)
-    const [walletAddress, setwalletAddress] = useState(null);
+
+    // postReview(formData, data.dao_name, data.guild_id);
+
+    const [public_address, setpublic_address] = useState('');
+
+    const { data: sign_data, isError, isLoading, isSuccess: signSucess, signMessage } = useSignMessage({
+        message: reviewDesc,
+    })
 
     useEffect(() => {
-        if (walletAddress) {
+        if (signSucess) {
             postReview(formData, data.dao_name, data.guild_id);
         }
-    }, walletAddress)
+    }, [signSucess])
 
     const postReview = async (formData, dao_name, guild_id) => {
-        if (!walletAddress) return setwalletPromptVisible(true);
-        let public_address = walletAddress;
-        console.log("Review Post started");
+        if (!signSucess) { return signMessage() }
+        if (public_address.length < 1) return (alert("Public Adress not found"));
         let postData = {
             ...formData,
             "dao_name": dao_name,
@@ -148,6 +169,8 @@ export default function Index() {
 
 
     console.log(formData);
+    const [connectWalletModelVisible, setconnectWalletModelVisible] = useState(false);
+
 
     if (!data) {
         return (
@@ -163,196 +186,245 @@ export default function Index() {
     }
 
     return (
-        <Provider client={client}>
-            <>
-                {loading && <Loader />}
-                {(walletPromptVisible) && <MultiWallet styles={styles} setwalletAddress={setwalletAddress} />}
-                <div className={styles.addReview}>
-                    <Nav />
-                    <div>
-                        <div className={styles.breadCrum}>
-                            <img src="left-arrow.png" alt="" />
-                            <span>
-                                <p>Add review for</p>
-                                <h3>{data.dao_name}</h3>
-                            </span>
-                        </div>
-                        <div className={styles.reviewForm}>
+        <>
+            {loading && <Loader />}
+            <div className={styles.addReview}>
+                <ConnectWalletModelSimple setpublic_address={setpublic_address} connectWalletModelVisible={connectWalletModelVisible} setconnectWalletModelVisible={setconnectWalletModelVisible} />
+                <Nav />
+                <div>
+                    <div className={styles.breadCrum}>
+                        <img src="left-arrow.png" alt="" />
+                        <span>
+                            <p>Add review for</p>
+                            <h3>{data.dao_name}</h3>
+                        </span>
+                    </div>
+                    <div className={styles.reviewForm}>
 
-                            <p className={styles.title}>Rate your experience</p>
-                            <Rating
-                                setrating={(rating) => {
-                                    setformData((f) => {
-                                        f['rating'] = rating;
-                                        return { ...f };
-                                    })
-                                }}
-                            />
-                            <div className={styles.desc}>
-                                <p className={styles.title}>Tell us about your experience</p>
-                                <textarea
-                                    value={reviewDesc}
-                                    onChange={(e) => {
-                                        setreviewDesc(e.target.value)
-                                    }} placeholder='This is where you will write your review. Explain what happened, and leave out offensive words. Keep your feedback honest, helpful and constructive.' name="" id="" cols="30" rows="10"></textarea>
-                            </div>
-                            <div className={styles.dialCon}>
-                                <p className={styles.title}>Please rate the following experiences</p>
-                                <div className={styles.col}>
-                                    <div className={styles.c1}>
-                                        <div className={styles.dial}>
-                                            <p className={styles.dialTitle}>Do you resonate with the vibes in the DAO community?</p>
-                                            <SliderComp
-                                                setter={(value) => {
-                                                    setformData((f) => {
-                                                        f['resonate_vibes_rate'] = value;
-                                                        return { ...f };
-                                                    })
-                                                }}
-                                            />
-                                        </div>
-                                        <div className={styles.dial}>
-                                            <p className={styles.dialTitle}>Do you believe your opinions matter in the DAO community?</p>
-                                            <SliderComp
-                                                setter={(value) => {
-                                                    setformData((f) => {
-                                                        f['opinions_matter'] = value;
-                                                        return { ...f };
-                                                    })
-                                                }}
-                                            />
-                                        </div>
-                                        <div className={styles.dial}>
-                                            <p className={styles.dialTitle}>Would you recommed this DAO/community to your friend?</p>
-                                            <SliderComp
-                                                setter={(value) => {
-                                                    setformData((f) => {
-                                                        f['friend_recommend'] = value;
-                                                        return { ...f };
-                                                    })
-                                                }}
-                                            />
-                                        </div>
+                        <p className={styles.title}>Rate your experience</p>
+                        <Rating
+                            setrating={(rating) => {
+                                setformData((f) => {
+                                    f['rating'] = rating;
+                                    return { ...f };
+                                })
+                            }}
+                        />
+                        <div className={styles.desc}>
+                            <p className={styles.title}>Tell us about your experience</p>
+                            <textarea
+                                value={reviewDesc}
+                                onChange={(e) => {
+                                    setreviewDesc(e.target.value)
+                                }} placeholder='This is where you will write your review. Explain what happened, and leave out offensive words. Keep your feedback honest, helpful and constructive.' name="" id="" cols="30" rows="10"></textarea>
+                        </div>
+                        <div className={styles.dialCon}>
+                            <p className={styles.title}>Please rate the following experiences</p>
+                            <div className={styles.col}>
+                                <div className={styles.c1}>
+                                    <div className={styles.dial}>
+                                        <p className={styles.dialTitle}>Do you resonate with the vibes in the DAO community?</p>
+                                        <SliderComp
+                                            setter={(value) => {
+                                                setformData((f) => {
+                                                    f['resonate_vibes_rate'] = value;
+                                                    return { ...f };
+                                                })
+                                            }}
+                                        />
                                     </div>
-                                    <div className={styles.c2}>
-                                        <div className={styles.dial}>
-                                            <p className={styles.dialTitle}>How would you rate the DAO’s onboarding experience?</p>
-                                            <SliderComp
-                                                setter={(value) => {
-                                                    setformData((f) => {
-                                                        f['onboarding_exp'] = value;
-                                                        return { ...f };
-                                                    })
-                                                }}
-                                            />
-                                        </div>
-                                        <div className={styles.dial}>
-                                            <p className={styles.dialTitle}>Do you think that DAO has great organizational structure?</p>
-                                            <SliderComp
-                                                setter={(value) => {
-                                                    setformData((f) => {
-                                                        f['great_org_structure'] = value;
-                                                        return { ...f };
-                                                    })
-                                                }}
-                                            />
-                                        </div>
-                                        <div className={styles.dial}>
-                                            <p className={styles.dialTitle}>Do you think there are great incentives for DAO members?</p>
-                                            <SliderComp
-                                                setter={(value) => {
-                                                    setformData((f) => {
-                                                        f['great_incentives'] = value;
-                                                        return { ...f };
-                                                    })
-                                                }}
-                                            />
-                                        </div>
+                                    <div className={styles.dial}>
+                                        <p className={styles.dialTitle}>Do you believe your opinions matter in the DAO community?</p>
+                                        <SliderComp
+                                            setter={(value) => {
+                                                setformData((f) => {
+                                                    f['opinions_matter'] = value;
+                                                    return { ...f };
+                                                })
+                                            }}
+                                        />
+                                    </div>
+                                    <div className={styles.dial}>
+                                        <p className={styles.dialTitle}>Would you recommed this DAO/community to your friend?</p>
+                                        <SliderComp
+                                            setter={(value) => {
+                                                setformData((f) => {
+                                                    f['friend_recommend'] = value;
+                                                    return { ...f };
+                                                })
+                                            }}
+                                        />
                                     </div>
                                 </div>
-                                <div className={styles.tc}>
-                                    <input value={tc} onChange={() => {
-                                        settc(!tc);
-                                    }} className={styles.checkbox} type="checkbox" />
-                                    <p>I confirm this review is about my own genuine experience. I am eligible to leave this review, and have not been offered any incentive or payment to leave a review for this company.</p>
+                                <div className={styles.c2}>
+                                    <div className={styles.dial}>
+                                        <p className={styles.dialTitle}>How would you rate the DAO’s onboarding experience?</p>
+                                        <SliderComp
+                                            setter={(value) => {
+                                                setformData((f) => {
+                                                    f['onboarding_exp'] = value;
+                                                    return { ...f };
+                                                })
+                                            }}
+                                        />
+                                    </div>
+                                    <div className={styles.dial}>
+                                        <p className={styles.dialTitle}>Do you think that DAO has great organizational structure?</p>
+                                        <SliderComp
+                                            setter={(value) => {
+                                                setformData((f) => {
+                                                    f['great_org_structure'] = value;
+                                                    return { ...f };
+                                                })
+                                            }}
+                                        />
+                                    </div>
+                                    <div className={styles.dial}>
+                                        <p className={styles.dialTitle}>Do you think there are great incentives for DAO members?</p>
+                                        <SliderComp
+                                            setter={(value) => {
+                                                setformData((f) => {
+                                                    f['great_incentives'] = value;
+                                                    return { ...f };
+                                                })
+                                            }}
+                                        />
+                                    </div>
                                 </div>
-                                <button className={styles.btnFilled} onClick={() => {
-                                    if (reviewDesc.length < 1) { return (alert("Please Tell us about your experience with the Community")); }
-                                    (formData.rating > 0) ? (tc ? postReview(formData, data.dao_name, data.guild_id) : alert("Please check the terms and conditions")) : alert("Please add Rating");
-                                }} >Post the review</button>
                             </div>
+                            <div className={styles.tc}>
+                                <input value={tc} onChange={() => {
+                                    settc(!tc);
+                                }} className={styles.checkbox} type="checkbox" />
+                                <p>I confirm this review is about my own genuine experience. I am eligible to leave this review, and have not been offered any incentive or payment to leave a review for this company.</p>
+                            </div>
+                            <button className={styles.btnFilled} onClick={() => {
+                                if (reviewDesc.length < 1) { return (alert("Please Tell us about your experience with the Community")); }
+                                (formData.rating > 0) ? (tc ? postReview(formData, data.dao_name, data.guild_id) : alert("Please check the terms and conditions")) : alert("Please add Rating");
+                            }} >Post the review</button>
                         </div>
                     </div>
+                </div>
 
-                    <div className={styles.rightSidebar}>
-                        <h3>Recent reviews</h3>
-                        <div className={styles.scrollBar}>
-                            <div className={styles.reviewCard + ' ' + styles.r1}>
-                                <p>SuperteamDAO is a crazy community, being build by crazy people, helping Web3 flourish alll around, making solana a global enabler for web3. Super cool floks backing super cool projects. Definitely community to be part off. 🚀🚀</p>
-                                <div className={styles.profile}>
-                                    <img className={styles.commaFloat} src="/comma-float.png" alt="" />
-                                    <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
-                                    <p>0x...f4b1</p>
-                                    <Starrating rating={5} />
-                                </div>
+                <div className={styles.rightSidebar}>
+                    <h3>Recent reviews</h3>
+                    <div className={styles.scrollBar}>
+                        <div className={styles.reviewCard + ' ' + styles.r1}>
+                            <p>SuperteamDAO is a crazy community, being build by crazy people, helping Web3 flourish alll around, making solana a global enabler for web3. Super cool floks backing super cool projects. Definitely community to be part off. 🚀🚀</p>
+                            <div className={styles.profile}>
+                                <img className={styles.commaFloat} src="/comma-float.png" alt="" />
+                                <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
+                                <p>0x...f4b1</p>
+                                <Starrating rating={5} />
                             </div>
-                            <div className={styles.reviewCard + ' ' + styles.r1}>
-                                <p>Yooo Memers, The OG Lords of memes at one place. Crazy community for crazy people. Find your vibe here at one place. Post memes and engage and share it with memers... Definitely a place to be for the🚀 folks..</p>
-                                <div className={styles.profile}>
-                                    <img className={styles.commaFloat} src="/comma-float.png" alt="" />
-                                    <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
-                                    <p>0x...e631</p>
-                                    <Starrating rating={5} />
-                                </div>
+                        </div>
+                        <div className={styles.reviewCard + ' ' + styles.r1}>
+                            <p>Yooo Memers, The OG Lords of memes at one place. Crazy community for crazy people. Find your vibe here at one place. Post memes and engage and share it with memers... Definitely a place to be for the🚀 folks..</p>
+                            <div className={styles.profile}>
+                                <img className={styles.commaFloat} src="/comma-float.png" alt="" />
+                                <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
+                                <p>0x...e631</p>
+                                <Starrating rating={5} />
                             </div>
-                            <div className={styles.reviewCard + ' ' + styles.r1}>
-                                <p>Superteam is a community that helps and uplifts all it`s members and solana ecosystem. They help you grow both financially and socially. It`s not a DAO it`s a place where you make friends for life. The best part is there`s opportunity for people from all the areas be it dev, design, marketing, content or memes. WAGMI.</p>
-                                <div className={styles.profile}>
-                                    <img className={styles.commaFloat} src="/comma-float.png" alt="" />
-                                    <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
-                                    <p>0x...c130</p>
-                                    <Starrating rating={5} />
-                                </div>
+                        </div>
+                        <div className={styles.reviewCard + ' ' + styles.r1}>
+                            <p>Superteam is a community that helps and uplifts all it`s members and solana ecosystem. They help you grow both financially and socially. It`s not a DAO it`s a place where you make friends for life. The best part is there`s opportunity for people from all the areas be it dev, design, marketing, content or memes. WAGMI.</p>
+                            <div className={styles.profile}>
+                                <img className={styles.commaFloat} src="/comma-float.png" alt="" />
+                                <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
+                                <p>0x...c130</p>
+                                <Starrating rating={5} />
                             </div>
-                            <div className={styles.reviewCard + ' ' + styles.r1}>
-                                <p>Superteam DAO is a super awesome community. Superteam folks are always buidling cool stuff for the Solana ecosystem. Everyone contribute their absolute best in every way possible. As a part of the community, I can guarantee a great potential to learn and explore the web3 ecosystem. </p>
-                                <div className={styles.profile}>
-                                    <img className={styles.commaFloat} src="/comma-float.png" alt="" />
-                                    <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
-                                    <p>0x...z707</p>
-                                    <Starrating rating={5} />
-                                </div>
+                        </div>
+                        <div className={styles.reviewCard + ' ' + styles.r1}>
+                            <p>Superteam DAO is a super awesome community. Superteam folks are always buidling cool stuff for the Solana ecosystem. Everyone contribute their absolute best in every way possible. As a part of the community, I can guarantee a great potential to learn and explore the web3 ecosystem. </p>
+                            <div className={styles.profile}>
+                                <img className={styles.commaFloat} src="/comma-float.png" alt="" />
+                                <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
+                                <p>0x...z707</p>
+                                <Starrating rating={5} />
                             </div>
-                            <div className={styles.reviewCard + ' ' + styles.r1}>
-                                <p>Superteam is a super high-quality DAO. Nobody ever feels that they are the smartest in the room, which clearly means the Members are in the right place!</p>
-                                <div className={styles.profile}>
-                                    <img className={styles.commaFloat} src="/comma-float.png" alt="" />
-                                    <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
-                                    <p>0x...fAce</p>
-                                    <Starrating rating={5} />
-                                </div>
+                        </div>
+                        <div className={styles.reviewCard + ' ' + styles.r1}>
+                            <p>Superteam is a super high-quality DAO. Nobody ever feels that they are the smartest in the room, which clearly means the Members are in the right place!</p>
+                            <div className={styles.profile}>
+                                <img className={styles.commaFloat} src="/comma-float.png" alt="" />
+                                <img style={{ gridArea: 'a' }} className={styles.profileImg} src="/hero-bg.jpg" alt="" />
+                                <p>0x...fAce</p>
+                                <Starrating rating={5} />
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className={styles.footer}>
-                    <h3>Other similar DAOs</h3>
-                    <div className={styles.daoList}>
-                        {
-                            dao_list.map((ele, idx) => {
-                                if (idx < ((window.outerWidth < 428) ? 3 : 4)) {
-                                    return <DaoCard data={ele} key={idx + "daolist"} />
-                                }
-                            })
-                        }
+            </div>
+            <div className={styles.footer}>
+                <h3>Other similar DAOs</h3>
+                <div className={styles.daoList}>
+                    {
+                        dao_list.map((ele, idx) => {
+                            if (idx < ((window.outerWidth < 428) ? 3 : 4)) {
+                                return <DaoCard data={ele} key={idx + "daolist"} />
+                            }
+                        })
+                    }
 
-                    </div>
                 </div>
-            </>
-        </Provider>
+            </div>
+        </>
     )
 }
 
+const ConnectWalletModelSimple = ({ connectWalletModelVisible, setconnectWalletModelVisible, setpublic_address }) => {
+    const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
+    const { disconnectAsync } = useDisconnect()
+    const { data: walletData, isError, isLoading } = useAccount()
+
+    useEffect(() => {
+        if (!isConnected && !isLoading && !isConnecting) {
+            setconnectWalletModelVisible(true);
+        }
+        if (isConnected && !isLoading) {
+            if (walletData?.address) { setpublic_address(walletData.address) }
+        }
+    })
+
+
+
+    if (connectWalletModelVisible) {
+        return (
+            <div className={styles.connectWalletModel}>
+                <div className={styles.walletModal}>
+                    <div className={styles.wallets}>
+                        <h1 className={styles.title}>Connect Wallet</h1>
+                        <p className={styles.subTitle}>Please select one of the following to proceed</p>
+                        <div className={styles.box}>
+                            {
+                                connectors.map((connector) => {
+                                    return (
+                                        <div key={connector.id} className={styles.option} onClick={async () => {
+                                            let res = await connectAsync(connector);
+                                            if (res) { setconnectWalletModelVisible(false) };
+                                        }}>
+                                            <img src={(connector.name == 'MetaMask') ? "/metamask.png" : "/wallet-connect.png"} alt="" />
+                                            <p> {connector.name}
+                                                {!connector.ready && '(unsupported)'}
+                                                {isConnecting &&
+                                                    connector.id === pendingConnector?.id &&
+                                                    ' (connecting)'}</p>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+    else {
+        return (null)
+    }
+}
 
 
 function Starrating({ rating }) {
@@ -448,29 +520,6 @@ function Rating({ setrating }) {
 
 
 
-
-export const client = createClient({
-    autoConnect: true,
-    connectors({ chainId }) {
-        //const chain = chains.find((x) => x.id === chainId) ?? defaultChain
-        console.log(chains);
-        const rpcUrl =
-            chains.find((x) => { console.log(x.id, chainId); return x.id === chainId })?.rpcUrls?.[0] ??
-            chain.mainnet.rpcUrls[0]
-        console.log(chains)
-        console.log(chainId)
-        return [
-            new InjectedConnector(),
-            new WalletConnectConnector({
-                chains,
-                options: {
-                    qrcode: true,
-                    rpc: { [chain.id]: rpcUrl },
-                },
-            }),
-        ]
-    },
-})
 
 
 /* 
