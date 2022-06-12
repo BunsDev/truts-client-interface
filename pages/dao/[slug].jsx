@@ -7,10 +7,21 @@ import Nav from '../../components/Nav';
 import DaoCard from '../../components/DaoCard';
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import Tip from '../../utils/tip';
-
 import Loader from '../../utils/Loader';
 import LoadingCard from '../../components/LoadingCard';
+import { BigNumber } from "@ethersproject/bignumber";
+
+import {
+    useAccount,
+    useConnect,
+    useDisconnect,
+    useEnsName,
+    useSignMessage,
+    useNetwork,
+    useSendTransaction,
+} from 'wagmi';
+
+import { Buffer } from "buffer";
 
 
 const API = process.env.API;
@@ -38,19 +49,17 @@ function DaoPage({ dao_data }) {
     const router = useRouter()
     const slug = router.query.slug
 
-    const [walletModelVisible, setwalletModelVisible] = useState(false);
-    const [currentAddress, setCurrentAddress] = useState(null);
-
-    //Tipping modules
-
 
     useEffect(() => {
+        if (!window.Buffer) {
+            window.Buffer = Buffer;
+        }
         fetchSimilar()
     }, [])
 
     const [dao_list, setdao_list] = useState([]);
 
-
+    const [current_review_wallet_address, setcurrent_review_wallet_address] = useState('');
 
     const fetchSimilar = async () => {
         try {
@@ -71,8 +80,9 @@ function DaoPage({ dao_data }) {
 
     const [showAlldials, setshowAlldials] = useState(true);
 
-
     const [m_btn, setm_btn] = useState(false);
+
+    const [walletModelVisible, setwalletModelVisible] = useState(false);
 
     if (!dao_data) {
         return (
@@ -92,7 +102,7 @@ function DaoPage({ dao_data }) {
             </Head>
             <div className={styles.con}>
                 <InfoBar data={dao_data} />
-                <WalletModal visible={walletModelVisible} setvisible={setwalletModelVisible} currentAddress={currentAddress} />
+                <WalletModal visible={walletModelVisible} setvisible={setwalletModelVisible} review_wallet_address={current_review_wallet_address} />
                 <Nav topSearchVisible={true} outline={false} />
                 <div className={styles.cover}>
                     <img src={(dao_data.dao_cover) ? dao_data.dao_cover : "/dao-cover.png"} alt="" />
@@ -186,12 +196,11 @@ function DaoPage({ dao_data }) {
                                     profile_img={ele.profile_img}
                                     data={ele}
                                     openModel={() => {
-                                        setCurrentAddress(ele.public_address);
                                         setwalletModelVisible(true);
+                                        setcurrent_review_wallet_address(ele.public_address)
                                     }}
                                 />
                             }).reverse()
-
                         }
 
                         <button className={styles.seeMore}>See more</button>
@@ -527,17 +536,50 @@ const InfoBar = ({ data }) => {
     }
 }
 
-const WalletModal = ({ setvisible, visible, currentAddress }) => {
+const WalletModal = ({ setvisible, visible, review_wallet_address }) => {
 
     const CONNECT_WALLET = 'CONNECT_WALLET';
     const WRONG_NETWORK = 'WRONG_NETWORK';
     const TIP_REVIEWER = 'TIP_REVIEWER';
     const SUCCESS = 'SUCESS';
-    const FAILURE = 'FAILURE'
+    const FAILURE = 'FAILURE';
+    const INSUFFICIENT = 'INSUFFICIENT';
 
     const [dialogType, setdialogType] = useState(CONNECT_WALLET);
 
-    let { currentAccount, payWithMetamask, connectWallet, checkConnectedWallet, changenetwork } = Tip(setdialogType, currentAddress);
+    const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
+    const { disconnectAsync } = useDisconnect()
+    const { data: walletData, isError, isLoading } = useAccount()
+
+    const {
+        activeChain,
+        chains,
+        error,
+        isLoading: chain_loading,
+        pendingChainId,
+        switchNetwork,
+    } = useNetwork()
+
+    let ONE_MATIC = '1000000000000000000'
+
+    const { data, isIdle, isError: tip_isError, isLoading: tip_Loading, isSuccess, sendTransaction } =
+        useSendTransaction({
+            request: {
+                to: review_wallet_address,
+                value: BigNumber.from(ONE_MATIC), // 1 Matic
+            },
+            onError(error) {
+                console.log('Error', error);
+                if (error.code == -32603) {
+                    return setdialogType(INSUFFICIENT);
+                }
+                else return setdialogType(FAILURE);
+            },
+            onSuccess(data) {
+                console.log('Success', data)
+                setdialogType(SUCCESS);
+            },
+        })
 
     const scrollDisable = (control) => {
         if (control) {
@@ -569,16 +611,22 @@ const WalletModal = ({ setvisible, visible, currentAddress }) => {
             <h1 className={styles.title}>Connect Wallet</h1>
             <p className={styles.subTitle}>Please select one of the following to proceed</p>
             <div className={styles.box}>
-                <div className={styles.option} onClick={() => {
-                    checkConnectedWallet();
-                }}>
-                    <img src="/metamask.png" alt="" />
-                    <p>Metamask</p>
-                </div>
-                <div className={styles.option}>
-                    <img src="/wallet-connect.png" alt="" />
-                    <p>Wallet Connect</p>
-                </div>
+                {
+                    connectors.map((connector) => {
+                        return (
+                            <div key={connector.id} className={styles.option} onClick={() => {
+                                connectAsync(connector);
+                            }}>
+                                <img src={(connector.name == 'MetaMask') ? "/metamask.png" : "/wallet-connect.png"} alt="" />
+                                <p> {connector.name}
+                                    {!connector.ready && '(unsupported)'}
+                                    {isConnecting &&
+                                        connector.id === pendingConnector?.id &&
+                                        ' (connecting)'}</p>
+                            </div>
+                        )
+                    })
+                }
             </div>
         </div>
     </>
@@ -588,7 +636,7 @@ const WalletModal = ({ setvisible, visible, currentAddress }) => {
             <h1 className={styles.title}>Wrong Network</h1>
             <p className={styles.subTitle}>Please switch to Matic network in your Wallet</p>
             <div className={styles.connectBtn} onClick={() => {
-                changenetwork();
+                switchNetwork(137);
             }}>
                 <img src="/polygon.png" alt="" />
                 <p>Switch to Polygon Chain</p>
@@ -598,7 +646,7 @@ const WalletModal = ({ setvisible, visible, currentAddress }) => {
 
 
     let tipReviewer = <>
-        <div className={styles.wallets}>
+        <div className={styles.wallets} key={"wallets"}>
             <h1 className={styles.title}>Tip the reviewer</h1>
             <p className={styles.subTitle}>Please note, tips are only possible on <strong>Polygon</strong></p>
             <div className={styles.tokenAmountBox}>
@@ -614,16 +662,16 @@ const WalletModal = ({ setvisible, visible, currentAddress }) => {
                 </div>
             </div>
             <div className={styles.connectBtn} onClick={async () => {
-                await payWithMetamask();
+                (!tip_Loading) && sendTransaction();
             }}>
                 {/* <img src="/polygon.png" alt="" /> */}
-                <p>Tip it!</p>
+                {(!tip_Loading) ? <p>Tip it!</p> : <p>Waiting for transaction to complete...</p>}
             </div>
         </div>
     </>
 
     let success = <>
-        <div className={styles.wallets}>
+        <div className={styles.wallets} key={"success"}>
             <div className={styles.finalPrompt}>
                 <img src="/sucess_tick.png" alt="" />
                 <p>Transaction successful. Thank you for your contribution and gratuity.</p>
@@ -632,7 +680,7 @@ const WalletModal = ({ setvisible, visible, currentAddress }) => {
     </>
 
     let failure = <>
-        <div className={styles.wallets}>
+        <div className={styles.wallets} key={"failure"}>
             <div className={styles.finalPrompt}>
                 <img src="/oops.png" alt="" />
                 <p>Transaction unsuccessful. Can you please try again :)</p>
@@ -640,11 +688,26 @@ const WalletModal = ({ setvisible, visible, currentAddress }) => {
         </div>
     </>
 
+    let insufficient = <>
+        <div className={styles.wallets} key={"balance"}>
+            <div className={styles.finalPrompt}>
+                <img src="/oops.png" alt="" />
+                <p>Transaction unsuccessful. Please make sure you have enough tokens for Gas fee :)</p>
+            </div>
+        </div>
+    </>
+
     const selector = () => {
         if (dialogType == CONNECT_WALLET) {
+            if (!isConnecting && isConnected) {
+                return setdialogType(WRONG_NETWORK);
+            }
             return wallets
         }
         else if (dialogType == WRONG_NETWORK) {
+            if (activeChain.id == 137) {
+                return setdialogType(TIP_REVIEWER);
+            }
             return wrongNetwork
         }
         else if (dialogType == TIP_REVIEWER) {
@@ -655,6 +718,9 @@ const WalletModal = ({ setvisible, visible, currentAddress }) => {
         }
         else if (dialogType == FAILURE) {
             return failure
+        }
+        else if (dialogType == INSUFFICIENT) {
+            return insufficient
         }
     }
 
@@ -679,69 +745,135 @@ const WalletModal = ({ setvisible, visible, currentAddress }) => {
 
 }
 
+const ConnectWalletModelSimple = ({ connectWalletModelVisible, setconnectWalletModelVisible }) => {
+    const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
+    const { disconnectAsync } = useDisconnect()
+    const { data: walletData, isError, isLoading } = useAccount()
+
+    if (connectWalletModelVisible) {
+        return (
+            <div className={styles.connectWalletModel}>
+                <div className={styles.walletModal}>
+                    <div className={styles.wallets}>
+                        <h1 className={styles.title}>Connect Wallet</h1>
+                        <p className={styles.subTitle}>Please select one of the following to proceed</p>
+                        <div className={styles.box}>
+                            {
+                                connectors.map((connector) => {
+                                    return (
+                                        <div key={connector.id} className={styles.option} onClick={async () => {
+                                            await connectAsync(connector);
+                                            setconnectWalletModelVisible(false);
+                                        }}>
+                                            <img src={(connector.name == 'MetaMask') ? "/metamask.png" : "/wallet-connect.png"} alt="" />
+                                            <p> {connector.name}
+                                                {!connector.ready && '(unsupported)'}
+                                                {isConnecting &&
+                                                    connector.id === pendingConnector?.id &&
+                                                    ' (connecting)'}</p>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+    else {
+        return (null)
+    }
+}
+
 function Comment({ comment, address, rating, profile_img, openModel, data }) {
 
-    const openMetaMask = async (type) => {
-        let ethereum = window.ethereum
-        if (!ethereum) {
-            alert("wallet error! unable fetch public address");
-            return false
+    const [wrapText, setwrapText] = useState(true);
+    const [ratingLoading, setratingLoader] = useState(false);
+
+    const [thumbsUp, setThumbsUp] = useState(data.thumbs_up);
+    const [thumbsDown, setThumbsDown] = useState(data.thumbs_down);
+
+    // thumbs_up: data.thumbs_up, thumbs_down: data.thumbs_down
+
+    const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
+    const { disconnectAsync } = useDisconnect()
+    const { data: walletData, isError, isLoading } = useAccount()
+
+    const [connectWalletModelVisible, setconnectWalletModelVisible] = useState(false);
+
+    const giveThumbs = async (type) => {
+        console.log("rating ", type)
+        if (!isConnected) {
+            setconnectWalletModelVisible(true);
         }
-        let accounts = await ethereum.request({ method: 'eth_requestAccounts' })
-        if (!accounts) {
-            return false
+        else {
+            if (type == 'up') {
+                let res = await addRating(true);
+                if (res) {
+                    if (res.deleted == true) {
+                        setThumbsUp(thumbsUp - 1);
+                    }
+                    else {
+                        if (!res.unique) {
+                            setThumbsDown(thumbsDown - 1);
+                        }
+                        setThumbsUp(thumbsUp + 1);
+                    }
+                }
+            }
+            else if (type == 'down') {
+                let res = await addRating(false);
+                if (res) {
+                    if (res.deleted == true) {
+                        setThumbsDown(thumbsDown - 1);
+                    }
+                    else {
+                        if (!res.unique) {
+                            setThumbsUp(thumbsUp - 1);
+                        }
+                        setThumbsDown(thumbsDown + 1);
+                    }
+                }
+            }
         }
-        console.log(accounts);
-        let res = await addRating(accounts[0], type)
-        return res;
+        setratingLoader(false);
     }
 
-    const [wrapText, setwrapText] = useState(true);
-
-    const addRating = async (wallet_address, type) => {
-        try {
-            let res = await axios.post(`${API}/review/rate-review`, {
-                "review_id": data._id,
-                "wallet_address": wallet_address,
-                "type": type
-            });
-            if (res.status == 200) {
-                return true;
+    const addRating = async (type) => {
+        console.log("rating ", type)
+        if (!isConnected) {
+        }
+        else {
+            try {
+                let res = await axios.post(`${API}/review/rate-review`, {
+                    "review_id": data._id,
+                    "wallet_address": walletData.address,
+                    "type": type
+                });
+                console.log(res);
+                if (res.status == 200) {
+                    return { status: true, unique: res.data.unique, deleted: res.data.deleted };
+                }
+                else {
+                    alert("network error");
+                    return false;
+                }
             }
-            else {
-                alert("network error");
+            catch (er) {
+                console.log(er)
                 return false;
             }
         }
-        catch (er) {
-            console.log(er)
-            return false;
-        }
     }
-
-    const [currentRatingState, setcurrentRatingState] = useState('');
 
     let p_img = (profile_img) ? profile_img : "/hero-bg.jpg"
 
-    useEffect(() => {
-        const updateRating = async () => {
-            if (currentRatingState == 'thumbs_up') {
-                let res = await openMetaMask(true);
-                (!res) && setcurrentRatingState('');
-            }
-            else if (currentRatingState == 'thumbs_down') {
-                let res = await openMetaMask(false);
-                (!res) && setcurrentRatingState('');
-            }
-        }
-
-        updateRating();
-    }, [currentRatingState])
-
     return (
         <div className={styles.comment}>
+            <ConnectWalletModelSimple connectWalletModelVisible={connectWalletModelVisible} setconnectWalletModelVisible={setconnectWalletModelVisible} />
             <div className={styles.profileName}>
-                <img style={{ gridArea: 'a' }} src={p_img} alt="" />
+                <img style={{ gridArea: 'a' }} src={p_img} alt="" onError={(e) => { e.target.src = '/hero-bg.jpg' }} />
                 <h1 onClick={() => {
                     navigator.clipboard.writeText(address);
                 }}
@@ -757,18 +889,21 @@ function Comment({ comment, address, rating, profile_img, openModel, data }) {
             }} >{(wrapText) ? "Read more" : "Show less"}</button>}
             <div className={styles.likes}>
                 <span>
-                    <img src="/thumbs-up.png" alt="" onClick={async () => {
-                        setcurrentRatingState('thumbs_up')
+                    {(!ratingLoading) ? <> <img src="/thumbs-up.png" alt="" onClick={() => {
+                        setratingLoader(true);
+                        giveThumbs('up');
                     }} />
-                    <p>{(currentRatingState == 'thumbs_up') ? data.thumbs_up + 1 : data.thumbs_up}</p>
+                        <p>{thumbsUp}</p>
+                    </> : <><img src="/mini-loader.gif" alt="" /><p> </p></>}
                 </span>
                 <span>
-                    <img src="/thumbs-down.png" alt="" onClick={async () => {
-                        setcurrentRatingState('thumbs_down')
-                        // let res = await openMetaMask(false)
-                        //     (!res) && setcurrentRatingState('');
-                    }} />
-                    <p>{(currentRatingState == 'thumbs_down') ? data.thumbs_down + 1 : data.thumbs_down}</p>
+                    {(!ratingLoading) ? <>
+                        <img src="/thumbs-down.png" alt="" onClick={async () => {
+                            setratingLoader(true);
+                            giveThumbs('down');
+                        }} />
+                        <p>{thumbsDown}</p>
+                    </> : <> <img src="/mini-loader.gif" alt="" /> <p> </p></>}
                 </span>
                 <span>
                     <img src="/tips.png" alt="" onClick={() => { openModel() }} />

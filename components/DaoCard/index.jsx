@@ -17,7 +17,7 @@ function DaoCard({ data, link }) {
     return (
         <Link href={`/dao/${link}`}>
             <div className={styles.daoCard}>
-                <img className={styles.cardCover} src={cover} alt="" />
+                <img className={styles.cardCover} src={cover} alt=""  onError={(e)=>{e.target.src = '/hero-bg.jpg'}} />
                 <div className={styles.info}>
                     <p className={styles.daoName}>{limitText(data.dao_name)} <img src="/verified.png" alt="" />
                         {(data.dao_name.length >= 18) && <div className={styles.toolTip}>
