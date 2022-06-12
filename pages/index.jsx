@@ -39,19 +39,22 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
     getDynamicCategoryDaoList(setdaoList);
   }, [])
 
-  useEffect(() => {
+  const resize = () => {
+    let bdy = document.querySelector('body');
+    bdy.style.zoom = `${100}%`
     if (window.innerWidth >= 470 && window.innerWidth < 1440) {
       console.log(window.innerWidth)
-      let bdy = document.querySelector('body');
       bdy.style.zoom = `${((window.innerWidth) / 1440) * 100}%`
     }
-
-    window.addEventListener('resize', () => {
-      if (window.innerWidth >= 470 && window.innerWidth < 1440) {
-        let bdy = document.querySelector('body');
-        bdy.style.zoom = `${((window.innerWidth) / 1440) * 100}%`
-      }
-    })
+  }
+  const fluidResize = () => {
+    window.addEventListener('resize', resize)
+    window.addEventListener('fullscreenchange', resize)
+    window.addEventListener('webkitfullscreenchange', resize)
+  }
+  useEffect(() => {
+    resize();
+    fluidResize();
   }, [])
 
   useEffect(() => {
@@ -74,6 +77,19 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
     })
 
   }, [daoList])
+
+  // useEffect(() => {
+  //   const myObserver = new ResizeObserver(entries => {
+  //     entries.forEach(entry => {
+  //       console.log('width', entry.contentRect.width);
+  //       console.log('height', entry.contentRect.height);
+  //     });
+  //     resize();
+  //   });
+
+  //   const someEl = document.querySelector(`.${styles.container_desktop}`);
+  //   myObserver.observe(someEl);
+  // },[])
 
   return (
     <>

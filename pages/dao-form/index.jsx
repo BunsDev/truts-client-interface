@@ -27,7 +27,7 @@ const openNewTab = (url) => {
     a.target = '_blank';
     a.href = url;
     a.click();
-  }
+}
 
 function DaoForm() {
 
@@ -40,6 +40,24 @@ function DaoForm() {
         logo: '',
         cover: ''
     })
+
+    const resize = () => {
+        let bdy = document.querySelector('body');
+        bdy.style.zoom = `${100}%`
+        if (window.innerWidth >= 470 && window.innerWidth < 1440) {
+            console.log(window.innerWidth)
+            bdy.style.zoom = `${((window.innerWidth) / 1440) * 100}%`
+        }
+    }
+    const fluidResize = () => {
+        window.addEventListener('resize', resize)
+        window.addEventListener('fullscreenchange', resize)
+        window.addEventListener('webkitfullscreenchange', resize)
+    }
+    useEffect(() => {
+        resize();
+        fluidResize();
+    }, [])
 
 
     let formHandler = (e) => {
@@ -63,9 +81,9 @@ function DaoForm() {
         let url = `${process.env.API}/dao/create-new-dao`
         let res = await axios.post(url, { ...formData, dao_category: daoCatList });
         if (res.data.status == true) {
-          window.location.href = './redirect/success'
+            window.location.href = './redirect/success'
         }
-        else{
+        else {
             window.location.href = './redirect/failed'
         }
         console.log(res);
@@ -223,10 +241,10 @@ function DaoForm() {
                     Love what we do? Truts your guts and join us now!
                 </h2>
                 <span className={styles.socialIcon}>
-              <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
-              <img src="/discord-grey.png" onClick={() => { openNewTab('https://discord.truts.xyz') }} alt=""  />
-              <img onClick={() => { openNewTab('https://truts.xyz') }} src="/web-grey.png" alt="" />
-            </span>
+                    <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
+                    <img src="/discord-grey.png" onClick={() => { openNewTab('https://discord.truts.xyz') }} alt="" />
+                    <img onClick={() => { openNewTab('https://truts.xyz') }} src="/web-grey.png" alt="" />
+                </span>
                 <p className={styles.footerSubTitle}></p>
             </div>
         </div>

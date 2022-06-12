@@ -49,21 +49,24 @@ function DaoPage({ dao_data }) {
     const router = useRouter()
     const slug = router.query.slug
 
-    
-  useEffect(() => {
-    if (window.innerWidth >= 470 && window.innerWidth < 1440) {
-      console.log(window.innerWidth)
-      let bdy = document.querySelector('body');
-      bdy.style.zoom = `${((window.innerWidth) / 1440) * 100}%`
-    }
 
-    window.addEventListener('resize', () => {
-      if (window.innerWidth >= 470 && window.innerWidth < 1440) {
+    const resize = () => {
         let bdy = document.querySelector('body');
-        bdy.style.zoom = `${((window.innerWidth) / 1440) * 100}%`
-      }
-    })
-  }, [])
+        bdy.style.zoom = `${100}%`
+        if (window.innerWidth >= 470 && window.innerWidth < 1440) {
+            console.log(window.innerWidth)
+            bdy.style.zoom = `${((window.innerWidth) / 1440) * 100}%`
+        }
+    }
+    const fluidResize = () => {
+        window.addEventListener('resize', resize)
+        window.addEventListener('fullscreenchange', resize)
+        window.addEventListener('webkitfullscreenchange', resize)
+    }
+    useEffect(() => {
+        resize();
+        fluidResize();
+    }, [])
 
     useEffect(() => {
         if (!window.Buffer) {
@@ -117,7 +120,7 @@ function DaoPage({ dao_data }) {
                 <meta name="description" content={dao_data.dao_mission || dao_data.description} />
             </Head>
             <div className={styles.main_con}>
-            <WalletModal visible={walletModelVisible} setvisible={setwalletModelVisible} review_wallet_address={current_review_wallet_address} />
+                <WalletModal visible={walletModelVisible} setvisible={setwalletModelVisible} review_wallet_address={current_review_wallet_address} />
                 <div className={styles.con}>
                     <InfoBar data={dao_data} />
                     <Nav topSearchVisible={true} outline={false} />
