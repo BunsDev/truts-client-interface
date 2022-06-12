@@ -532,6 +532,11 @@
     background-color: rgba(0, 0, 0, 0.274);
     z-index: 1000000;
     position: absolute;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
 }
 
 .walletModal {
@@ -641,8 +646,6 @@
 
 .connectWalletModel {
     @extend .walletCon;
-    top: 0;
-    left: 0;
 }
 
 .connectBtn {
