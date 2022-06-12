@@ -224,7 +224,7 @@ function DaoForm() {
                 </h2>
                 <span className={styles.socialIcon}>
               <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
-              {/* <img src="/discord-grey.png" alt="" /> */}
+              <img src="/discord-grey.png" onClick={() => { openNewTab('https://discord.truts.xyz') }} alt=""  />
               <img onClick={() => { openNewTab('https://truts.xyz') }} src="/web-grey.png" alt="" />
             </span>
                 <p className={styles.footerSubTitle}></p>

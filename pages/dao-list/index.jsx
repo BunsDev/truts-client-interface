@@ -80,7 +80,7 @@ function DaoList() {
                     }
                 </select>
 
-                <select name="" id="">
+                {/* <select name="" id="">
                     {[
                         'Ratings (High to Low)',
                         'Ratings (Low to High)',
@@ -91,17 +91,17 @@ function DaoList() {
                         )
                     })
                     }
-                </select>
+                </select> */}
             </div>
             <div className={styles.col2}>
                 <div className={styles.leftNav}>
-                    <Filter list={[
+                    {/* <Filter list={[
                         'Ratings (High to Low)',
                         'Ratings (Low to High)',
                         'Sort by name (A-Z)'
                     ]}
                         selectedTab={'all'} setselectedTab={() => { }}
-                    />
+                    /> */}
                     {/* Second filter */}
                     <Filter list={[
                         'all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal'

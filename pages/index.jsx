@@ -90,7 +90,7 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
             <h3>Review web3 communities,</h3>
             <h3 className={styles.titleBlue}>Earn Rewards!</h3>
           </div>
-          <p className={styles.subTitle}>Discover cool communities Learn, Contribute and Earn with communities you love and Truts</p>
+          <p className={styles.subTitle}>Discover cool communities, Learn, Contribute and Earn with communities you love and Truts</p>
           <SearchComp data={daoList} />
         </div>
 
@@ -265,7 +265,7 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
             </h2>
             <span className={styles.socialIcon}>
               <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
-              {/* <img src="/discord-grey.png" alt="" /> */}
+              <img src="/discord-grey.png" alt="" onClick={() => { openNewTab('https://discord.truts.xyz') }} />
               <img onClick={() => { openNewTab('https://truts.xyz') }} src="/web-grey.png" alt="" />
             </span>
             <p className={styles.footerSubTitle}></p>
