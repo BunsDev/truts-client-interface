@@ -184,6 +184,7 @@
     height: 95px;
     padding-top: 5px;
     margin-top: 0;
+    
 
     .searchComp {
         input {
@@ -252,6 +253,9 @@
             height: 20.51px;
             cursor: pointer;
         }
+    }
+    .topNavSearch {
+        display: none;
     }
 }
 
