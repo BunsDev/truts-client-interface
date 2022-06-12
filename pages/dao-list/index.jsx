@@ -10,6 +10,22 @@ const API = process.env.API;
 
 function DaoList() {
 
+    
+  useEffect(() => {
+    if (window.innerWidth >= 470 && window.innerWidth < 1440) {
+      console.log(window.innerWidth)
+      let bdy = document.querySelector('body');
+      bdy.style.zoom = `${((window.innerWidth) / 1440) * 100}%`
+    }
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 470 && window.innerWidth < 1440) {
+        let bdy = document.querySelector('body');
+        bdy.style.zoom = `${((window.innerWidth) / 1440) * 100}%`
+      }
+    })
+  }, [])
+
     const [dao_list, setdao_list] = useState(null);
     const [selectedTab, setselectedTab] = useState('all');
 

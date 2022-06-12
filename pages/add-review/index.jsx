@@ -48,6 +48,22 @@ export default function Index() {
     const [loading, setloading] = useState(false)
     const [id, setid] = useState(null);
 
+
+    useEffect(() => {
+        if (window.innerWidth >= 470 && window.innerWidth < 1440) {
+            console.log(window.innerWidth)
+            let bdy = document.querySelector('body');
+            bdy.style.zoom = `${((window.innerWidth) / 1440) * 100}%`
+        }
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 470 && window.innerWidth < 1440) {
+                let bdy = document.querySelector('body');
+                bdy.style.zoom = `${((window.innerWidth) / 1440) * 100}%`
+            }
+        })
+    }, [])
+
     useEffect(() => {
         let cookie = window.getCookie = function (name) {
             var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));

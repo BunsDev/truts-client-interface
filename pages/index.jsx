@@ -40,6 +40,21 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
   }, [])
 
   useEffect(() => {
+    if (window.innerWidth >= 470 && window.innerWidth < 1440) {
+      console.log(window.innerWidth)
+      let bdy = document.querySelector('body');
+      bdy.style.zoom = `${((window.innerWidth) / 1440) * 100}%`
+    }
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 470 && window.innerWidth < 1440) {
+        let bdy = document.querySelector('body');
+        bdy.style.zoom = `${((window.innerWidth) / 1440) * 100}%`
+      }
+    })
+  }, [])
+
+  useEffect(() => {
     //Floating search bar
     let sec2 = document.querySelector('#sec2');
 
