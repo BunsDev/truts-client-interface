@@ -5,26 +5,27 @@ import { useState, useEffect } from 'react';
 import DaoCard from '../../components/DaoCard';
 import axios from 'axios';
 import Loader from '../../utils/Loader';
+import Head from 'next/head'
 
 const API = process.env.API;
 
 function DaoList() {
 
-    
-  useEffect(() => {
-    if (window.innerWidth >= 470 && window.innerWidth < 1440) {
-      console.log(window.innerWidth)
-      let bdy = document.querySelector('body');
-      bdy.style.zoom = `${((window.innerWidth) / 1440) * 100}%`
-    }
 
-    window.addEventListener('resize', () => {
-      if (window.innerWidth >= 470 && window.innerWidth < 1440) {
-        let bdy = document.querySelector('body');
-        bdy.style.zoom = `${((window.innerWidth) / 1440) * 100}%`
-      }
-    })
-  }, [])
+    useEffect(() => {
+        if (window.innerWidth >= 470 && window.innerWidth < 1440) {
+            console.log(window.innerWidth)
+            let bdy = document.querySelector('body');
+            bdy.style.zoom = `${((window.innerWidth) / 1440) * 100}%`
+        }
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 470 && window.innerWidth < 1440) {
+                let bdy = document.querySelector('body');
+                bdy.style.zoom = `${((window.innerWidth) / 1440) * 100}%`
+            }
+        })
+    }, [])
 
     const [dao_list, setdao_list] = useState(null);
     const [selectedTab, setselectedTab] = useState('all');
@@ -62,25 +63,31 @@ function DaoList() {
     }
 
     return (
-        <div className={styles.con}>
-            <Nav data={dao_list} topSearchVisible={true} outline={true} />
-            <h1 className={styles.title}>Our community library</h1>
-            <p className={styles.subText}>Explore our 300+ communities and find the one that fits you</p>
-            <div className={styles.m_filters}>
-                <select onChange={(e) => {
-                    setselectedTab(e.target.value);
-                }} name="" id="">
-                    {[
-                        'all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal'
-                    ].map((ele, idx) => {
-                        return (
-                            <option key={ele + idx} value={ele}>{ele}</option>
-                        )
-                    })
-                    }
-                </select>
+        <>
+            <Head>
+                <title>Truts</title>
+                <meta name="description" content="Discover web3 communities that vibes with you from a list of thousands of communities across different categories (service, investment, media, social) and know all about them" />
+                <link rel="icon" href="/favicon.png" />
+            </Head>
+            <div className={styles.con}>
+                <Nav data={dao_list} topSearchVisible={true} outline={true} />
+                <h1 className={styles.title}>Our community library</h1>
+                <p className={styles.subText}>Explore our 300+ communities and find the one that fits you</p>
+                <div className={styles.m_filters}>
+                    <select onChange={(e) => {
+                        setselectedTab(e.target.value);
+                    }} name="" id="">
+                        {[
+                            'all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal'
+                        ].map((ele, idx) => {
+                            return (
+                                <option key={ele + idx} value={ele}>{ele}</option>
+                            )
+                        })
+                        }
+                    </select>
 
-                {/* <select name="" id="">
+                    {/* <select name="" id="">
                     {[
                         'Ratings (High to Low)',
                         'Ratings (Low to High)',
@@ -92,59 +99,60 @@ function DaoList() {
                     })
                     }
                 </select> */}
-            </div>
-            <div className={styles.col2}>
-                <div className={styles.leftNav}>
-                    {/* <Filter list={[
+                </div>
+                <div className={styles.col2}>
+                    <div className={styles.leftNav}>
+                        {/* <Filter list={[
                         'Ratings (High to Low)',
                         'Ratings (Low to High)',
                         'Sort by name (A-Z)'
                     ]}
                         selectedTab={'all'} setselectedTab={() => { }}
                     /> */}
-                    {/* Second filter */}
-                    <Filter list={[
-                        'all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal'
-                    ]} selectedTab={selectedTab} setselectedTab={setselectedTab} />
-                </div>
+                        {/* Second filter */}
+                        <Filter list={[
+                            'all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal'
+                        ]} selectedTab={selectedTab} setselectedTab={setselectedTab} />
+                    </div>
 
-                <div className={styles.cardCon}>
-                    {
-                        dao_list.map((ele, idx) => {
-                            if (selectedTab == 'all') {
-                                return (
-                                    <DaoCard
-                                        link={ele.slug}
-                                        data={ele}
-                                        key={'c' + idx + selectedTab}
-                                    />
-                                )
-                            } else {
+                    <div className={styles.cardCon}>
+                        {
+                            dao_list.map((ele, idx) => {
+                                if (selectedTab == 'all') {
+                                    return (
+                                        <DaoCard
+                                            link={ele.slug}
+                                            data={ele}
+                                            key={'c' + idx + selectedTab}
+                                        />
+                                    )
+                                } else {
 
-                                if (ele.dao_category.includes(selectedTab)) {
-                                    return <DaoCard
-                                        link={ele.slug}
-                                        data={ele}
-                                        key={'c' + idx + selectedTab}
-                                    />
+                                    if (ele.dao_category.includes(selectedTab)) {
+                                        return <DaoCard
+                                            link={ele.slug}
+                                            data={ele}
+                                            key={'c' + idx + selectedTab}
+                                        />
+                                    }
                                 }
-                            }
-                        }).reverse()
-                    }
+                            }).reverse()
+                        }
+                    </div>
                 </div>
-            </div>
-            <div className={styles.footer}>
-                <h2 className={styles.footerTitle}>
-                    Love what we do? Truts your guts and join us now!
-                </h2>
-                <span className={styles.socialIcon}>
-                    <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
-                    {/* <img src="/discord-grey.png" alt="" /> */}
-                    <img onClick={() => { openNewTab('https://truts.xyz') }} src="/web-grey.png" alt="" />
-                </span>
-                <p className={styles.footerSubTitle}></p>
-            </div>
-        </div >
+                <div className={styles.footer}>
+                    <h2 className={styles.footerTitle}>
+                        Love what we do? Truts your guts and join us now!
+                    </h2>
+                    <span className={styles.socialIcon}>
+                        <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
+                        {/* <img src="/discord-grey.png" alt="" /> */}
+                        <img onClick={() => { openNewTab('https://truts.xyz') }} src="/web-grey.png" alt="" />
+                    </span>
+                    <p className={styles.footerSubTitle}></p>
+                </div>
+            </div >
+        </>
     )
 }
 

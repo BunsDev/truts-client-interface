@@ -5,7 +5,7 @@ import Nav from '../../components/Nav';
 import axios from 'axios';
 import MultiWallet from '../../utils/MultiWallet';
 import Loader from '../../utils/Loader';
-
+import Head from 'next/head'
 import { Provider, WagmiProvider, chain, createClient, defaultChains } from 'wagmi'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { InjectedConnector } from 'wagmi/connectors/injected'
@@ -203,6 +203,11 @@ export default function Index() {
 
     return (
         <>
+            <Head>
+                <title>Truts</title>
+                <meta name="description" content="Discover web3 communities that vibes with you from a list of thousands of communities across different categories (service, investment, media, social) and know all about them" />
+                <link rel="icon" href="/favicon.png" />
+            </Head>
             {loading && <Loader />}
             <div className={styles.addReview}>
                 <ConnectWalletModelSimple setpublic_address={setpublic_address} connectWalletModelVisible={connectWalletModelVisible} setconnectWalletModelVisible={setconnectWalletModelVisible} />
@@ -312,7 +317,7 @@ export default function Index() {
                                 <input value={tc} onChange={() => {
                                     settc(!tc);
                                 }} className={styles.checkbox} type="checkbox" />
-                                <p>I confirm this review is about my own genuine experience. I am eligible to leave this review, and have not been offered any incentive or payment to leave a review for this company.</p>
+                                <p>I confirm this review is about my own genuine experience. I am eligible to leave this review, and have not been offered any incentive or payment to leave a review for this community.</p>
                             </div>
                             <button className={styles.btnFilled} onClick={() => {
                                 if (reviewDesc.length < 1) { return (alert("Please Tell us about your experience with the Community")); }

@@ -106,12 +106,12 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
                 border: "1.25px solid #3f3f3f8d", padding: "0 50px", borderTopColor: "#121212",
                 borderBottomColor: "#121212",
               }} >
-                <h3 style={{ color: "#E1BA9D" }}>1000+</h3>
+                <h3 style={{ color: "#E1BA9D" }}>100+</h3>
                 <p>Reviews Posted and Counting</p>
               </span>
 
               <span>
-                <h3 style={{ color: "#C09DFF" }}>500+</h3>
+                <h3 style={{ color: "#C09DFF" }}>200+</h3>
                 <p>Individuals joined Web3 using Truts</p>
               </span>
             </div>
@@ -388,7 +388,7 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
             </h2>
             <span className={styles.socialIcon}>
               <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
-              {/* <img src="/discord-grey.png" alt="" /> */}
+              <img onClick={() => { openNewTab('https://discord.truts.xyz') }} src="/discord-grey.png" alt="" />
               <img onClick={() => { openNewTab('https://truts.xyz') }} src="/web-grey.png" alt="" />
             </span>
             <p className={styles.footerSubTitle}></p>
