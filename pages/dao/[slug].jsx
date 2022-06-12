@@ -889,7 +889,7 @@ function Comment({ comment, address, rating, profile_img, openModel, data }) {
                     navigator.clipboard.writeText(address);
                 }}
                     style={{ cursor: "pointer" }}
-                >{address.slice(0, 5) + "..." + address.slice(-4, -1)}</h1>
+                >{address.slice(0, 5) + "..." + address.slice(-4)}</h1>
                 <Starrating rating={rating} />
             </div>
             <p className={styles.commentText}>
