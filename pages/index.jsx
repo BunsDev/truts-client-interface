@@ -10,6 +10,7 @@ import DaoCard from '../components/DaoCard';
 import Loader from '../utils/Loader';
 import _ from 'lodash'
 import Link from 'next/link'
+import Footer from '../components/Footer'
 
 
 //import addSampleData from './../addSampleData'
@@ -275,7 +276,7 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
               </div>
             </div>
           </div>
-          <div className={styles.footer}>
+          {/* <div className={styles.footer}>
             <h2 className={styles.footerTitle}>
               Love what we do? Truts your guts and join us now!
             </h2>
@@ -285,7 +286,8 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
               <img onClick={() => { openNewTab('https://truts.xyz') }} src="/web-grey.png" alt="" />
             </span>
             <p className={styles.footerSubTitle}></p>
-          </div>
+          </div> */}
+         
 
         </section >
       </div >
@@ -398,7 +400,7 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
               </div>
             </div>
           </div>
-          <div className={styles.footer}>
+          {/* <div className={styles.footer}>
             <h2 className={styles.footerTitle}>
               Love what we do? Truts your guts and join us now!
             </h2>
@@ -408,9 +410,10 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
               <img onClick={() => { openNewTab('https://truts.xyz') }} src="/web-grey.png" alt="" />
             </span>
             <p className={styles.footerSubTitle}></p>
-          </div>
+          </div> */}
         </div>
       </div>
+      <Footer />
     </>
   )
 }
