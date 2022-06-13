@@ -78,7 +78,7 @@ function DaoForm() {
             alert("Please add DAO category");
             return null
         }
-        let url = `${process.env.API}/dao/create-new-dao-v2`
+        let url = `https://truts.herokuapp.com/dao/create-new-dao-v2`
         let res = await axios.post(url, { ...formData, dao_category: daoCatList });
         if (res.status == 201) {
             window.location.href = './redirect/success'
@@ -187,10 +187,10 @@ function DaoForm() {
                         <input required name={'mirror_link'} placeholder='Paste it here, it will link automatically' type="text" onChange={formHandler} />
                     </span>
                 </div>
-
+                {/* https://truts.herokuapp.com/dao/create-new-dao-v2 */}
                 <span name={'website_link'} className={styles.input}>
-                    <p>Discord guild ID</p>
-                    <input name={'guild_id'} placeholder='Paste it here, it will link automatically' type="text" onChange={formHandler} />
+                    <p>Submiters Discord Id</p>
+                    <input name={'guild_id'} placeholder='Example : sampleuser#8493' type="text" onChange={formHandler} />
                 </span>
 
                 {/* <span className={styles.input}>
