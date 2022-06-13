@@ -6,6 +6,7 @@ import DaoCard from '../../components/DaoCard';
 import axios from 'axios';
 import Loader from '../../utils/Loader';
 import Head from 'next/head'
+import Footer from '../../components/Footer'
 
 const API = process.env.API;
 
@@ -143,18 +144,9 @@ function DaoList() {
                         }
                     </div>
                 </div>
-                <div className={styles.footer}>
-                    <h2 className={styles.footerTitle}>
-                        Love what we do? Truts your guts and join us now!
-                    </h2>
-                    <span className={styles.socialIcon}>
-                        <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
-                        {/* <img src="/discord-grey.png" alt="" /> */}
-                        <img onClick={() => { openNewTab('https://truts.xyz') }} src="/web-grey.png" alt="" />
-                    </span>
-                    <p className={styles.footerSubTitle}></p>
-                </div>
+                
             </div >
+            <Footer/>
         </>
     )
 }

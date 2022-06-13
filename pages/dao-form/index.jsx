@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styles from './daoForm.module.scss'
 import Nav from '../../components/Nav'
 import axios from 'axios'
+import Footer from '../../components/Footer'
 
 
 let formObject = {
@@ -96,124 +97,114 @@ function DaoForm() {
 
 
     return (
+        <>
+            <div className={styles.con}>
+                <Nav />
+                <form className={styles.form} onSubmit={(e) => { e.preventDefault(); submitForm() }}>
+                    <h1 className={styles.title}>Fill these details to list your Community</h1>
+                    <p className={styles.subtitle}>Please fill the required information to list your DAO on Truts</p>
 
-        <div className={styles.con}>
-            <Nav />
-            <form className={styles.form} onSubmit={(e) => { e.preventDefault(); submitForm() }}>
-                <h1 className={styles.title}>Fill these details to list your Community</h1>
-                <p className={styles.subtitle}>Please fill the required information to list your DAO on Truts</p>
+                    <span className={styles.input}>
+                        <p>Name of the Community</p>
+                        <input required name={'dao_name'} type="text" onChange={formHandler} />
+                    </span>
 
-                <span className={styles.input}>
-                    <p>Name of the Community</p>
-                    <input required name={'dao_name'} type="text" onChange={formHandler} />
-                </span>
-
-                <span className={styles.input} id={"catlist"}>
-                    <p>Category of your DAO (example: Service, Collectors, DeFi) <small>(Enter ` <strong>,</strong> ` to add a Category)</small> </p>
-                    <div className={styles.categoryInput}>
-                        {
-                            <>
-                                {
-                                    daoCatList.map((ele, idx) => {
-                                        return (
-                                            <div
-                                                onClick={() => {
-                                                    setdaoCatList((cl) => {
-                                                        return cl.filter(c => (c == ele) ? false : true)
-                                                    })
-                                                }}
-                                                key={"daoTag" + idx} className={styles.catTag}>
-                                                {ele}
-                                                <div className={styles.close}>
-                                                    <img src="/crossmark.png" alt="" />
+                    <span className={styles.input} id={"catlist"}>
+                        <p>Category of your DAO (example: Service, Collectors, DeFi) <small>(Enter ` <strong>,</strong> ` to add a Category)</small> </p>
+                        <div className={styles.categoryInput}>
+                            {
+                                <>
+                                    {
+                                        daoCatList.map((ele, idx) => {
+                                            return (
+                                                <div
+                                                    onClick={() => {
+                                                        setdaoCatList((cl) => {
+                                                            return cl.filter(c => (c == ele) ? false : true)
+                                                        })
+                                                    }}
+                                                    key={"daoTag" + idx} className={styles.catTag}>
+                                                    {ele}
+                                                    <div className={styles.close}>
+                                                        <img src="/crossmark.png" alt="" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        )
-                                    })
-
-                                }
-                            </>
-                        }
-                        {(daoCatList.length < 3) && <span className={styles.catInput}>
-                            <input placeholder='Category' value={catInput} type="text"
-                                onChange={(e) => {
-                                    setcatInput(e.target.value);
-                                }}
-                                onKeyUpCapture={(e) => {
-                                    if (e.key == ',' || e.key == 'Enter') {
-
-                                        setdaoCatList((list) => {
-                                            let item = catInput;
-                                            if (e.key == ',') {
-                                                item = item.slice(0, -1);
-                                            }
-                                            if (item.length < 1) return [...list]
-                                            list = [...list, item];
-                                            return [...list]
+                                            )
                                         })
-                                        setcatInput('');
+
                                     }
-                                }}
-                            />
-                        </span>}
+                                </>
+                            }
+                            {(daoCatList.length < 3) && <span className={styles.catInput}>
+                                <input placeholder='Category' value={catInput} type="text"
+                                    onChange={(e) => {
+                                        setcatInput(e.target.value);
+                                    }}
+                                    onKeyUpCapture={(e) => {
+                                        if (e.key == ',' || e.key == 'Enter') {
+
+                                            setdaoCatList((list) => {
+                                                let item = catInput;
+                                                if (e.key == ',') {
+                                                    item = item.slice(0, -1);
+                                                }
+                                                if (item.length < 1) return [...list]
+                                                list = [...list, item];
+                                                return [...list]
+                                            })
+                                            setcatInput('');
+                                        }
+                                    }}
+                                />
+                            </span>}
+                        </div>
+                    </span>
+
+                    <span className={styles.input}>
+                        <p>Whats your community`s mission statement?</p>
+                        <input required name={'dao_mission'} placeholder='Please keep it within 1 or 2 lines' type="text" onChange={formHandler} />
+                    </span>
+
+                    <span className={styles.input}>
+                        <p>A brief description of the community</p>
+                        <textarea required name={'description'} placeholder='Please keep it within 1 or 2 lines' type="text" onChange={formHandler} />
+                    </span>
+
+                    <div className={styles.fourCfourR}>
+                        <span className={styles.input}>
+                            <p>Discord link</p>
+                            <input required name={'discord_link'} placeholder='Paste it here, it will link automatically' type="text" onChange={formHandler} />
+                        </span>
+                        <span className={styles.input}>
+                            <p>Twitter link</p>
+                            <input required name={'twitter_link'} placeholder='Paste it here, it will link automatically' type="text" onChange={formHandler} />
+                        </span>
+                        <span className={styles.input}>
+                            <p>Website link</p>
+                            <input required name={'website_link'} placeholder='Paste it here, it will link automatically' type="text" onChange={formHandler} />
+                        </span>
+                        <span className={styles.input}>
+                            <p>Mirror link</p>
+                            <input required name={'mirror_link'} placeholder='Paste it here, it will link automatically' type="text" onChange={formHandler} />
+                        </span>
                     </div>
-                </span>
-
-                <span className={styles.input}>
-                    <p>Whats your community`s mission statement?</p>
-                    <input required name={'dao_mission'} placeholder='Please keep it within 1 or 2 lines' type="text" onChange={formHandler} />
-                </span>
-
-                <span className={styles.input}>
-                    <p>A brief description of the community</p>
-                    <textarea required name={'description'} placeholder='Please keep it within 1 or 2 lines' type="text" onChange={formHandler} />
-                </span>
-
-                <div className={styles.fourCfourR}>
-                    <span className={styles.input}>
-                        <p>Discord link</p>
-                        <input required name={'discord_link'} placeholder='Paste it here, it will link automatically' type="text" onChange={formHandler} />
+                    {/* https://truts.herokuapp.com/dao/create-new-dao-v2 */}
+                    <span name={'website_link'} className={styles.input}>
+                        <p>Submiters Discord Id</p>
+                        <input name={'guild_id'} placeholder='Example : sampleuser#8493' type="text" onChange={formHandler} />
                     </span>
-                    <span className={styles.input}>
-                        <p>Twitter link</p>
-                        <input required name={'twitter_link'} placeholder='Paste it here, it will link automatically' type="text" onChange={formHandler} />
-                    </span>
-                    <span className={styles.input}>
-                        <p>Website link</p>
-                        <input required name={'website_link'} placeholder='Paste it here, it will link automatically' type="text" onChange={formHandler} />
-                    </span>
-                    <span className={styles.input}>
-                        <p>Mirror link</p>
-                        <input required name={'mirror_link'} placeholder='Paste it here, it will link automatically' type="text" onChange={formHandler} />
-                    </span>
-                </div>
-                {/* https://truts.herokuapp.com/dao/create-new-dao-v2 */}
-                <span name={'website_link'} className={styles.input}>
-                    <p>Submiters Discord Id</p>
-                    <input name={'guild_id'} placeholder='Example : sampleuser#8493' type="text" onChange={formHandler} />
-                </span>
 
-                {/* <span className={styles.input}>
+                    {/* <span className={styles.input}>
                     <p>Slug</p>
                     <input placeholder='Paste it here, it will link automatically' type="text" />
                 </span> */}
 
-                <button type='submit' className={styles.submit}>Submit</button>
+                    <button type='submit' className={styles.submit}>Submit</button>
 
-            </form>
-
-            <div className={styles.footer}>
-                <h2 className={styles.footerTitle}>
-                    Love what we do? Truts your guts and join us now!
-                </h2>
-                <span className={styles.socialIcon}>
-                    <img onClick={() => { openNewTab('https://twitter.com/trutsxyz') }} src="/twitter-grey.png" alt="" />
-                    <img src="/discord-grey.png" onClick={() => { openNewTab('https://discord.truts.xyz') }} alt="" />
-                    <img onClick={() => { openNewTab('https://truts.xyz') }} src="/web-grey.png" alt="" />
-                </span>
-                <p className={styles.footerSubTitle}></p>
+                </form>
             </div>
-        </div>
+            <Footer />
+        </>
     )
 }
 
