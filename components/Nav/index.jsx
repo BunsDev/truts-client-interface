@@ -20,6 +20,15 @@ import {
 
 import { Buffer } from "buffer";
 
+const openNewTab = (url) => {
+    if (url.length < 1) return
+    let a = document.createElement('a');
+    a.target = '_blank';
+    a.href = url;
+    a.click();
+  }
+  
+
 function Nav({ topSearchVisible, outline }) {
 
     useEffect(() => {
@@ -44,9 +53,9 @@ function Nav({ topSearchVisible, outline }) {
             </Link>
             <SearchComp topSearchVisible={topSearchVisible} />
             <ul>
-                {/* <li onClick={() => {
+                <li onClick={() => {
                     openNewTab(`${location.href.split('/')[0]}/dao-form`)
-                }} >Add a Dao</li> */}
+                }} >Add a Dao</li>
                 <Link href={'/dao-list'} passHref>
                     <li>Discover Communities</li>
                 </Link>

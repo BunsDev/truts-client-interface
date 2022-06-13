@@ -69,18 +69,18 @@ function DaoForm() {
 
     const submitForm = async () => {
 
-        if (!(formData.dao_cover?.length && formData.dao_logo?.length)) {
-            alert("Please Upload the Cover image and DAO logo");
-            return null
-        }
+        // if (!(formData.dao_cover?.length && formData.dao_logo?.length)) {
+        //     alert("Please Upload the Cover image and DAO logo");
+        //     return null
+        // }
 
         if (!(daoCatList?.length)) {
             alert("Please add DAO category");
             return null
         }
-        let url = `${process.env.API}/dao/create-new-dao`
+        let url = `${process.env.API}/dao/create-new-dao-v2`
         let res = await axios.post(url, { ...formData, dao_category: daoCatList });
-        if (res.data.status == true) {
+        if (res.status == 201) {
             window.location.href = './redirect/success'
         }
         else {
@@ -159,40 +159,6 @@ function DaoForm() {
                     </div>
                 </span>
 
-                <div className={styles.uploadImage}>
-                    <label htmlFor={'logo'}>
-                        <p>Upload the community logo</p>
-                        <img src={(imgSrc.logo.length > 0) ? imgSrc.logo : "/upload-placeholder.png"} alt="" />
-                        <input id="logo" name={'dao_logo'} type="file" onChange={(e) => {
-                            let imgFile = e.target.files[0];
-                            var reader = new FileReader();
-                            reader.readAsDataURL(imgFile);
-                            reader.onloadend = function () {
-                                setimgSrc((im) => {
-                                    im.logo = reader.result;
-                                    setFormData((fd) => { fd[e.target.name] = reader.result; return { ...fd } })
-                                    return { ...im }
-                                })
-                            }
-                        }} />
-                    </label>
-                    <label htmlFor={'cover'}>
-                        <p>Upload the community`s Cover </p>
-                        <img src={(imgSrc.cover.length > 0) ? imgSrc.cover : "/upload-placeholder.png"} alt="" />
-                        <input id="cover" name={'dao_cover'} type="file" onChange={(e) => {
-                            let imgFile = e.target.files[0];
-                            var reader = new FileReader();
-                            reader.readAsDataURL(imgFile);
-                            reader.onloadend = function () {
-                                setimgSrc((im) => {
-                                    im.cover = reader.result;
-                                    setFormData((fd) => { fd[e.target.name] = reader.result; return { ...fd } })
-                                    return { ...im }
-                                })
-                            }
-                        }} />
-                    </label>
-                </div>
                 <span className={styles.input}>
                     <p>Whats your community`s mission statement?</p>
                     <input required name={'dao_mission'} placeholder='Please keep it within 1 or 2 lines' type="text" onChange={formHandler} />
