@@ -26,8 +26,8 @@ const openNewTab = (url) => {
     a.target = '_blank';
     a.href = url;
     a.click();
-  }
-  
+}
+
 
 function Nav({ topSearchVisible, outline }) {
 
@@ -44,6 +44,21 @@ function Nav({ topSearchVisible, outline }) {
     let search_style = styles.nav;
     if (topSearchVisible) {
         search_style = styles.nav + ' ' + styles.topNavSearch
+    }
+
+    const getWalletIcon = (name) => {
+        if (name == 'MetaMask') {
+            return '/metamask.png'
+        }
+        else if (name == 'Coinbase Wallet') {
+            return '/coinbase.png'
+        }
+        else if (name == 'WalletConnect') {
+            return '/wallet-connect.png'
+        }
+        else {
+            return '/wallet.png'
+        }
     }
 
     return (
@@ -75,7 +90,7 @@ function Nav({ topSearchVisible, outline }) {
                                                 key={connector.id}
                                                 onClick={() => { connectAsync(connector) }}
                                             >
-                                                <img src={(connector.name == 'MetaMask') ? "/metamask.png" : "/wallet-connect.png"} alt="" />
+                                                <img src={getWalletIcon(connector.name)} alt="" />
                                                 {connector.name}
                                                 {!connector.ready && '(unsupported)'}
                                                 {isConnecting &&

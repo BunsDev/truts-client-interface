@@ -1,12 +1,15 @@
 import '../styles/globals.css'
 import NextNProgress from "nextjs-progressbar";
 import { chain, createClient } from 'wagmi'
-
+import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { Provider } from 'wagmi'
 import Script from 'next/script';
 const chains = [chain.polygon, chain.polygonMumbai];
+
+
 
 export const client = createClient({
   autoConnect: true,
@@ -18,7 +21,13 @@ export const client = createClient({
       chain.mainnet.rpcUrls[0]
     console.log(chainId)
     return [
-      new InjectedConnector(),
+      new MetaMaskConnector(),
+      new CoinbaseWalletConnector({
+        chains,
+        options: {
+          rpc: { [chain.id]: rpcUrl },
+        },
+      }),
       new WalletConnectConnector({
         chains,
         options: {
