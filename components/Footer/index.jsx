@@ -41,11 +41,11 @@ export default function Component() {
             </ul>
             <span className={styles.socialIcons}>
                 <img onClick={() => {
-                    openNewTab('https://twitter.truts.xyz/')
-                }} src={twitter_w.src} alt="" />
-                <img onClick={() => {
                     openNewTab('https://discord.truts.xyz/')
                 }} src={discord_w.src} alt="" />
+                <img onClick={() => {
+                    openNewTab('https://twitter.truts.xyz/')
+                }} src={twitter_w.src} alt="" />
                 <a href="#">
                     <img src={web_w.src} alt="" />
                 </a>
