@@ -63,6 +63,17 @@ function DaoForm() {
 
     </>
 
+    let new_dao = <>
+        <img src="/sucess_tick.png" className={styles.sc_tick} alt="" />
+        <p>Congratulations! You have successfully submitted the application to list your DAO. Now sit back and relax. If we need more information, we will reach out to you. Otherwise, you are all set and you will see your DAO listed in a day or two :)</p>
+
+        <span className={styles.btns}>
+            <button className={styles.primaryBtn} onClick={() => {
+                openNewTab('https://discord.com/invite/96nAdBJ2Kj');
+            }}>Join Truts Community</button>
+        </span>
+    </>
+
     let failed = <>
         <img src="/oops.png" className={styles.sc_oops} alt="" />
         <p>Oops, something went wrong. Can you please try again :(</p>
@@ -83,8 +94,8 @@ function DaoForm() {
                 window.location.href = '../'
             }}>Try again</button>
         </span>
-
     </>
+
 
     if (!state) {
         return (
@@ -94,12 +105,27 @@ function DaoForm() {
         )
     }
 
+    const getMessage = () => {
+        if (state == 'success') {
+            return success
+        }
+        else if (state == 'duplicate_review') {
+            return duplicate_review
+        }
+        else if (state == 'new_dao') {
+            return new_dao
+        }
+        else {
+            return failed
+        }
+    }
+
     return (
 
         <div className={styles.con}>
             <Nav />
             <div className={styles.messageCon}>
-                {(state == 'success') ? success : ((state == 'duplicate_review') ? duplicate_review : failed)}
+                {getMessage()}
             </div>
             <div className={styles.footer}>
                 <h2 className={styles.footerTitle}>

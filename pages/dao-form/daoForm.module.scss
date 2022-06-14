@@ -230,3 +230,26 @@
     color: white;
     margin-top: 64px;
 }
+
+.loader{
+    display: flex;
+    width: 100%;
+    min-height: 100%;
+    position: fixed;
+    background-color: #1212128f;
+    top: 0;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    img{
+        height: 80px;
+        width: 80px;
+    }
+    
+    h1{
+        color: white;
+        max-width: 80vw;
+        text-align: center;
+    }
+}

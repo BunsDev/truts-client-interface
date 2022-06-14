@@ -37,6 +37,8 @@ function DaoForm() {
     const [catInput, setcatInput] = useState('');
     const [daoCatList, setdaoCatList] = useState([]);
 
+    const [loaderVisible, setloaderVisible] = useState(false)
+
     const [imgSrc, setimgSrc] = useState({
         logo: '',
         cover: ''
@@ -80,9 +82,10 @@ function DaoForm() {
             return null
         }
         let url = `https://truts.herokuapp.com/dao/create-new-dao-v2`
+        setloaderVisible(true);
         let res = await axios.post(url, { ...formData, dao_category: daoCatList });
         if (res.status == 201) {
-            window.location.href = './redirect/success'
+            window.location.href = './redirect/new_dao'
         }
         else {
             window.location.href = './redirect/failed'
@@ -95,9 +98,18 @@ function DaoForm() {
     }, [])
 
 
+    const Loader = () => {
+        return (
+            <div className={styles.loader}>
+                <h1>Please wait while you Communities is being uploaded</h1>
+                <img src="/black-loader.gif" alt="" />
+            </div>
+        )
+    }
 
     return (
         <>
+            {(loaderVisible) && <Loader />}
             <div className={styles.con}>
                 <Nav />
                 <form className={styles.form} onSubmit={(e) => { e.preventDefault(); submitForm() }}>
