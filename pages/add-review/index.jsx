@@ -6,23 +6,30 @@ import axios from 'axios';
 import MultiWallet from '../../utils/MultiWallet';
 import Loader from '../../utils/Loader';
 import Head from 'next/head'
-import { Provider, WagmiProvider, chain, createClient, defaultChains } from 'wagmi'
-import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
-import { InjectedConnector } from 'wagmi/connectors/injected'
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
+
 //import { client} from "./Connect.jsx"
 import { Buffer } from "buffer";
-import { resolve } from 'path';
-import { rejects } from 'assert';
+
 //import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
 
 const alchemyId = 'ckNGqpTIk3SdrCDhZZT0fNjssMKW0fR'
 const infuraId = "7cedc93bca594509a5abbaae985320a6"
 
+const getWalletIcon = (name) => {
+    if (name == 'MetaMask') {
+        return '/metamask.png'
+    }
+    else if (name == 'Coinbase Wallet') {
+        return '/coinbase.png'
+    }
+    else if (name == 'WalletConnect') {
+        return '/wallet-connect.png'
+    }
+    else {
+        return '/wallet.png'
+    }
+}
 
-//chains: [defaultChains, chain.mainnet, chain.optimism]
-const chains = [chain.polygon, chain.polygonMumbai];
-const defaultChain = chain.mainnet
 
 import {
     useAccount,
@@ -145,7 +152,6 @@ export default function Index() {
     // postReview(formData, data.dao_name, data.guild_id);
 
     const [public_address, setpublic_address] = useState('');
-
     const { data: sign_data, isError, isLoading, isSuccess: signSucess, signMessage } = useSignMessage({
         message: reviewDesc,
     })
@@ -428,7 +434,7 @@ const ConnectWalletModelSimple = ({ connectWalletModelVisible, setconnectWalletM
                                             let res = await connectAsync(connector);
                                             if (res) { setconnectWalletModelVisible(false) };
                                         }}>
-                                            <img src={(connector.name == 'MetaMask') ? "/metamask.png" : "/wallet-connect.png"} alt="" />
+                                            <img src={getWalletIcon(connector.name)} alt="" />
                                             <p> {connector.name}
                                                 {!connector.ready && '(unsupported)'}
                                                 {isConnecting &&

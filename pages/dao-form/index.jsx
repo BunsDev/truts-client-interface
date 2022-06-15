@@ -4,6 +4,33 @@ import Nav from '../../components/Nav'
 import axios from 'axios'
 import Footer from '../../components/Footer'
 
+import {
+    useAccount,
+    useConnect,
+    useDisconnect,
+    useEnsName,
+    useSignMessage,
+    useNetwork,
+    useSendTransaction,
+} from 'wagmi';
+
+const API = process.env.API
+
+const getWalletIcon = (name) => {
+    if (name == 'MetaMask') {
+        return '/metamask.png'
+    }
+    else if (name == 'Coinbase Wallet') {
+        return '/coinbase.png'
+    }
+    else if (name == 'WalletConnect') {
+        return '/wallet-connect.png'
+    }
+    else {
+        return '/wallet.png'
+    }
+}
+
 
 let formObject = {
     "dao_name": "string",
@@ -30,19 +57,39 @@ const openNewTab = (url) => {
     a.click();
 }
 
+
+
 function DaoForm() {
 
     const [formData, setFormData] = useState({});
 
     const [catInput, setcatInput] = useState('');
     const [daoCatList, setdaoCatList] = useState([]);
+    const [connectWalletModelVisible, setconnectWalletModelVisible] = useState(false);
+    const [loaderVisible, setloaderVisible] = useState(false);
 
-    const [loaderVisible, setloaderVisible] = useState(false)
-
-    const [imgSrc, setimgSrc] = useState({
+    ; const [imgSrc, setimgSrc] = useState({
         logo: '',
         cover: ''
     })
+
+    const CategoryChip = ({ name, idx }) => {
+        const removeCat = () => {
+            setdaoCatList((list) => {
+                let newList = list.filter((ele, id) => {
+                    if (idx == id) {
+                        return false
+                    }
+                    return true
+                })
+                return [...newList]
+            })
+        }
+
+        return (
+            <span onClick={() => { removeCat() }} className={styles.chip}>{name}<img src='/close.png' /></span>
+        )
+    }
 
     const resize = () => {
         let bdy = document.querySelector('body');
@@ -62,7 +109,6 @@ function DaoForm() {
         fluidResize();
     }, [])
 
-
     let formHandler = (e) => {
         setFormData((obj) => {
             obj[e.target.name] = e.target.value;
@@ -70,20 +116,43 @@ function DaoForm() {
         })
     }
 
-    const submitForm = async () => {
+    const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
+    const { disconnectAsync } = useDisconnect()
+    const { data: walletData, isError, isLoading } = useAccount()
 
-        // if (!(formData.dao_cover?.length && formData.dao_logo?.length)) {
-        //     alert("Please Upload the Cover image and DAO logo");
-        //     return null
-        // }
+
+    const [public_address, setpublic_address] = useState('');
+    const { data: sign_data, isError: signError, isLoading: signLoading, isSuccess: signSucess, signMessage } = useSignMessage({
+        message: formData.dao_name,
+    })
+
+    const submitForm = async (acc) => {
+        console.log(acc);
+        let walletAddress = public_address;
+
+        if (acc) {
+            if (acc.length > 1) {
+                walletAddress = acc;
+            }
+        }
+
+        if (!isConnected) {
+            if (acc?.length > 1) {
+                console.log("continue");
+            }
+            else {
+                console.log(isConnected);
+                return setconnectWalletModelVisible(true);
+            }
+        }
 
         if (!(daoCatList?.length)) {
             alert("Please add DAO category");
             return null
         }
-        let url = `https://truts.herokuapp.com/dao/create-new-dao-v2`
+        let url = `${API}/dao/create-new-dao-v2`
         setloaderVisible(true);
-        let res = await axios.post(url, { ...formData, dao_category: daoCatList });
+        let res = await axios.post(url, { ...formData, dao_category: daoCatList, submitter_public_address: `${walletAddress}` });
         if (res.status == 201) {
             window.location.href = './redirect/new_dao'
         }
@@ -101,8 +170,10 @@ function DaoForm() {
     const Loader = () => {
         return (
             <div className={styles.loader}>
-                <h1>Please wait while you Communities is being uploaded</h1>
-                <img src="/black-loader.gif" alt="" />
+                <div className={styles.wrapper}>
+                    <h1>Please wait ! your Community is being uploaded</h1>
+                    <img src="/black-loader.gif" alt="" />
+                </div>
             </div>
         )
     }
@@ -111,6 +182,7 @@ function DaoForm() {
         <>
             {(loaderVisible) && <Loader />}
             <div className={styles.con}>
+                <ConnectWalletModelSimple submit_form={submitForm} connectWalletModelVisible={connectWalletModelVisible} setconnectWalletModelVisible={setconnectWalletModelVisible} setpublic_address={setpublic_address} />
                 <Nav />
                 <form className={styles.form} onSubmit={(e) => { e.preventDefault(); submitForm() }}>
                     <h1 className={styles.title}>Fill these details to list your Community</h1>
@@ -120,57 +192,28 @@ function DaoForm() {
                         <p>Name of the Community</p>
                         <input required name={'dao_name'} type="text" onChange={formHandler} />
                     </span>
+                    <p className={styles.inputTitle}>What’s the category of your DAO?</p>
+                    <div className={styles.categoryCon}>
+                        <input type="text" value={catInput} onChange={(e) => {
+                            setcatInput(e.target.value);
+                        }} />
+                        <span className={styles.addBtn} onClick={() => {
+                            setdaoCatList((ele) => {
+                                return [...ele, catInput.trim()]
+                            })
+                            setcatInput('');
+                        }}>Add</span>
+                    </div>
+                    <div className={styles.categoryList}>
+                        {
+                            daoCatList.map((ele, idx) => {
+                                return (
+                                    <CategoryChip name={ele} key={'c' + idx} idx={idx} />
+                                )
+                            })
+                        }
 
-                    <span className={styles.input} id={"catlist"}>
-                        <p>Category of your DAO (example: Service, Collectors, DeFi) <small>(Enter ` <strong>,</strong> ` to add a Category)</small> </p>
-                        <div className={styles.categoryInput}>
-                            {
-                                <>
-                                    {
-                                        daoCatList.map((ele, idx) => {
-                                            return (
-                                                <div
-                                                    onClick={() => {
-                                                        setdaoCatList((cl) => {
-                                                            return cl.filter(c => (c == ele) ? false : true)
-                                                        })
-                                                    }}
-                                                    key={"daoTag" + idx} className={styles.catTag}>
-                                                    {ele}
-                                                    <div className={styles.close}>
-                                                        <img src="/crossmark.png" alt="" />
-                                                    </div>
-                                                </div>
-                                            )
-                                        })
-
-                                    }
-                                </>
-                            }
-                            {(daoCatList.length < 3) && <span className={styles.catInput}>
-                                <input placeholder='Category' value={catInput} type="text"
-                                    onChange={(e) => {
-                                        setcatInput(e.target.value);
-                                    }}
-                                    onKeyUpCapture={(e) => {
-                                        if (e.key == ',' || e.key == 'Enter') {
-
-                                            setdaoCatList((list) => {
-                                                let item = catInput;
-                                                if (e.key == ',') {
-                                                    item = item.slice(0, -1);
-                                                }
-                                                if (item.length < 1) return [...list]
-                                                list = [...list, item];
-                                                return [...list]
-                                            })
-                                            setcatInput('');
-                                        }
-                                    }}
-                                />
-                            </span>}
-                        </div>
-                    </span>
+                    </div>
 
                     <span className={styles.input}>
                         <p>Whats your community`s mission statement?</p>
@@ -179,7 +222,7 @@ function DaoForm() {
 
                     <span className={styles.input}>
                         <p>A brief description of the community</p>
-                        <textarea required name={'description'} placeholder='Please keep it within 1 or 2 lines' type="text" onChange={formHandler} />
+                        <textarea required name={'description'} placeholder='Please keep it within 1 or 2 lines' type="text" rows={8} onChange={formHandler} />
                     </span>
 
                     <div className={styles.fourCfourR}>
@@ -203,7 +246,7 @@ function DaoForm() {
                     {/* https://truts.herokuapp.com/dao/create-new-dao-v2 */}
                     <span name={'website_link'} className={styles.input}>
                         <p>Submiters Discord Id</p>
-                        <input name={'guild_id'} placeholder='Example : sampleuser#8493' type="text" onChange={formHandler} />
+                        <input name={'submitter_dicord_id'} placeholder='Example : sampleuser#8493' type="text" onChange={formHandler} />
                     </span>
 
                     {/* <span className={styles.input}>
@@ -220,5 +263,55 @@ function DaoForm() {
     )
 }
 
+const ConnectWalletModelSimple = ({ connectWalletModelVisible, setconnectWalletModelVisible, setpublic_address, submit_form }) => {
+    const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
+    const { disconnectAsync } = useDisconnect()
+    const { data: walletData, isError, isLoading } = useAccount()
+
+    console.log(submit_form)
+
+    useEffect(() => {
+
+    })
+
+    if (connectWalletModelVisible) {
+        return (
+            <div className={styles.connectWalletModel}>
+                <div className={styles.walletModal}>
+                    <div className={styles.wallets}>
+                        <h1 className={styles.title}>Connect Wallet</h1>
+                        <p className={styles.subTitle}>Please select one of the following to proceed</p>
+                        <div className={styles.box}>
+                            {
+                                connectors.map((connector) => {
+                                    return (
+                                        <div key={connector.id} className={styles.option} onClick={async () => {
+                                            let res = await connectAsync(connector);
+                                            console.log(res);
+                                            setpublic_address(res.account)
+                                            console.log("submitform");
+                                            submit_form(res.account)
+                                            if (res) { setconnectWalletModelVisible(false) };
+                                        }}>
+                                            <img src={getWalletIcon(connector.name)} alt="" />
+                                            <p> {connector.name}
+                                                {!connector.ready && '(unsupported)'}
+                                                {isConnecting &&
+                                                    connector.id === pendingConnector?.id &&
+                                                    ' (connecting)'}</p>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+    else {
+        return (null)
+    }
+}
 
 export default DaoForm
