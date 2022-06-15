@@ -150,7 +150,7 @@ function DaoForm() {
             alert("Please add DAO category");
             return null
         }
-        let url = `${API}/dao/create-new-dao-v2`
+        let url = `https://truts.herokuapp.com/dao/create-new-dao-v2`
         setloaderVisible(true);
         let res = await axios.post(url, { ...formData, dao_category: daoCatList, submitter_public_address: `${walletAddress}` });
         if (res.status == 201) {
