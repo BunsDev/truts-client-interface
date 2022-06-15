@@ -153,6 +153,7 @@ function DaoForm() {
         let url = `https://truts.herokuapp.com/dao/create-new-dao-v2`
         setloaderVisible(true);
         let res = await axios.post(url, { ...formData, dao_category: daoCatList, submitter_public_address: `${walletAddress}` });
+    
         if (res.status == 201) {
             window.location.href = './redirect/new_dao'
         }
@@ -246,7 +247,7 @@ function DaoForm() {
                     {/* https://truts.herokuapp.com/dao/create-new-dao-v2 */}
                     <span name={'website_link'} className={styles.input}>
                         <p>Submiters Discord Id</p>
-                        <input name={'submitter_dicord_id'} placeholder='Example : sampleuser#8493' type="text" onChange={formHandler} />
+                        <input name={'submitter_discord_id'} placeholder='Example : sampleuser#8493' type="text" onChange={formHandler} />
                     </span>
 
                     {/* <span className={styles.input}>
