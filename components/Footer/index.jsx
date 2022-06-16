@@ -26,7 +26,7 @@ export default function Component() {
             }} className={styles.footer_btn}>Join Truts</button>
             <ul className={styles.links}>
                 <a href='#'><li>Home</li></a>
-                <Link href={'/dao-form'} passHref>
+                <Link href={'/add-your-community'} passHref>
                     <li>Add a DAO</li>
                 </Link>
                 <Link href={'/dao-list'} passHref>

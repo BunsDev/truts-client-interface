@@ -12,6 +12,15 @@ const nextConfig = {
   env: {
     API: AWS
   },
+  async redirects() {
+    return [
+      {
+        source: '/dao-form',
+        destination: '/add-your-community',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

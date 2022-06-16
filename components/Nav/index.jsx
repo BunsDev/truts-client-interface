@@ -68,9 +68,9 @@ function Nav({ topSearchVisible, outline }) {
             </Link>
             <SearchComp topSearchVisible={topSearchVisible} />
             <ul>
-                <li onClick={() => {
-                    openNewTab(`${location.href.split('/')[0]}/dao-form`)
-                }} >Add a Dao</li>
+                <Link href={'/add-your-community'} passHref>
+                    <li  >Add a DAO</li>
+                </Link>
                 <Link href={'/dao-list'} passHref>
                     <li>Discover Communities</li>
                 </Link>

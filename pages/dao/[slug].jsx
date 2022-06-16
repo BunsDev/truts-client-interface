@@ -524,7 +524,7 @@ const InfoBar = ({ data }) => {
         return (
             <div className={styles.infoBar}>
                 <div className={styles.profileName}>
-                    <img style={{ gridArea: 'a' }} src={data.dao_cover} alt="" onError={(e) => { e.target.src = '/hero-bg.jpg' }} />
+                    <img style={{ gridArea: 'a' }} src={data.dao_logo} alt="" onError={(e) => { e.target.src = '/hero-bg.jpg' }} />
                     <h1>{data.dao_name}</h1>
                     <Starrating rating={data.average_rating} />
                 </div>
