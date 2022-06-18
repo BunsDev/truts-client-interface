@@ -92,6 +92,13 @@ function DaoList() {
                 })]
             })
         }
+        else {
+            setdao_list((ele) => {
+                return [...ele.sort((a, b) => {
+                    return b.review_count - a.review_count
+                })]
+            })
+        }
     }
 
     console.log(selectedTab)
@@ -150,11 +157,14 @@ function DaoList() {
                             'Sort by name (A-Z)'
                         ]}
                             selectedTab={selectedSort} setselectedTab={sortBy}
+                            reset={() => {
+                                sortBy('default');
+                            }}
                         />
                         {/* Second filter */}
                         <Filter list={[
                             'all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal'
-                        ]} selectedTab={selectedTab} setselectedTab={setselectedTab} />
+                        ]} selectedTab={selectedTab} setselectedTab={setselectedTab} reset={() => { setselectedTab('all') }} />
                     </div>
 
                     <div className={styles.cardCon} key={selectedSort + selectedTab}>
@@ -189,14 +199,14 @@ function DaoList() {
     )
 }
 
-function Filter({ list, selectedTab, setselectedTab }) {
+function Filter({ list, selectedTab, setselectedTab, reset }) {
 
     return (
         <div className={styles.filter}>
             <div className={styles.filterHead}>
                 <h3>Sort by</h3>
                 <p onClick={() => {
-                    setselectedTab('all');
+                    reset();
                 }}>Reset</p>
             </div>
             <div className={styles.filterBody}>
