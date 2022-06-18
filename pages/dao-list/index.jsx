@@ -47,7 +47,9 @@ function DaoList() {
         try {
             const db_res = await axios.get(`${API}/dao/get-dao-list`)
             if (db_res.data) {
-                setdao_list(db_res.data.results)
+                setdao_list(db_res.data.results.sort((a, b) => {
+                    return b.review_count - a.review_count
+                }))
             }
             else {
                 alert("network error");
@@ -55,6 +57,40 @@ function DaoList() {
         }
         catch (er) {
             console.log(er);
+        }
+    }
+
+    const [selectedSort, setselectedSort] = useState('Ratings (High to Low)');
+    const sortBy = (type) => {
+        console.log(type)
+        let filters = [
+            'Ratings (High to Low)',
+            'Ratings (Low to High)',
+            'Sort by name (A-Z)'
+        ]
+
+        let selection = filters.indexOf(type);
+        setselectedSort(type)
+        if (selection == 0) {
+            setdao_list((ele) => {
+                return [...ele.sort((a, b) => {
+                    return b.average_rating - a.average_rating
+                })]
+            })
+        }
+        else if (selection == 1) {
+            setdao_list((ele) => {
+                return [...ele.sort((a, b) => {
+                    return b.average_rating - a.average_rating
+                }).reverse()]
+            })
+        }
+        else if (selection == 2) {
+            setdao_list((ele) => {
+                return [...ele.sort((a, b) => {
+                    return a.slug.charCodeAt(0) - b.slug.charCodeAt(0)
+                })]
+            })
         }
     }
 
@@ -85,41 +121,43 @@ function DaoList() {
                             'all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal'
                         ].map((ele, idx) => {
                             return (
-                                <option key={ele + idx} value={ele}>{ele}</option>
+                                <option onClick={() => { sortBy(ele) }} key={ele + idx} value={ele}>{ele}</option>
                             )
                         })
                         }
                     </select>
 
-                    {/* <select name="" id="">
-                    {[
-                        'Ratings (High to Low)',
-                        'Ratings (Low to High)',
-                        'Sort by name (A-Z)'
-                    ].map((ele, idx) => {
-                        return (
-                            <option key={ele + idx} value={ele}>{ele}</option>
-                        )
-                    })
-                    }
-                </select> */}
+                    <select name="" id="" onChange={(e) => {
+                        sortBy(e.target.value)
+                    }}>
+                        {[
+                            'Ratings (High to Low)',
+                            'Ratings (Low to High)',
+                            'Sort by name (A-Z)'
+                        ].map((ele, idx) => {
+                            return (
+                                <option onClick={() => { sortBy(ele) }} key={ele + idx} value={ele}>{ele}</option>
+                            )
+                        })
+                        }
+                    </select>
                 </div>
                 <div className={styles.col2}>
                     <div className={styles.leftNav}>
-                        {/* <Filter list={[
-                        'Ratings (High to Low)',
-                        'Ratings (Low to High)',
-                        'Sort by name (A-Z)'
-                    ]}
-                        selectedTab={'all'} setselectedTab={() => { }}
-                    /> */}
+                        <Filter list={[
+                            'Ratings (High to Low)',
+                            'Ratings (Low to High)',
+                            'Sort by name (A-Z)'
+                        ]}
+                            selectedTab={selectedSort} setselectedTab={sortBy}
+                        />
                         {/* Second filter */}
                         <Filter list={[
                             'all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal'
                         ]} selectedTab={selectedTab} setselectedTab={setselectedTab} />
                     </div>
 
-                    <div className={styles.cardCon}>
+                    <div className={styles.cardCon} key={selectedSort + selectedTab}>
                         {
                             dao_list.map((ele, idx) => {
                                 if (selectedTab == 'all') {
@@ -140,13 +178,13 @@ function DaoList() {
                                         />
                                     }
                                 }
-                            }).reverse()
+                            })
                         }
                     </div>
                 </div>
-                
+
             </div >
-            <Footer/>
+            <Footer />
         </>
     )
 }
