@@ -7,6 +7,7 @@ import axios from 'axios';
 import Loader from '../../utils/Loader';
 import Head from 'next/head'
 import Footer from '../../components/Footer'
+import Component from '../../components/Footer';
 
 const API = process.env.API;
 
@@ -62,43 +63,38 @@ function DaoList() {
 
     const [selectedSort, setselectedSort] = useState('Sort by Review count');
     const sortBy = (type) => {
-        console.log(type)
-        let filters = [
-            'Ratings (High to Low)',
-            'Ratings (Low to High)',
-            'Sort by name (A-Z)'
-        ]
-
-        let selection = filters.indexOf(type);
         setselectedSort(type)
-        if (selection == 0) {
-            setdao_list((ele) => {
-                return [...ele.sort((a, b) => {
-                    return b.average_rating - a.average_rating
-                })]
-            })
+    }
+
+    const returnDaoList = (dao_list_comp) => {
+        // 'Sort by Review count',
+        // 'Sort by name (A-Z)',
+        // 'Ratings (High to Low)',
+        // 'Ratings (Low to High)',
+        let sortedDaoList = dao_list;
+        if (selectedSort == 'Ratings (Low to High)') {
+            sortedDaoList = [...dao_list.sort((a, b) => {
+                return b.average_rating - a.average_rating
+            }).reverse()]
         }
-        else if (selection == 1) {
-            setdao_list((ele) => {
-                return [...ele.sort((a, b) => {
-                    return b.average_rating - a.average_rating
-                }).reverse()]
-            })
+        else if (selectedSort == 'Ratings (High to Low)') {
+            sortedDaoList = [...dao_list.sort((a, b) => {
+                return b.average_rating - a.average_rating
+            })]
         }
-        else if (selection == 2) {
-            setdao_list((ele) => {
-                return [...ele.sort((a, b) => {
-                    return a.slug.charCodeAt(0) - b.slug.charCodeAt(0)
-                })]
-            })
+        else if (selectedSort == 'Sort by name (A-Z)') {
+            sortedDaoList = [...dao_list.sort((a, b) => {
+                return a.slug.charCodeAt(0) - b.slug.charCodeAt(0)
+            })]
         }
         else {
-            setdao_list((ele) => {
-                return [...ele.sort((a, b) => {
-                    return b.review_count - a.review_count
-                })]
-            })
+            sortedDaoList = [...dao_list.sort((a, b) => {
+                return b.review_count - a.review_count
+            })]
         }
+
+        return dao_list_comp(sortedDaoList)
+
     }
 
     console.log(selectedTab)
@@ -171,25 +167,26 @@ function DaoList() {
 
                     <div className={styles.cardCon} key={selectedSort + selectedTab}>
                         {
-                            dao_list.map((ele, idx) => {
-                                if (selectedTab == 'all') {
-                                    return (
-                                        <DaoCard
-                                            link={ele.slug}
-                                            data={ele}
-                                            key={'c' + idx + selectedTab}
-                                        />
-                                    )
-                                } else {
-
-                                    if (ele.dao_category.includes(selectedTab)) {
-                                        return <DaoCard
-                                            link={ele.slug}
-                                            data={ele}
-                                            key={'c' + idx + selectedTab}
-                                        />
+                            returnDaoList((sortedDaoList) => {
+                                return sortedDaoList.map((ele, idx) => {
+                                    if (selectedTab == 'all') {
+                                        return (
+                                            <DaoCard
+                                                link={ele.slug}
+                                                data={ele}
+                                                key={'c' + idx + selectedTab}
+                                            />
+                                        )
+                                    } else {
+                                        if (ele.dao_category.includes(selectedTab)) {
+                                            return <DaoCard
+                                                link={ele.slug}
+                                                data={ele}
+                                                key={'c' + idx + selectedTab}
+                                            />
+                                        }
                                     }
-                                }
+                                })
                             })
                         }
                     </div>
