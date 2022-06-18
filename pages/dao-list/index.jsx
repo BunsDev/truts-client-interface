@@ -60,7 +60,7 @@ function DaoList() {
         }
     }
 
-    const [selectedSort, setselectedSort] = useState('Ratings (High to Low)');
+    const [selectedSort, setselectedSort] = useState('_');
     const sortBy = (type) => {
         console.log(type)
         let filters = [
