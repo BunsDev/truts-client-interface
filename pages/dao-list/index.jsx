@@ -60,7 +60,7 @@ function DaoList() {
         }
     }
 
-    const [selectedSort, setselectedSort] = useState('_');
+    const [selectedSort, setselectedSort] = useState('Sort by Review count');
     const sortBy = (type) => {
         console.log(type)
         let filters = [
@@ -138,9 +138,10 @@ function DaoList() {
                         sortBy(e.target.value)
                     }}>
                         {[
+                            'Sort by Review count',
+                            'Sort by name (A-Z)',
                             'Ratings (High to Low)',
                             'Ratings (Low to High)',
-                            'Sort by name (A-Z)'
                         ].map((ele, idx) => {
                             return (
                                 <option onClick={() => { sortBy(ele) }} key={ele + idx} value={ele}>{ele}</option>
@@ -152,13 +153,14 @@ function DaoList() {
                 <div className={styles.col2}>
                     <div className={styles.leftNav}>
                         <Filter list={[
+                            'Sort by Review count',
+                            'Sort by name (A-Z)',
                             'Ratings (High to Low)',
                             'Ratings (Low to High)',
-                            'Sort by name (A-Z)'
                         ]}
                             selectedTab={selectedSort} setselectedTab={sortBy}
                             reset={() => {
-                                sortBy('default');
+                                sortBy('Sort by Review count');
                             }}
                         />
                         {/* Second filter */}
