@@ -1143,7 +1143,7 @@ function Comment({ comment, address, rating, profile_img, openModel, data, openC
                 </span>
                 <span>
                     <img src="/tips.png" alt="" onClick={() => { openModel() }} />
-                    <p>{(data.chain == 'sol') ? 'sol' : 'matic'}</p>
+                    <p>{(data.chain == 'sol') ? 'Tip SOL' : 'Tip MATIC'}</p>
                 </span>
             </div>
         </div>

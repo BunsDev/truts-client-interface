@@ -61,15 +61,17 @@ function Nav({ topSearchVisible, outline, openConnectWallet, getWalletAddress })
     }, [])
 
     useEffect(() => {
-        if (isConnected) {
-            setwalletState({ chain: 'eth', connected: true, wallet_address: walletData.address });
-            window.localStorage.setItem('wallet_state', JSON.stringify({ chain: 'eth', connected: true, wallet_address: walletData.address }));
-            setwalletPopUpVisible(false);
-        }
-        if (!isConnected && (!localStorage.getItem('wallet_state'))) {
-            setwalletState({});
-            window.localStorage.removeItem('wallet_state');
-        }
+        setTimeout(() => {
+            if (isConnected) {
+                setwalletState({ chain: 'eth', connected: true, wallet_address: walletData.address });
+                window.localStorage.setItem('wallet_state', JSON.stringify({ chain: 'eth', connected: true, wallet_address: walletData.address }));
+                setwalletPopUpVisible(false);
+            }
+            if (!isConnected && (!localStorage.getItem('wallet_state'))) {
+                setwalletState({});
+                window.localStorage.removeItem('wallet_state');
+            }
+        },100);
     }, [isConnected])
 
     // wallet functions
