@@ -173,6 +173,8 @@ export default function Index() {
             }
             console.log(res);
         } else if (wallet_state.chain == 'sol') {
+            const resp = await window.solana.connect();
+            let wallet = resp.publicKey.toString()
             const message = `Sign below to authenticate your Review`;
             const encodedMessage = new TextEncoder().encode(message);
             const signedMessage = await window.solana.signMessage(encodedMessage, "utf8");
@@ -191,7 +193,7 @@ export default function Index() {
             "public_address": wallet_state.wallet_address,
             "chain": wallet_state.chain
         }
-        
+
         if (id == '6287dcc3f711c412fb9e1074') {
             setloading(true);
             let review_send = await axios.post(`${API}/review/add-review-event`, postData);
