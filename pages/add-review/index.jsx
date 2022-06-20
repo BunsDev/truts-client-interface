@@ -94,6 +94,10 @@ export default function Index() {
         try {
             let res = await axios.get(`${process.env.API}/dao/get-dao-by-id?id=${id}`);
             let user = await axios.get(`${process.env.API}/auth/user?uid=${uid}`)
+            let dubplicate_review_res = await axios.get(`${process.env.API}/review/get-review-by-did?dicordId=${user.data.dicordId}&dao_name=${res.data.dao_name}`);
+            if (dubplicate_review_res.status == 204) {
+                window.location.href = `./redirect/duplicate_review-${res.data.slug}`
+            }
             let guild_id = res.data.guild_id;
             if (res.status == 200, user.status == 200) {
                 let guild_list = JSON.parse(user.data.guilds).map((ele) => {
@@ -108,7 +112,7 @@ export default function Index() {
                 }
                 else {
                     alert("not a member");
-                    window.location.href = './'
+                    window.location.href = `./dao/${res.data.slug}`
                 }
             }
         }

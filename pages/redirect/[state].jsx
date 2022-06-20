@@ -97,6 +97,18 @@ function DaoForm() {
     </>
 
 
+    let duplicate_review_redirect = <>
+        <img src="/oops.png" className={styles.sc_oops} alt="" />
+        <p>Oops, Review already exist by this User</p>
+        <span className={styles.btns}>
+            <button onClick={() => {
+                window.location.href = `../dao/${state.split('-')[1]}`
+            }}>Try again</button>
+        </span>
+    </>
+
+
+
     if (!state) {
         return (
             <h1>
@@ -114,6 +126,9 @@ function DaoForm() {
         }
         else if (state == 'new_dao') {
             return new_dao
+        }
+        else if (state.split('-')[0] == 'duplicate_review') {
+            return duplicate_review_redirect
         }
         else {
             return failed

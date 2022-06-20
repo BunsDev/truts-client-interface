@@ -614,8 +614,6 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
     const FAILURE = 'FAILURE';
     const INSUFFICIENT = 'INSUFFICIENT';
 
-    const [usdSol, setusdSol] = useState(0);
-
     const [dialogType, setdialogType] = useState('CONNECT_WALLET')
 
     const scrollDisable = (control) => {
@@ -630,48 +628,6 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
 
     const connection = new Connection(NETWORK);
 
-    const createTransferTransaction = async () => {
-        let coingecko = await axios.get('https://api.coingecko.com/api/v3/coins/solana');
-        console.log(coingecko)
-        let usd = coingecko.data.market_data.current_price.usd;
-        console.log(usd);
-        let sol = 1000000000;
-        let provider = getProvider();
-        if (!provider.publicKey) return;
-        setusdSol((sol / (parseInt(usd)) / sol).toFixed(2));
-        let transaction = new Transaction().add(
-            SystemProgram.transfer({
-                fromPubkey: provider.publicKey,
-                toPubkey: review_wallet_address,
-                lamports: parseInt(sol / (parseInt(usd))),
-            })
-        );
-        transaction.feePayer = provider.publicKey;
-        // addLog("Getting recent blockhash");
-        const anyTransaction = transaction;
-        anyTransaction.recentBlockhash = (
-            await connection.getLatestBlockhash()
-        ).blockhash;
-        return transaction;
-    };
-    const sendTransaction = async (transaction) => {
-        let provider = getProvider();
-        try {
-            if (!transaction) return;
-            let signed = await provider.signTransaction(transaction);
-            // addLog("Got signature, submitting transaction");
-            let signature = await connection.sendRawTransaction(signed.serialize());
-            setdialogType(SUCCESS);
-            //  addLog("Submitted transaction " + signature + ", awaiting confirmation");
-            await connection.confirmTransaction(signature);
-            //  addLog("Transaction " + signature + " confirmed");
-        } catch (err) {
-            setdialogType(FAILURE)
-            console.log(err);
-            console.warn(err);
-            //  addLog("[error] sendTransaction: " + JSON.stringify(err));
-        }
-    };
 
     useEffect(() => {
         if (visible) {
@@ -727,16 +683,60 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
         </div>
     </>
 
-    let TipReviewer = () => {
-        const [trx, settrx] = useState({})
-        let getTrx = async () => {
-            await window.solana.connect();
-            let t = await createTransferTransaction();
-            settrx(t);
+    const createTransferTransaction = async (lamports) => {
+        let provider = getProvider();
+        if (!provider.publicKey) return;
+        let transaction = new Transaction().add(
+            SystemProgram.transfer({
+                fromPubkey: provider.publicKey,
+                toPubkey: review_wallet_address,
+                lamports: lamports,
+            })
+        );
+        transaction.feePayer = provider.publicKey;
+        // addLog("Getting recent blockhash");
+        const anyTransaction = transaction;
+        anyTransaction.recentBlockhash = (
+            await connection.getLatestBlockhash()
+        ).blockhash;
+        return transaction;
+    };
+    const sendTransaction = async (transaction) => {
+        let provider = getProvider();
+        try {
+            if (!transaction) return;
+            let signed = await provider.signTransaction(transaction);
+            // addLog("Got signature, submitting transaction");
+            let signature = await connection.sendRawTransaction(signed.serialize());
+            setdialogType(SUCCESS);
+            //  addLog("Submitted transaction " + signature + ", awaiting confirmation");
+            await connection.confirmTransaction(signature);
+            //  addLog("Transaction " + signature + " confirmed");
+        } catch (err) {
+            setdialogType(FAILURE)
+            console.log(err);
+            console.warn(err);
+            //  addLog("[error] sendTransaction: " + JSON.stringify(err));
         }
+    };
+
+    let TipReviewer = () => {
+
+        const [dollarAmount, setdollarAmount] = useState(1);
+        const [equalentSolLamports, setequalentSolLamports] = useState(0);
+        let one_sol = 1000000000;
+
+        let calculateUSDtoSol = async () => {
+            let coingecko = await axios.get('https://api.coingecko.com/api/v3/coins/solana');
+            console.log(coingecko)
+            let usd = coingecko.data.market_data.current_price.usd;
+            let one_dollar_in_lamport = parseInt(one_sol / parseFloat(usd));
+            setequalentSolLamports(one_dollar_in_lamport * dollarAmount);
+        }
+
         useEffect(() => {
-            getTrx();
-        }, [])
+            calculateUSDtoSol();
+        }, [dollarAmount])
 
         return (
             <>
@@ -750,14 +750,17 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
                         <div className={styles.body}>
                             <span className={styles.token}>
                                 <img src="/solana.png" alt="" />
-                                <h2>1 $</h2>
+                                <h2>{(parseFloat(equalentSolLamports / one_sol).toFixed(2))} SOL</h2>
                             </span>
-                            <h1 className={styles.amount}>{usdSol} SOL</h1>
+                            <h1 className={styles.amount}>$</h1>
+                            <input className={styles.dollarInput} type="number" value={dollarAmount} onChange={(e) => { (e.target.value >= 0) ? setdollarAmount(e.target.value) : setdollarAmount(0) }} />
                         </div>
                     </div>
                     <div className={styles.connectBtn} onClick={async () => {
-                        console.log('send')
-                        await sendTransaction(trx)
+                        if (dollarAmount <= 0) { return alert("Tipping amount should be greater than 0") }
+                        await window.solana.connect()
+                        let trx = await createTransferTransaction(equalentSolLamports);
+                        await sendTransaction(trx);
                     }}>
                         <p>Tip it!</p>
                     </div>
@@ -833,12 +836,25 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
     } = useNetwork()
 
     let ONE_MATIC = '1000000000000000000'
+    const [dollarAmount, setdollarAmount] = useState(1);
+    const [equalentMaticAmount, setequalentMaticAmount] = useState(0);
+
+    let calculateUSDtoMatic = async () => {
+        let coingecko = await axios.get('https://api.coingecko.com/api/v3/coins/matic-network');
+        let usd = coingecko.data.market_data.current_price.usd;
+        let one_dollar_in_gwei = parseInt(ONE_MATIC / parseFloat(usd));
+        setequalentMaticAmount(one_dollar_in_gwei * dollarAmount);
+    }
+
+    useEffect(() => {
+        if (dollarAmount > 0) { calculateUSDtoMatic() }
+    }, [dollarAmount])
 
     const { data, isIdle, isError: tip_isError, isLoading: tip_Loading, isSuccess, sendTransaction } =
         useSendTransaction({
             request: {
                 to: review_wallet_address,
-                value: BigNumber.from(ONE_MATIC), // 1 Matic
+                value: BigNumber.from(`${equalentMaticAmount}`), // 1 Matic
             },
             onError(error) {
                 console.log('Error', error);
@@ -931,9 +947,10 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
                 <div className={styles.body}>
                     <span className={styles.token}>
                         <img src="/matic.png" alt="" />
-                        <h2>MATIC</h2>
+                        <h2>{parseFloat(equalentMaticAmount / ONE_MATIC).toFixed(2)} MATIC</h2>
                     </span>
-                    <h1 className={styles.amount}>1.00</h1>
+                    <h1 className={styles.amount}>$</h1>
+                    <input className={styles.dollarInput} type="number" value={dollarAmount} onChange={(e) => { (e.target.value >= 0) ? setdollarAmount(e.target.value) : setdollarAmount(0) }} />
                 </div>
             </div>
             <div className={styles.connectBtn} onClick={async () => {

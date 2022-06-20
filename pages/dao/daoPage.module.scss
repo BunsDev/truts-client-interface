@@ -724,6 +724,18 @@
             font-weight: 600;
             font-size: 25px;
             margin: 0;
+            margin-left: auto;
+        }
+
+        .dollarInput {
+            border: none;
+            border-bottom: 1px solid rgb(202, 202, 202);
+            outline: none;
+            background-color: transparent;
+            font-size: 25px;
+            width: 80px;
+           min-width: 80px;
+            text-align: right;
         }
     }
 
@@ -1072,4 +1084,3 @@
         }
     }
 }
-
