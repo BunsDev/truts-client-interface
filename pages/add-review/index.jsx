@@ -42,6 +42,7 @@ import {
 } from 'wagmi';
 
 
+
 const API = process.env.API
 
 
@@ -88,7 +89,6 @@ export default function Index() {
 
 
     const getDetails = async (cookie, uid) => {
-
         let id = cookie('target')
         setid(id);
         try {
@@ -148,29 +148,50 @@ export default function Index() {
         "great_incentives": 0,
     })
 
-
-    // postReview(formData, data.dao_name, data.guild_id);
-
     const [public_address, setpublic_address] = useState('');
-    const { data: sign_data, isError, isLoading, isSuccess: signSucess, signMessage } = useSignMessage({
-        message: reviewDesc,
-    })
 
     useEffect(() => {
-        if (signSucess) {
-            postReview(formData, data.dao_name, data.guild_id);
-        }
-    }, [signSucess])
+        console.log(public_address);
+        if (public_address.length > 1) { postReview(formData, data.dao_name, data.guild_id) }
+    }, [public_address])
+
+    const { data: signData, isError, isLoading, isSuccess, signMessage, signMessageAsync } = useSignMessage({
+        message: `Sign below to authenticate your Review`,
+    })
 
     const postReview = async (formData, dao_name, guild_id) => {
-        if (!signSucess) { return signMessage() }
-        if (public_address.length < 1) return (alert("Public Adress not found"));
+
+        let wallet_state = JSON.parse(window.localStorage.getItem('wallet_state'));
+        if (!wallet_state) {
+            return setconnectWalletModelVisible(true)
+        }
+
+        if (wallet_state.chain == 'eth') {
+            let res = await signMessageAsync();
+            if (!res) {
+                return null
+            }
+            console.log(res);
+        } else if (wallet_state.chain == 'sol') {
+            const message = `Sign below to authenticate your Review`;
+            const encodedMessage = new TextEncoder().encode(message);
+            const signedMessage = await window.solana.signMessage(encodedMessage, "utf8");
+            if (!signedMessage) {
+                return null
+            }
+        } else {
+            return null
+        }
+
+
         let postData = {
             ...formData,
             "dao_name": dao_name,
             "guild_id": guild_id,
-            "public_address": public_address,
+            "public_address": wallet_state.wallet_address,
+            "chain": wallet_state.chain
         }
+        
         if (id == '6287dcc3f711c412fb9e1074') {
             setloading(true);
             let review_send = await axios.post(`${API}/review/add-review-event`, postData);
@@ -195,6 +216,7 @@ export default function Index() {
     console.log(formData);
     const [connectWalletModelVisible, setconnectWalletModelVisible] = useState(false);
 
+    console.log('add', public_address)
 
     if (!data) {
         return (
@@ -218,8 +240,7 @@ export default function Index() {
             </Head>
             {loading && <Loader />}
             <div className={styles.addReview}>
-                <ConnectWalletModelSimple setpublic_address={setpublic_address} connectWalletModelVisible={connectWalletModelVisible} setconnectWalletModelVisible={setconnectWalletModelVisible} />
-                <Nav />
+                <Nav openConnectWallet={connectWalletModelVisible} getWalletAddress={(address) => { setpublic_address(address) }} />
                 <div>
                     <div className={styles.breadCrum}>
                         <img src="left-arrow.png" alt="" />
@@ -402,59 +423,6 @@ export default function Index() {
         </>
     )
 }
-
-const ConnectWalletModelSimple = ({ connectWalletModelVisible, setconnectWalletModelVisible, setpublic_address }) => {
-    const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
-    const { disconnectAsync } = useDisconnect()
-    const { data: walletData, isError, isLoading } = useAccount()
-
-    useEffect(() => {
-        if (!isConnected && !isLoading && !isConnecting) {
-            setconnectWalletModelVisible(true);
-        }
-        if (isConnected && !isLoading) {
-            if (walletData?.address) { setpublic_address(walletData.address) }
-        }
-    })
-
-
-
-    if (connectWalletModelVisible) {
-        return (
-            <div className={styles.connectWalletModel}>
-                <div className={styles.walletModal}>
-                    <div className={styles.wallets}>
-                        <h1 className={styles.title}>Connect Wallet</h1>
-                        <p className={styles.subTitle}>Please select one of the following to proceed</p>
-                        <div className={styles.box}>
-                            {
-                                connectors.map((connector) => {
-                                    return (
-                                        <div key={connector.id} className={styles.option} onClick={async () => {
-                                            let res = await connectAsync(connector);
-                                            if (res) { setconnectWalletModelVisible(false) };
-                                        }}>
-                                            <img src={getWalletIcon(connector.name)} alt="" />
-                                            <p> {connector.name}
-                                                {!connector.ready && '(unsupported)'}
-                                                {isConnecting &&
-                                                    connector.id === pendingConnector?.id &&
-                                                    ' (connecting)'}</p>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-    else {
-        return (null)
-    }
-}
-
 
 function Starrating({ rating }) {
     return (

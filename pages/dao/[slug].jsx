@@ -13,6 +13,14 @@ import { BigNumber } from "@ethersproject/bignumber";
 import Footer from '../../components/Footer'
 
 import {
+    Connection,
+    PublicKey,
+    Transaction,
+    clusterApiUrl,
+    SystemProgram,
+} from "@solana/web3.js";
+
+import {
     useAccount,
     useConnect,
     useDisconnect,
@@ -118,6 +126,12 @@ function DaoPage({ dao_data }) {
 
     const [walletModelVisible, setwalletModelVisible] = useState(false);
 
+    const [solWalletModelVisible, setsolWalletModelVisible] = useState(false);
+
+    const [connectModelVisible, setconnectModelVisible] = useState(0);
+
+    const [navKey, setnavKey] = useState(0);
+
     if (!dao_data) {
         return (
             <Loader />
@@ -136,10 +150,11 @@ function DaoPage({ dao_data }) {
                 <meta name="description" content={dao_data.dao_mission || dao_data.description} />
             </Head>
             <div className={styles.main_con}>
-                <WalletModal visible={walletModelVisible} setvisible={setwalletModelVisible} review_wallet_address={current_review_wallet_address} />
+                <WalletModalEth visible={walletModelVisible} setvisible={setwalletModelVisible} review_wallet_address={current_review_wallet_address} />
+                <WalletModalSol setnavKey={setnavKey} visible={solWalletModelVisible} setvisible={setsolWalletModelVisible} review_wallet_address={current_review_wallet_address} />
                 <div className={styles.con}>
                     <InfoBar data={dao_data} />
-                    <Nav topSearchVisible={true} outline={false} />
+                    <Nav key={navKey + 'n'} topSearchVisible={true} outline={false} openConnectWallet={connectModelVisible} getWalletAddress={(address) => { }} />
                     <div className={styles.cover}>
                         <img src={(dao_data.dao_cover) ? dao_data.dao_cover : "/dao-cover.png"} onError={(e) => { e.target.src = '/hero-bg.jpg' }} alt="" />
                         <div className={styles.gradient} />
@@ -231,9 +246,18 @@ function DaoPage({ dao_data }) {
                                         rating={ele.rating}
                                         profile_img={ele.profile_img}
                                         data={ele}
+                                        openConnectWallet={() => {
+                                            setconnectModelVisible(ele => ele + 1);
+                                        }}
                                         openModel={() => {
-                                            setwalletModelVisible(true);
-                                            setcurrent_review_wallet_address(ele.public_address)
+                                            if (ele.chain == 'sol') {
+                                                setsolWalletModelVisible(true);
+                                                setcurrent_review_wallet_address(ele.public_address)
+                                            }
+                                            else {
+                                                setwalletModelVisible(true);
+                                                setcurrent_review_wallet_address(ele.public_address)
+                                            }
                                         }}
                                     />
                                 }).reverse()
@@ -321,7 +345,7 @@ function DaoPage({ dao_data }) {
 
                 </div>
                 <div className={styles.m_daopage}>
-                    <Nav />
+                    <Nav key={navKey + 'n'} openConnectWallet={connectModelVisible} getWalletAddress={(address) => { }} />
                     <div className={styles.cover}>
                         <img src={(dao_data.dao_cover) ? dao_data.dao_cover : "/dao-cover.png"} alt="" onError={(e) => { e.target.src = '/hero-bg.jpg' }} />
                         <div className={styles.gradient} />
@@ -407,8 +431,18 @@ function DaoPage({ dao_data }) {
                                             rating={ele.rating}
                                             profile_img={ele.profile_img}
                                             data={ele}
+                                            openConnectWallet={() => {
+                                                setconnectModelVisible(ele => ele + 1);
+                                            }}
                                             openModel={() => {
-                                                setwalletModelVisible(true);
+                                                if (ele.chain == 'sol') {
+                                                    setsolWalletModelVisible(true);
+                                                    setcurrent_review_wallet_address(ele.public_address)
+                                                }
+                                                else {
+                                                    setwalletModelVisible(true);
+                                                    setcurrent_review_wallet_address(ele.public_address)
+                                                }
                                             }}
                                         />
                                     }).reverse()
@@ -556,7 +590,225 @@ const InfoBar = ({ data }) => {
     }
 }
 
-const WalletModal = ({ setvisible, visible, review_wallet_address }) => {
+
+const getProvider = () => {
+    if ("solana" in window) {
+        const anyWindow = window;
+        const provider = anyWindow.solana;
+        if (provider.isPhantom) {
+            console.log(provider)
+            return provider;
+        }
+    }
+    window.open("https://phantom.app/", "_blank");
+};
+
+const NETWORK = clusterApiUrl("mainnet-beta");
+console.log(NETWORK)
+
+const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey }) => {
+    const { disconnectAsync } = useDisconnect()
+    const CONNECT_WALLET = 'CONNECT_WALLET';
+    const TIP_REVIEWER = 'TIP_REVIEWER';
+    const SUCCESS = 'SUCESS';
+    const FAILURE = 'FAILURE';
+    const INSUFFICIENT = 'INSUFFICIENT';
+
+    const [usdSol, setusdSol] = useState(0);
+
+    const [dialogType, setdialogType] = useState('CONNECT_WALLET')
+
+    const scrollDisable = (control) => {
+        if (control) {
+            document.querySelector('body').style.overflow = "hidden";
+        }
+        else {
+            console.log("enable scroll")
+            document.querySelector('body').style.overflow = "auto";
+        }
+    }
+
+    const connection = new Connection(NETWORK);
+
+    const createTransferTransaction = async () => {
+        let coingecko = await axios.get('https://api.coingecko.com/api/v3/coins/solana');
+        console.log(coingecko)
+        let usd = coingecko.data.market_data.current_price.usd;
+        console.log(usd);
+        let sol = 1000000000;
+        let provider = getProvider();
+        if (!provider.publicKey) return;
+        setusdSol((sol / (parseInt(usd)) / sol).toFixed(2));
+        let transaction = new Transaction().add(
+            SystemProgram.transfer({
+                fromPubkey: provider.publicKey,
+                toPubkey: review_wallet_address,
+                lamports: parseInt(sol / (parseInt(usd))),
+            })
+        );
+        transaction.feePayer = provider.publicKey;
+        // addLog("Getting recent blockhash");
+        const anyTransaction = transaction;
+        anyTransaction.recentBlockhash = (
+            await connection.getLatestBlockhash()
+        ).blockhash;
+        return transaction;
+    };
+    const sendTransaction = async (transaction) => {
+        let provider = getProvider();
+        try {
+            if (!transaction) return;
+            let signed = await provider.signTransaction(transaction);
+            // addLog("Got signature, submitting transaction");
+            let signature = await connection.sendRawTransaction(signed.serialize());
+            setdialogType(SUCCESS);
+            //  addLog("Submitted transaction " + signature + ", awaiting confirmation");
+            await connection.confirmTransaction(signature);
+            //  addLog("Transaction " + signature + " confirmed");
+        } catch (err) {
+            setdialogType(FAILURE)
+            console.log(err);
+            console.warn(err);
+            //  addLog("[error] sendTransaction: " + JSON.stringify(err));
+        }
+    };
+
+    useEffect(() => {
+        if (visible) {
+            openModel();
+        }
+    }, [visible])
+
+    const openModel = () => {
+        scrollDisable(true);
+    }
+
+    const closeModel = () => {
+        scrollDisable(false);
+        setvisible(false);
+    }
+
+    let connect_wallet = <div className={styles.wallets}>
+        <h1 className={styles.title}>Switch to Solana</h1>
+        <p className={styles.subTitle}>This Public Address can receive tips only on Solana</p>
+        <div className={styles.connectBtn} onClick={async () => {
+            // switchNetwork(137);
+            if (window.solana && window.solana.isPhantom) {
+                await disconnectAsync();
+                const resp = await window.solana.connect();
+                let wallet = resp.publicKey.toString()
+                window.localStorage.setItem('wallet_state', JSON.stringify({ chain: 'sol', connected: true, wallet_address: wallet }));
+                setnavKey(ele => ele + 1)
+            }
+            else {
+                getProvider();
+            }
+        }}>
+            <img src="/phantom.avif" alt="" />
+            <p>Connect Phantom Wallet</p>
+        </div>
+    </div>
+
+    let success = <>
+        <div className={styles.wallets} key={"success"}>
+            <div className={styles.finalPrompt}>
+                <img src="/sucess_tick.png" alt="" />
+                <p>Transaction successful. Thank you for your contribution and gratuity.</p>
+            </div>
+        </div>
+    </>
+
+    let failure = <>
+        <div className={styles.wallets} key={"failure"}>
+            <div className={styles.finalPrompt}>
+                <img src="/oops.png" alt="" />
+                <p>Transaction unsuccessful. Can you please try again :)</p>
+            </div>
+        </div>
+    </>
+
+    let TipReviewer = () => {
+        const [trx, settrx] = useState({})
+        let getTrx = async () => {
+            await window.solana.connect();
+            let t = await createTransferTransaction();
+            settrx(t);
+        }
+        useEffect(() => {
+            getTrx();
+        }, [])
+
+        return (
+            <>
+                <div className={styles.wallets} key={"wallets"}>
+                    <h1 className={styles.title}>Tip the reviewer</h1>
+                    <p className={styles.subTitle}>Please note, tips to this user are only possible on <strong>Solana</strong></p>
+                    <div className={styles.tokenAmountBox}>
+                        <div className={styles.head}>
+                            <p>Pay With</p>
+                        </div>
+                        <div className={styles.body}>
+                            <span className={styles.token}>
+                                <img src="/solana.png" alt="" />
+                                <h2>1 $</h2>
+                            </span>
+                            <h1 className={styles.amount}>{usdSol} SOL</h1>
+                        </div>
+                    </div>
+                    <div className={styles.connectBtn} onClick={async () => {
+                        console.log('send')
+                        await sendTransaction(trx)
+                    }}>
+                        <p>Tip it!</p>
+                    </div>
+                </div>
+            </>
+        )
+    }
+
+    const selector = () => {
+        let wallet_state = JSON.parse(window.localStorage.getItem('wallet_state'));
+        if (dialogType == SUCCESS) {
+            return success
+        }
+        if (dialogType == FAILURE) {
+            return failure
+        }
+        if (dialogType == TIP_REVIEWER) {
+            return <TipReviewer />
+        }
+        if (!wallet_state) {
+            return connect_wallet
+        }
+        else if (wallet_state.chain == 'eth') {
+            return connect_wallet
+        }
+        else if (wallet_state.chain == 'sol') {
+            setdialogType(TIP_REVIEWER);
+        }
+    }
+
+    if (visible) {
+        return (
+            <div className={styles.walletCon}>
+                <div className={styles.walletModal}>
+                    <img src={'/close.svg'} onClick={() => {
+                        closeModel();
+                        setdialogType(CONNECT_WALLET)
+                    }} className={styles.closeIcon} />
+                    {
+                        selector()
+                    }
+                </div>
+            </div>
+        )
+    } else {
+        return null
+    }
+
+}
+
+const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
 
     const CONNECT_WALLET = 'CONNECT_WALLET';
     const WRONG_NETWORK = 'WRONG_NETWORK';
@@ -671,7 +923,7 @@ const WalletModal = ({ setvisible, visible, review_wallet_address }) => {
     let tipReviewer = <>
         <div className={styles.wallets} key={"wallets"}>
             <h1 className={styles.title}>Tip the reviewer</h1>
-            <p className={styles.subTitle}>Please note, tips are only possible on <strong>Polygon</strong></p>
+            <p className={styles.subTitle}>Please note, tips this user are only possible on <strong>Polygon</strong></p>
             <div className={styles.tokenAmountBox}>
                 <div className={styles.head}>
                     <p>Pay With</p>
@@ -768,51 +1020,9 @@ const WalletModal = ({ setvisible, visible, review_wallet_address }) => {
 
 }
 
-const ConnectWalletModelSimple = ({ connectWalletModelVisible, setconnectWalletModelVisible }) => {
-    const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
-    const { disconnectAsync } = useDisconnect()
-    const { data: walletData, isError, isLoading } = useAccount()
 
-    if (connectWalletModelVisible) {
-        return (
-            <div className={styles.connectWalletModel}>
-                <div className={styles.walletModal}>
-                <img src={'/close.svg'} onClick={() => {
-                        setconnectWalletModelVisible(false)
-                    }} className={styles.closeIcon} />
-                    <div className={styles.wallets}>
-                        <h1 className={styles.title}>Connect Wallet</h1>
-                        <p className={styles.subTitle}>Please select one of the following to proceed</p>
-                        <div className={styles.box}>
-                            {
-                                connectors.map((connector) => {
-                                    return (
-                                        <div key={connector.id} className={styles.option} onClick={async () => {
-                                            await connectAsync(connector);
-                                            setconnectWalletModelVisible(false);
-                                        }}>
-                                            <img src={getWalletIcon(connector.name)} alt="" />
-                                            <p> {connector.name}
-                                                {!connector.ready && '(unsupported)'}
-                                                {isConnecting &&
-                                                    connector.id === pendingConnector?.id &&
-                                                    ' (connecting)'}</p>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-    else {
-        return (null)
-    }
-}
 
-function Comment({ comment, address, rating, profile_img, openModel, data }) {
+function Comment({ comment, address, rating, profile_img, openModel, data, openConnectWallet }) {
 
     const [wrapText, setwrapText] = useState(true);
     const [ratingLoading, setratingLoader] = useState(false);
@@ -826,14 +1036,14 @@ function Comment({ comment, address, rating, profile_img, openModel, data }) {
     const { disconnectAsync } = useDisconnect()
     const { data: walletData, isError, isLoading } = useAccount()
 
-    const [connectWalletModelVisible, setconnectWalletModelVisible] = useState(false);
-
     const giveThumbs = async (type) => {
         console.log("rating ", type)
-        if (!isConnected) {
-            setconnectWalletModelVisible(true);
+        let wallet_state = JSON.parse(window.localStorage.getItem('wallet_state'));
+        if (!wallet_state) {
+            return openConnectWallet(true);
         }
         else {
+            setratingLoader(true);
             if (type == 'up') {
                 let res = await addRating(true);
                 if (res) {
@@ -867,44 +1077,44 @@ function Comment({ comment, address, rating, profile_img, openModel, data }) {
     }
 
     const addRating = async (type) => {
-        console.log("rating ", type)
-        if (!isConnected) {
+        let wallet_state = JSON.parse(window.localStorage.getItem('wallet_state'));
+        if (!wallet_state) {
+            return openConnectWallet(true)
         }
-        else {
-            try {
-                let res = await axios.post(`${API}/review/rate-review`, {
-                    "review_id": data._id,
-                    "wallet_address": walletData.address,
-                    "type": type
-                });
-                console.log(res);
-                if (res.status == 200) {
-                    return { status: true, unique: res.data.unique, deleted: res.data.deleted };
-                }
-                else {
-                    alert("network error");
-                    return false;
-                }
+        try {
+            let res = await axios.post(`${API}/review/rate-review`, {
+                "review_id": data._id,
+                "wallet_address": wallet_state.wallet_address,
+                "type": type,
+                "chain": wallet_state.chain
+            });
+            console.log(res);
+            if (res.status == 200) {
+                return { status: true, unique: res.data.unique, deleted: res.data.deleted };
             }
-            catch (er) {
-                console.log(er)
+            else {
+                alert("network error");
                 return false;
             }
         }
+        catch (er) {
+            console.log(er)
+            return false;
+        }
+
     }
 
     let p_img = (profile_img) ? profile_img : "/hero-bg.jpg"
 
     return (
         <div className={styles.comment}>
-            <ConnectWalletModelSimple connectWalletModelVisible={connectWalletModelVisible} setconnectWalletModelVisible={setconnectWalletModelVisible} />
             <div className={styles.profileName}>
                 <img style={{ gridArea: 'a' }} src={p_img} alt="" onError={(e) => { e.target.src = '/hero-bg.jpg' }} />
                 <h1 onClick={() => {
                     navigator.clipboard.writeText(address);
                 }}
                     style={{ cursor: "pointer" }}
-                >{address.slice(0, 5) + "..." + address.slice(-4)}</h1>
+                >{address.slice(0, 5) + "..." + address.slice(-4)} </h1>
                 <Starrating rating={rating} />
             </div>
             <p className={styles.commentText}>
@@ -916,7 +1126,7 @@ function Comment({ comment, address, rating, profile_img, openModel, data }) {
             <div className={styles.likes}>
                 <span>
                     {(!ratingLoading) ? <> <img src="/thumbs-up.png" alt="" onClick={() => {
-                        setratingLoader(true);
+
                         giveThumbs('up');
                     }} />
                         <p>{thumbsUp}</p>
@@ -925,7 +1135,7 @@ function Comment({ comment, address, rating, profile_img, openModel, data }) {
                 <span>
                     {(!ratingLoading) ? <>
                         <img src="/thumbs-down.png" alt="" onClick={async () => {
-                            setratingLoader(true);
+
                             giveThumbs('down');
                         }} />
                         <p>{thumbsDown}</p>
@@ -933,6 +1143,7 @@ function Comment({ comment, address, rating, profile_img, openModel, data }) {
                 </span>
                 <span>
                     <img src="/tips.png" alt="" onClick={() => { openModel() }} />
+                    <p>{(data.chain == 'sol') ? 'sol' : 'matic'}</p>
                 </span>
             </div>
         </div>

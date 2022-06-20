@@ -184,7 +184,6 @@
     height: 95px;
     padding-top: 5px;
     margin-top: 0;
-    
 
     .searchComp {
         input {
@@ -266,4 +265,142 @@
     100% {
         opacity: 1;
     }
+}
+
+/// connect wallet
+
+.walletCon {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.274);
+    z-index: 1000000;
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+}
+
+.walletModal {
+    display: flex;
+    width: 539px;
+    height: auto;
+    background: #ffffff;
+    z-index: 1000;
+    box-shadow: 0px 40px 250px rgba(0, 0, 0, 0.16);
+    border-radius: 32px;
+    overflow: hidden;
+    position: absolute;
+    animation: grow 0.5s ease-in-out forwards;
+    .closeIcon {
+        position: absolute;
+        height: 28px;
+        width: 28px;
+        right: 0;
+        top: 0;
+        margin: 25px;
+        cursor: pointer;
+    }
+
+    @media (max-width: 470px) {
+        width: 90vw;
+    }
+}
+
+.wallets {
+    width: 100%;
+    .title {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-weight: 500;
+        font-size: 32px;
+        margin: 30px 32px 0 32px;
+    }
+    .subTitle {
+        margin-top: 10px;
+        font-style: normal;
+        font-weight: 400;
+        margin: 0 32px;
+        margin-top: 10px;
+    }
+
+    .box {
+        display: flex;
+        width: 100%;
+        min-height: 292px;
+        background: #f2f5ff;
+        margin-top: 28px;
+        padding: 60px 39px;
+        flex-direction: column;
+        border-radius: 32px 32px 0 0;
+    }
+
+    .option {
+        display: flex;
+        //   background: #dae2fd;
+        width: 460px;
+        height: 80px;
+        border-bottom: 1.35px solid rgb(192, 162, 247);
+        align-items: center;
+        padding: 0 15px;
+        cursor: pointer;
+        img {
+            width: 39px;
+            object-fit: contain;
+            margin-right: 33px;
+        }
+        p {
+            font-weight: 500;
+            font-size: 20px;
+        }
+        .subtext {
+            font-size: 16px;
+            color: gray;
+            font-weight: 400;
+            margin-left: 5px;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+        transition: all 0.3s ease-in-out;
+        &:hover {
+            transition: all 0.3s ease-in-out;
+            background: #dae2fd;
+            border-bottom: 1.35px solid rgb(133, 67, 255);
+        }
+    }
+
+    @keyframes grow {
+        0% {
+            transform: scale(0.7);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @media (max-width: 470px) {
+        width: 90vw;
+        font-size: 3.5vw;
+        .title {
+            font-size: 5vw;
+        }
+        .option {
+            p {
+                font-size: 5vw;
+            }
+            .subtext {
+                font-size: 4.5vw;
+            }
+        }
+    }
+}
+
+.connectWalletModel {
+    @extend .walletCon;
 }
