@@ -61,7 +61,7 @@ function Nav({ topSearchVisible, outline, openConnectWallet, getWalletAddress })
     }, [])
 
     useEffect(() => {
-        setTimeout(() => {
+
             if (isConnected) {
                 setwalletState({ chain: 'eth', connected: true, wallet_address: walletData.address });
                 window.localStorage.setItem('wallet_state', JSON.stringify({ chain: 'eth', connected: true, wallet_address: walletData.address }));
@@ -71,7 +71,7 @@ function Nav({ topSearchVisible, outline, openConnectWallet, getWalletAddress })
                 setwalletState({});
                 window.localStorage.removeItem('wallet_state');
             }
-        },100);
+
     }, [isConnected])
 
     // wallet functions
