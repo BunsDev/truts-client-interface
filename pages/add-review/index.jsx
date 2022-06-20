@@ -152,7 +152,7 @@ export default function Index() {
 
     useEffect(() => {
         console.log(public_address);
-        if (public_address.length > 1) { postReview(formData, data.dao_name, data.guild_id) }
+        if (public_address.length > 1 && tc) { postReview(formData, data.dao_name, data.guild_id) }
     }, [public_address])
 
     const { data: signData, isError, isLoading, isSuccess, signMessage, signMessageAsync } = useSignMessage({
@@ -202,6 +202,9 @@ export default function Index() {
                 let data = { id: review_send.data.db._id, dao_name: review_send.data.db.dao_name, guild_id: review_send.data.db.guild_id, public_address: review_send.data.db.public_address };
                 window.location.href = `${API}/review/authorize-review-event?data=${JSON.stringify(data)}`
             }
+            else {
+                window.location.href = 'https://www.truts.xyz/redirect/duplicate_review'
+            }
         }
         else {
             setloading(true);
@@ -210,6 +213,9 @@ export default function Index() {
                 console.log(review_send.data);
                 let data = { id: review_send.data.db._id, dao_name: review_send.data.db.dao_name, guild_id: review_send.data.db.guild_id, public_address: review_send.data.db.public_address };
                 window.location.href = `${API}/review/authorize-review?data=${JSON.stringify(data)}`
+            }
+            else {
+                window.location.href = 'https://www.truts.xyz/redirect/duplicate_review'
             }
         }
     }
