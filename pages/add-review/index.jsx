@@ -117,7 +117,7 @@ export default function Index() {
             }
         }
         catch (er) {
-            console.log(er);
+            console.log(er);//
         }
 
         try {
