@@ -348,7 +348,7 @@ function DaoPage({ dao_data }) {
                 <div className={styles.m_daopage}>
                     <Nav key={navKey + 'n'} openConnectWallet={connectModelVisible} getWalletAddress={(address) => { }} />
                     <div className={styles.cover}>
-                        <img src={(dao_data.dao_cover) ? dao_data.dao_cover : "/dao-cover.png"} alt="" onError={(e) => { e.target.src = '/hero-bg.jpg' }} />
+                        <img style={{ objectFit: "cover" }} src={(dao_data.dao_cover) ? dao_data.dao_cover : "/dao-cover.png"} alt="" onError={(e) => { e.target.src = '/hero-bg.jpg' }} />
                         <div className={styles.gradient} />
                         <div className={styles.daoInfo}>
                             <h1>{dao_data.dao_name} <img src="/verified.png" alt="" /> </h1>
