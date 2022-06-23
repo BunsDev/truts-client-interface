@@ -88,8 +88,9 @@
 .tags {
     display: flex;
     span {
+        cursor: pointer;
         display: flex;
-        width: 127px;
+        padding: 0 15px;
         height: 28px;
         background: #ebe3f8;
         border-radius: 32px;
@@ -734,7 +735,7 @@
             background-color: transparent;
             font-size: 25px;
             width: 80px;
-           min-width: 80px;
+            min-width: 80px;
             text-align: right;
         }
     }
