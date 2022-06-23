@@ -31,6 +31,7 @@ import {
 } from 'wagmi';
 
 import { Buffer } from "buffer";
+import { get } from 'lodash';
 
 const getWalletIcon = (name) => {
     if (name == 'MetaMask') {
@@ -724,19 +725,28 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
 
         const [dollarAmount, setdollarAmount] = useState(1);
         const [equalentSolLamports, setequalentSolLamports] = useState(0);
+        const [usd, setusd] = useState(0);
         let one_sol = 1000000000;
 
         let calculateUSDtoSol = async () => {
-            let coingecko = await axios.get('https://api.coingecko.com/api/v3/coins/solana');
-            console.log(coingecko)
-            let usd = coingecko.data.market_data.current_price.usd;
             let one_dollar_in_lamport = parseInt(one_sol / parseFloat(usd));
             setequalentSolLamports(one_dollar_in_lamport * dollarAmount);
         }
 
+        let getUsd = async () => {
+            let coingecko = await axios.get('https://api.coingecko.com/api/v3/coins/solana');
+            console.log(coingecko)
+            let usd = coingecko.data.market_data.current_price.usd;
+            setusd(usd);
+        }
+
+        useEffect(() => {
+            getUsd();
+        }, [])
+
         useEffect(() => {
             calculateUSDtoSol();
-        }, [dollarAmount])
+        }, [dollarAmount, usd])
 
         return (
             <>
@@ -750,7 +760,7 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
                         <div className={styles.body}>
                             <span className={styles.token}>
                                 <img src="/solana.png" alt="" />
-                                <h2>{(parseFloat(equalentSolLamports / one_sol).toFixed(2))} SOL</h2>
+                                <h2>{(equalentSolLamports > 0) && (parseFloat(equalentSolLamports / one_sol).toFixed(2))} SOL</h2>
                             </span>
                             <h1 className={styles.amount}>$</h1>
                             <input className={styles.dollarInput} type="number" value={dollarAmount} onChange={(e) => { (e.target.value >= 0) ? setdollarAmount(e.target.value) : setdollarAmount(0) }} />
@@ -839,16 +849,26 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
     const [dollarAmount, setdollarAmount] = useState(1);
     const [equalentMaticAmount, setequalentMaticAmount] = useState(0);
 
-    let calculateUSDtoMatic = async () => {
+    const [usd, setusd] = useState(0);
+
+    let getUsd = async () => {
         let coingecko = await axios.get('https://api.coingecko.com/api/v3/coins/matic-network');
         let usd = coingecko.data.market_data.current_price.usd;
+        setusd(usd)
+    }
+
+    useEffect(() => {
+        getUsd()
+    }, [])
+
+    let calculateUSDtoMatic = async () => {
         let one_dollar_in_gwei = parseInt(ONE_MATIC / parseFloat(usd));
         setequalentMaticAmount(one_dollar_in_gwei * dollarAmount);
     }
 
     useEffect(() => {
-        if (dollarAmount > 0) { calculateUSDtoMatic() }
-    }, [dollarAmount])
+        if (dollarAmount > 0 && usd > 0) { calculateUSDtoMatic() }
+    }, [dollarAmount, usd])
 
     const { data, isIdle, isError: tip_isError, isLoading: tip_Loading, isSuccess, sendTransaction } =
         useSendTransaction({
@@ -947,7 +967,7 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
                 <div className={styles.body}>
                     <span className={styles.token}>
                         <img src="/matic.png" alt="" />
-                        <h2>{parseFloat(equalentMaticAmount / ONE_MATIC).toFixed(2)} MATIC</h2>
+                        <h2>{(equalentMaticAmount > 0) && parseFloat(equalentMaticAmount / ONE_MATIC).toFixed(2)} MATIC</h2>
                     </span>
                     <h1 className={styles.amount}>$</h1>
                     <input className={styles.dollarInput} type="number" value={dollarAmount} onChange={(e) => { (e.target.value >= 0) ? setdollarAmount(e.target.value) : setdollarAmount(0) }} />
