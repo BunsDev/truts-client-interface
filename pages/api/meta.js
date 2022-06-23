@@ -10,6 +10,12 @@ export default withOGImage({
         inspectHtml: false,
     },
     nextApiOgImageConfig: {
-        quality: 50
+        quality: 50,
+        type: 'jpeg',
+        // Width of the image in pixels
+        width: 300,
+        // Height of the image in pixels 
+        height: 157,
     }
 });
+
