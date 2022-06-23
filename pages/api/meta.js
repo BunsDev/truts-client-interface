@@ -9,4 +9,7 @@ export default withOGImage({
     dev: {
         inspectHtml: false,
     },
+    nextApiOgImageConfig: {
+        quality: 50
+    }
 });
