@@ -291,7 +291,7 @@ function DaoPage({ dao_data }) {
                                 </button>
                                 <button className={styles.webBtn}
                                     onClick={() => {
-                                        openNewTab(dao_data.website_link)
+                                        (dao_data.mirror_link?.length > 1) && openNewTab(dao_data.mirror_link)
                                     }}
                                 >
                                     <img src="/web-outline.png" alt="" />
