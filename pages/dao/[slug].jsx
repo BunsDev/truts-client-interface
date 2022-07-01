@@ -153,7 +153,7 @@ function DaoPage({ dao_data }) {
                 <meta name="twitter:site" content="@digitalocean" />
                 <meta name="twitter:title" content="Sammy the Shark" />
                 <meta name="twitter:description" content="Senior Selachimorpha at DigitalOcean" />
-                <meta name="twitter:image" content="https://www.truts.xyz/api/fetchcard?rid=627c982b8ffffe0011429584" />
+                <meta name="twitter:image" content="https://html.sammy-codes.com/images/large-profile.jpg" />
             </Head>
             <div className={styles.main_con}>
                 <WalletModalEth visible={walletModelVisible} setvisible={setwalletModelVisible} review_wallet_address={current_review_wallet_address} />
