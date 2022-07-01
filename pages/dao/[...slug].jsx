@@ -1256,7 +1256,7 @@ export async function getServerSideProps(ctx) {
     let { slug } = ctx.query
     // Fetch data from external API
     let res = await fetchData(slug[0])
-    let rid = slug[1] || rid;
+    let rid = slug[1] || '';
     // Pass data to the page via props
     return { props: { dao_data: res, rid: rid } }
 }
