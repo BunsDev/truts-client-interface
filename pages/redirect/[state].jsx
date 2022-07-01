@@ -44,6 +44,7 @@ function DaoForm() {
         }
         let id = cookie('target')
         setid(id);
+        console.log(id);
     }, [])
 
     const router = useRouter()

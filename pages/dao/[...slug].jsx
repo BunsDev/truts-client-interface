@@ -73,7 +73,7 @@ function DaoPage({ dao_data }) {
 
     const router = useRouter()
     const slug = router.query.slug[0];
-    let rid = router.query.slug[1];
+    let rid = router.query.slug[1] || '';
 
     const resize = () => {
         let bdy = document.querySelector('body');
@@ -98,6 +98,22 @@ function DaoPage({ dao_data }) {
             window.Buffer = Buffer;
         }
         fetchSimilar()
+    }, [])
+
+    const [selected, setselected] = useState({});
+
+    useEffect(() => {
+        // _id
+        if (rid.length > 0) {
+            dao_data.reviews.forEach((ele) => {
+                console.log('_');
+                if (ele._id == rid) {
+                    console.log(ele);
+                    setselected({ ...ele });
+                }
+            })
+        }
+
     }, [])
 
     const [dao_list, setdao_list] = useState([]);
@@ -150,19 +166,19 @@ function DaoPage({ dao_data }) {
                 <link rel="icon" href="/favicon.png" />
                 <meta name="description" content={dao_data.dao_mission || dao_data.description} />
 
-                <meta property="og:url" content="https://www.truts.xyz/dao/cult_dao/" />
-                <meta property="og:type" content="website" />
-                <meta property="og:title" content="Cult DAO" />
-                <meta property="og:description" content="The first rule of CULT is you TALK about CULT" />
-                <meta property="og:image" content={`https://www.truts.xyz/api/fetchcard?rid=${rid}`} />
+                {(rid.length > 0) && <><meta property="og:url" content="https://www.truts.xyz/dao/cult_dao/" />
+                    <meta property="og:type" content="website" />
+                    <meta property="og:title" content="Cult DAO" />
+                    <meta property="og:description" content="The first rule of CULT is you TALK about CULT" />
+                    <meta property="og:image" content={`https://www.truts.xyz/api/fetchcard?rid=${rid}`} />
 
 
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta property="twitter:domain" content="truts.xyz" />
-                <meta property="twitter:url" content="https://www.truts.xyz/dao/cult_dao/" />
-                <meta name="twitter:title" content="Cult DAO" />
-                <meta name="twitter:description" content="The first rule of CULT is you TALK about CULT" />
-                <meta name="twitter:image" content={`https://www.truts.xyz/api/fetchcard?rid=${rid}`} />
+                    <meta name="twitter:card" content="summary_large_image" />
+                    <meta property="twitter:domain" content="truts.xyz" />
+                    <meta property="twitter:url" content="https://www.truts.xyz/dao/cult_dao/" />
+                    <meta name="twitter:title" content="Cult DAO" />
+                    <meta name="twitter:description" content="The first rule of CULT is you TALK about CULT" />
+                    <meta name="twitter:image" content={`https://www.truts.xyz/api/fetchcard?rid=${rid}`} /></>}
 
             </Head>
             <div className={styles.main_con}>
@@ -252,9 +268,33 @@ function DaoPage({ dao_data }) {
                                     </div>
                                 </span>}
                             </div>
-
+                            {
+                                (rid.length > 0 && selected.review_desc) && <Comment
+                                    key={'sel' + "comment"}
+                                    comment={selected.review_desc}
+                                    address={selected.public_address}
+                                    rating={selected.rating}
+                                    profile_img={selected.profile_img}
+                                    data={selected}
+                                    openConnectWallet={() => {
+                                        setconnectModelVisible(selected => selected + 1);
+                                    }}
+                                    openModel={() => {
+                                        if (ele.chain == 'sol') {
+                                            setsolWalletModelVisible(true);
+                                            setcurrent_review_wallet_address(selected.public_address)
+                                        }
+                                        else {
+                                            setwalletModelVisible(true);
+                                            setcurrent_review_wallet_address(selected.public_address)
+                                        }
+                                    }}
+                                    highlight={true}
+                                />
+                            }
                             {
                                 dao_data.reviews.map((ele, idx) => {
+                                    if (ele._id == rid) return null
                                     return <Comment
                                         key={idx + "comment"}
                                         comment={ele.review_desc}
@@ -1074,7 +1114,7 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
 
 
 
-function Comment({ comment, address, rating, profile_img, openModel, data, openConnectWallet }) {
+function Comment({ comment, address, rating, profile_img, openModel, data, openConnectWallet, highlight }) {
 
     const [wrapText, setwrapText] = useState(true);
     const [ratingLoading, setratingLoader] = useState(false);
@@ -1157,9 +1197,12 @@ function Comment({ comment, address, rating, profile_img, openModel, data, openC
     }
 
     let p_img = (profile_img) ? profile_img : "/hero-bg.jpg"
-
+    let cmtStyle = styles.comment
+    if (highlight) {
+        cmtStyle = cmtStyle + ' ' + styles.highlight
+    }
     return (
-        <div className={styles.comment}>
+        <div className={cmtStyle}>
             <div className={styles.profileName}>
                 <img style={{ gridArea: 'a' }} src={p_img} alt="" onError={(e) => { e.target.src = '/hero-bg.jpg' }} />
                 <h1 onClick={() => {
@@ -1196,6 +1239,10 @@ function Comment({ comment, address, rating, profile_img, openModel, data, openC
                 <span>
                     <img src="/tips.png" alt="" onClick={() => { openModel() }} />
                     <p>{(data.chain == 'sol') ? 'Tip SOL' : 'Tip MATIC'}</p>
+                </span>
+                {/* http://twitter.com/share?text=text goes here&url=http://url goes here&hashtags=hashtag1,hashtag2,hashtag3 */}
+                <span>
+                    <img src="/share.png" alt="" onClick={() => { openNewTab(`http://twitter.com/share?text=text goes here&url=https://www.truts.xyz/dao/${slug}/${data._id} goes here&hashtags=hashtag1,hashtag2,hashtag3`) }} />
                 </span>
             </div>
         </div>

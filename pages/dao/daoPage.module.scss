@@ -225,6 +225,11 @@
     }
 }
 
+.highlight {
+    outline: 5px solid #3066fc;
+    box-shadow: 0 0 50px #3066fc49;
+}
+
 .comment {
     display: flex;
     flex-direction: column;
