@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import axios from "axios"
-let API = `http://ec2-35-90-127-101.us-west-2.compute.amazonaws.com:5500`
+let API = `http://35.88.248.101:5500`
 export default async function handler(req, res) {
   let rid = req.query.rid
   let res_bin = await axios.get(`${API}/review-card-bin/?rid=${rid}`);
