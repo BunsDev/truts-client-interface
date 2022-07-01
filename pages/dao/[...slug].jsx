@@ -167,16 +167,16 @@ function DaoPage({ dao_data, rid }) {
 
                 {(rid.length > 0) && <><meta property="og:url" content="https://www.truts.xyz/dao/cult_dao/" />
                     <meta property="og:type" content="website" />
-                    <meta property="og:title" content="Cult DAO" />
-                    <meta property="og:description" content="The first rule of CULT is you TALK about CULT" />
+                    <meta property="og:title" content={dao_data.dao_name} />
+                    <meta property="og:description" content={dao_data.dao_mission || dao_data.description} />
                     <meta property="og:image" content={`https://www.truts.xyz/api/fetchcard?rid=${rid}`} />
 
 
                     <meta name="twitter:card" content="summary_large_image" />
                     <meta property="twitter:domain" content="truts.xyz" />
                     <meta property="twitter:url" content="https://www.truts.xyz/dao/cult_dao/" />
-                    <meta name="twitter:title" content="Cult DAO" />
-                    <meta name="twitter:description" content="The first rule of CULT is you TALK about CULT" />
+                    <meta name="twitter:title" content={dao_data.dao_name} />
+                    <meta name="twitter:description" content={dao_data.dao_mission || dao_data.description} />
                     <meta name="twitter:image" content={`https://www.truts.xyz/api/fetchcard?rid=${rid}`} /></>}
 
             </Head>
