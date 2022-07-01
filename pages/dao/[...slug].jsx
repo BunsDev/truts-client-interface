@@ -165,7 +165,7 @@ function DaoPage({ dao_data, rid }) {
                 <link rel="icon" href="/favicon.png" />
                 <meta name="description" content={dao_data.dao_mission || dao_data.description} />
 
-                {(rid.length > 0) && <><meta property="og:url" content="https://www.truts.xyz/dao/cult_dao/" />
+                {(rid.length > 0) && <><meta property="og:url" content={`https://www.truts.xyz/dao/${dao_data.slug}`} />
                     <meta property="og:type" content="website" />
                     <meta property="og:title" content={dao_data.dao_name} />
                     <meta property="og:description" content={dao_data.dao_mission || dao_data.description} />
@@ -174,7 +174,7 @@ function DaoPage({ dao_data, rid }) {
 
                     <meta name="twitter:card" content="summary_large_image" />
                     <meta property="twitter:domain" content="truts.xyz" />
-                    <meta property="twitter:url" content="https://www.truts.xyz/dao/cult_dao/" />
+                    <meta property="twitter:url" content={`https://www.truts.xyz/dao/${dao_data.slug}`} />
                     <meta name="twitter:title" content={dao_data.dao_name} />
                     <meta name="twitter:description" content={dao_data.dao_mission || dao_data.description} />
                     <meta name="twitter:image" content={`https://www.truts.xyz/api/fetchcard?rid=${rid}`} /></>}
