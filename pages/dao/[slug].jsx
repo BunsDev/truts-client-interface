@@ -149,6 +149,8 @@ function DaoPage({ dao_data }) {
                 <link rel="preload" as="image" href="/verified.png"></link>
                 <link rel="icon" href="/favicon.png" />
                 <meta name="description" content={dao_data.dao_mission || dao_data.description} />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:image" content="/api/fetchcard?rid=627c982b8ffffe0011429584" />
             </Head>
             <div className={styles.main_con}>
                 <WalletModalEth visible={walletModelVisible} setvisible={setwalletModelVisible} review_wallet_address={current_review_wallet_address} />
