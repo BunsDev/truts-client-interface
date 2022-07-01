@@ -1243,9 +1243,9 @@ function Comment({ comment, address, rating, profile_img, openModel, data, openC
                     <img src="/tips.png" alt="" onClick={() => { openModel() }} />
                     <p>{(data.chain == 'sol') ? 'Tip SOL' : 'Tip MATIC'}</p>
                 </span>
-                <span>
+                {/* <span>
                     <img src="/share.png" alt="" onClick={() => { openNewTab(`http://twitter.com/share?text=Discovering ${data.dao_name} (@${twitter_slug}) on Truts.xyz (@trutsxyz) &url=https://www.truts.xyz/dao/${slug}/${data._id}`) }} />
-                </span>
+                </span> */}
             </div>
         </div>
     )
