@@ -69,11 +69,10 @@ function Starrating({ rating }) {
     )
 }
 //
-function DaoPage({ dao_data }) {
+function DaoPage({ dao_data, rid }) {
 
     const router = useRouter()
     const slug = router.query.slug[0];
-    let rid = router.query.slug[1] || '';
 
     const resize = () => {
         let bdy = document.querySelector('body');
@@ -290,6 +289,7 @@ function DaoPage({ dao_data }) {
                                         }
                                     }}
                                     highlight={true}
+                                    slug={slug}
                                 />
                             }
                             {
@@ -315,6 +315,7 @@ function DaoPage({ dao_data }) {
                                                 setcurrent_review_wallet_address(ele.public_address)
                                             }
                                         }}
+                                        slug={slug}
                                     />
                                 }).reverse()
                             }
@@ -1114,7 +1115,7 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
 
 
 
-function Comment({ comment, address, rating, profile_img, openModel, data, openConnectWallet, highlight }) {
+function Comment({ comment, address, rating, profile_img, openModel, data, openConnectWallet, highlight, slug }) {
 
     const [wrapText, setwrapText] = useState(true);
     const [ratingLoading, setratingLoader] = useState(false);
@@ -1255,8 +1256,9 @@ export async function getServerSideProps(ctx) {
     let { slug } = ctx.query
     // Fetch data from external API
     let res = await fetchData(slug[0])
+    let rid = slug[1] || rid;
     // Pass data to the page via props
-    return { props: { dao_data: res } }
+    return { props: { dao_data: res, rid: rid } }
 }
 
 const fetchData = async (slug) => {
