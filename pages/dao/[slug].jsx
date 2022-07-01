@@ -150,7 +150,10 @@ function DaoPage({ dao_data }) {
                 <link rel="icon" href="/favicon.png" />
                 <meta name="description" content={dao_data.dao_mission || dao_data.description} />
                 <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:image" content="/api/fetchcard?rid=627c982b8ffffe0011429584" />
+                <meta name="twitter:site" content="@digitalocean" />
+                <meta name="twitter:title" content="Sammy the Shark" />
+                <meta name="twitter:description" content="Senior Selachimorpha at DigitalOcean" />
+                <meta name="twitter:image" content="https://www.truts.xyz/api/fetchcard?rid=627c982b8ffffe0011429584" />
             </Head>
             <div className={styles.main_con}>
                 <WalletModalEth visible={walletModelVisible} setvisible={setwalletModelVisible} review_wallet_address={current_review_wallet_address} />
