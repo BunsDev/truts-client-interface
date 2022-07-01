@@ -149,11 +149,21 @@ function DaoPage({ dao_data }) {
                 <link rel="preload" as="image" href="/verified.png"></link>
                 <link rel="icon" href="/favicon.png" />
                 <meta name="description" content={dao_data.dao_mission || dao_data.description} />
+
+                <meta property="og:url" content="https://www.truts.xyz/dao/cult_dao/" />
+                <meta property="og:type" content="website" />
+                <meta property="og:title" content="Cult DAO" />
+                <meta property="og:description" content="The first rule of CULT is you TALK about CULT" />
+                <meta property="og:image" content="https://www.truts.xyz/api/fetchcard?rid=627c982b8ffffe0011429584" />
+
+
                 <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:site" content="@digitalocean" />
-                <meta name="twitter:title" content="Sammy the Shark" />
-                <meta name="twitter:description" content="Senior Selachimorpha at DigitalOcean" />
-                <meta name="twitter:image" content="https://html.sammy-codes.com/images/large-profile.jpg" />
+                <meta property="twitter:domain" content="truts.xyz" />
+                <meta property="twitter:url" content="https://www.truts.xyz/dao/cult_dao/" />
+                <meta name="twitter:title" content="Cult DAO" />
+                <meta name="twitter:description" content="The first rule of CULT is you TALK about CULT" />
+                <meta name="twitter:image" content="https://www.truts.xyz/api/fetchcard?rid=627c982b8ffffe0011429584" />
+
             </Head>
             <div className={styles.main_con}>
                 <WalletModalEth visible={walletModelVisible} setvisible={setwalletModelVisible} review_wallet_address={current_review_wallet_address} />
