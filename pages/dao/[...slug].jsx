@@ -72,8 +72,8 @@ function Starrating({ rating }) {
 function DaoPage({ dao_data }) {
 
     const router = useRouter()
-    const slug = router.query.slug
-
+    const slug = router.query.slug[0];
+    let rid = router.query.slug[1];
 
     const resize = () => {
         let bdy = document.querySelector('body');
@@ -154,7 +154,7 @@ function DaoPage({ dao_data }) {
                 <meta property="og:type" content="website" />
                 <meta property="og:title" content="Cult DAO" />
                 <meta property="og:description" content="The first rule of CULT is you TALK about CULT" />
-                <meta property="og:image" content="https://www.truts.xyz/api/fetchcard?rid=627c982b8ffffe0011429584" />
+                <meta property="og:image" content={`https://www.truts.xyz/api/fetchcard?rid=${rid}`} />
 
 
                 <meta name="twitter:card" content="summary_large_image" />
@@ -162,7 +162,7 @@ function DaoPage({ dao_data }) {
                 <meta property="twitter:url" content="https://www.truts.xyz/dao/cult_dao/" />
                 <meta name="twitter:title" content="Cult DAO" />
                 <meta name="twitter:description" content="The first rule of CULT is you TALK about CULT" />
-                <meta name="twitter:image" content="https://www.truts.xyz/api/fetchcard?rid=627c982b8ffffe0011429584" />
+                <meta name="twitter:image" content={`https://www.truts.xyz/api/fetchcard?rid=${rid}`} />
 
             </Head>
             <div className={styles.main_con}>
@@ -1207,7 +1207,7 @@ function Comment({ comment, address, rating, profile_img, openModel, data, openC
 export async function getServerSideProps(ctx) {
     let { slug } = ctx.query
     // Fetch data from external API
-    let res = await fetchData(slug)
+    let res = await fetchData(slug[0])
     // Pass data to the page via props
     return { props: { dao_data: res } }
 }
