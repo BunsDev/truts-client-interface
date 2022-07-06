@@ -62,15 +62,15 @@ function Nav({ topSearchVisible, outline, openConnectWallet, getWalletAddress })
 
     useEffect(() => {
 
-            if (isConnected) {
-                setwalletState({ chain: 'eth', connected: true, wallet_address: walletData.address });
-                window.localStorage.setItem('wallet_state', JSON.stringify({ chain: 'eth', connected: true, wallet_address: walletData.address }));
-                setwalletPopUpVisible(false);
-            }
-            if (!isConnected && (!localStorage.getItem('wallet_state'))) {
-                setwalletState({});
-                window.localStorage.removeItem('wallet_state');
-            }
+        if (isConnected) {
+            setwalletState({ chain: 'eth', connected: true, wallet_address: walletData.address });
+            window.localStorage.setItem('wallet_state', JSON.stringify({ chain: 'eth', connected: true, wallet_address: walletData.address }));
+            setwalletPopUpVisible(false);
+        }
+        if (!isConnected && (!localStorage.getItem('wallet_state'))) {
+            setwalletState({});
+            window.localStorage.removeItem('wallet_state');
+        }
 
     }, [isConnected])
 
@@ -120,7 +120,7 @@ function Nav({ topSearchVisible, outline, openConnectWallet, getWalletAddress })
                 <SearchComp topSearchVisible={topSearchVisible} />
                 <ul>
                     <Link href={'/add-your-community'} passHref>
-                        <li  >Add a DAO</li>
+                        <li>Add Community</li>
                     </Link>
                     <Link href={'/dao-list'} passHref>
                         <li>Discover Communities</li>
