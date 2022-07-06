@@ -21,7 +21,6 @@ export const client = createClient({
       chain.mainnet.rpcUrls[0]
     console.log(chainId)
     return [
-      new InjectedConnector(),
       new MetaMaskConnector(),
       new CoinbaseWalletConnector({
         chains,
