@@ -153,7 +153,7 @@ function DaoForm() {
         let url = `https://truts.herokuapp.com/dao/create-new-dao-v2`
         setloaderVisible(true);
         let res = await axios.post(url, { ...formData, dao_category: daoCatList, submitter_public_address: `${walletAddress}` });
-    
+
         if (res.status == 201) {
             window.location.href = './redirect/new_dao'
         }
@@ -240,7 +240,7 @@ function DaoForm() {
                             <input required name={'website_link'} placeholder='Paste it here, it will link automatically' type="text" onChange={formHandler} />
                         </span>
                         <span className={styles.input}>
-                            <p>Mirror link</p>
+                            <p>Additional link</p>
                             <input required name={'mirror_link'} placeholder='Paste it here, it will link automatically' type="text" onChange={formHandler} />
                         </span>
                     </div>
