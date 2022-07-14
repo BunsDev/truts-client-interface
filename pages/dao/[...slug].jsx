@@ -1240,13 +1240,13 @@ function Comment({ comment, address, rating, profile_img, openModel, data, openC
                         <p>{thumbsDown}</p>
                     </> : <> <img src="/mini-loader.gif" alt="" /> <p> </p></>}
                 </span>
-                <span>
+                <span  >
                     <img src="/tips.png" alt="" onClick={() => { openModel() }} />
-                    <p>{(data.chain == 'sol') ? 'Tip SOL' : 'Tip MATIC'}</p>
+                    <p onClick={() => { openModel() }}>{(data.chain == 'sol') ? 'Tip SOL' : 'Tip MATIC'}</p>
                 </span>
-                { <span>
+                {<span>
                     <img src="/share.png" alt="" onClick={() => { openNewTab(`http://twitter.com/share?text=Check out this ${data.rating}⭐ review for ${data.dao_name} (@${twitter_slug}) on @trutsxyz  &hashtags=truts,${unspacedDaoName} %0WAGMI &url=https://www.truts.xyz/dao/${slug}/${data._id}`) }} />
-                </span> }
+                </span>}
             </div>
         </div>
     )

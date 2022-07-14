@@ -306,15 +306,18 @@
                 margin-right: 4.5px;
                 cursor: pointer;
 
-                &:hover {
-                    opacity: 0.5;
-                }
+               
             }
             p {
                 margin: 0;
                 margin-right: 25px;
                 font-weight: 400;
                 font-size: 16px;
+                cursor: pointer;
+               
+            }
+            &:hover {
+                opacity: 0.5;
             }
         }
     }
