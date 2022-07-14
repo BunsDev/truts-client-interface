@@ -1245,7 +1245,7 @@ function Comment({ comment, address, rating, profile_img, openModel, data, openC
                     <p>{(data.chain == 'sol') ? 'Tip SOL' : 'Tip MATIC'}</p>
                 </span>
                 { <span>
-                    <img src="/share.png" alt="" onClick={() => { openNewTab(`http://twitter.com/share?text=Check out this ${data.rating}⭐ review for ${data.dao_name} (@${twitter_slug}) on @trutsxyz &url=https://www.truts.xyz/dao/${slug}/${data._id} &hashtag=truts &hashtag=${unspacedDaoName}`) }} />
+                    <img src="/share.png" alt="" onClick={() => { openNewTab(`http://twitter.com/share?text=Check out this ${data.rating}⭐ review for ${data.dao_name} (@${twitter_slug}) on @trutsxyz  &hashtags=truts,${unspacedDaoName} &url=https://www.truts.xyz/dao/${slug}/${data._id}`) }} />
                 </span> }
             </div>
         </div>
