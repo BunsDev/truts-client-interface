@@ -1204,6 +1204,7 @@ function Comment({ comment, address, rating, profile_img, openModel, data, openC
     if (highlight) {
         cmtStyle = cmtStyle + ' ' + styles.highlight
     }
+    var unspacedDaoName = data.dao_name.replace(/\s/g, "");
     return (
         <div className={cmtStyle}>
             <div className={styles.profileName}>
@@ -1244,7 +1245,7 @@ function Comment({ comment, address, rating, profile_img, openModel, data, openC
                     <p>{(data.chain == 'sol') ? 'Tip SOL' : 'Tip MATIC'}</p>
                 </span>
                 { <span>
-                    <img src="/share.png" alt="" onClick={() => { openNewTab(`http://twitter.com/share?text=Check out this ${data.rating}⭐ review for ${data.dao_name} (@${twitter_slug}) on Truts.xyz (@trutsxyz) &url=https://www.truts.xyz/dao/${slug}/${data._id}`) }} />
+                    <img src="/share.png" alt="" onClick={() => { openNewTab(`http://twitter.com/share?text=Check out this ${data.rating}⭐ review for ${data.dao_name} (@${twitter_slug}) on @trutsxyz &url=https://www.truts.xyz/dao/${slug}/${data._id} #truts #${unspacedDaoName}`) }} />
                 </span> }
             </div>
         </div>
