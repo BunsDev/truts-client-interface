@@ -231,7 +231,7 @@ function DaoPage({ dao_data, rid }) {
                                     <div name={"q2"} className={styles.dialCon}>
                                         <Dial
                                             percent={getAverageRating(dao_data?.reviews, 'opinions_matter')} />
-                                        <p>says their opinions are been heard</p>
+                                        <p>says their opinions are heard</p>
                                     </div>
                                     <div name={"q3"} className={styles.dialCon}>
                                         <Dial
