@@ -10,7 +10,7 @@ const nextConfig = {
     path: '',
   },
   env: {
-    API: LOCALHOST //AWS
+    API: AWS //AWS
   },
   async redirects() {
     return [
