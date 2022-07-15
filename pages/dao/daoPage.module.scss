@@ -710,6 +710,8 @@
     .token {
         display: flex;
         align-items: center;
+        position: relative;
+        cursor: pointer;
         img {
             width: 32px;
             height: 32px;
@@ -719,6 +721,48 @@
             font-size: 25px;
             margin: 0;
             margin-left: 10px;
+        }
+
+        &:hover {
+            .dropDownOptions {
+                display: flex;
+            }
+        }
+    }
+
+    .dropArrow {
+        height: auto !important;
+        width: 12px !important;
+        margin-top: 3px;
+        margin-left: 10px;
+        object-fit: contain;
+    }
+
+    .dropDownOptions {
+        display: flex;
+        display: none;
+        position: absolute;
+        width: 100%;
+        min-height: 50px;
+        background-color: rgb(255, 255, 255);
+        margin-top: 140px;
+        border-radius: 10px;
+        flex-direction: column;
+        box-shadow: 0 0 15px rgba(128, 128, 128, 0.562);
+        animation: appear 0.25s ease-in-out forwards;
+        .splOption {
+            display: flex;
+            align-items: center;
+            padding-left: 8px;
+            cursor: pointer;
+            p {
+                margin-left: 10px;
+                font-weight: 500;
+            }
+            &:hover {
+                transition: all 0.15s ease-in-out;
+                background-color: rgba(220, 220, 220, 0.397);           
+            }
         }
     }
 
@@ -1091,5 +1135,14 @@
                 line-height: 12px;
             }
         }
+    }
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
     }
 }
