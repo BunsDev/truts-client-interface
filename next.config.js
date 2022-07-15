@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-let LOCALHOST = 'http://localhost:5000'
+let LOCALHOST = 'http://localhost:5500'
 let AWS = 'https://7cjecbsr4a.us-west-2.awsapprunner.com'
 
 const nextConfig = {
@@ -10,7 +10,7 @@ const nextConfig = {
     path: '',
   },
   env: {
-    API: AWS
+    API: LOCALHOST //AWS
   },
   async redirects() {
     return [

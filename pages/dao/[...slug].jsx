@@ -12,12 +12,26 @@ import LoadingCard from '../../components/LoadingCard';
 import { BigNumber } from "@ethersproject/bignumber";
 import Footer from '../../components/Footer'
 
+import { Token,
+    ASSOCIATED_TOKEN_PROGRAM_ID, 
+    TOKEN_PROGRAM_ID, 
+    getOrCreateAssociatedTokenAccount, 
+    getAssociatedTokenAddress, 
+    createTransferInstruction,
+    createTransferCheckedInstruction, 
+    getAccount,
+    getMint
+ } from '@solana/spl-token'
+
 import {
+    
+    sendAndConfirmTransaction,
     Connection,
     PublicKey,
     Transaction,
     clusterApiUrl,
     SystemProgram,
+    LAMPORTS_PER_SOL
 } from "@solana/web3.js";
 
 import {
@@ -742,6 +756,63 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
         </div>
     </>
 
+    //Changed by dheeraj added createTransferTransactionSplToken
+    const createTransferTransactionSplToken = async (splTokenAmount) => {
+        let provider = getProvider();
+        if (!provider.publicKey) return;
+        console.log('Token amount ',splTokenAmount)
+
+        let publicKey = 'MEANeD3XDdUmNMsRGjASkSWdC8prLYsoRJ61pPeHctD'
+
+        const mySplToken = new PublicKey(publicKey);
+        const mint = await getMint(connection, mySplToken);
+        const ownerPublicKey = new PublicKey(provider.publicKey);
+        const destPublickey = new PublicKey(review_wallet_address)
+      
+        const associatedSourceTokenAddr = await getOrCreateAssociatedTokenAccount(
+            connection,
+            ownerPublicKey,
+            mySplToken,
+            ownerPublicKey,
+            TOKEN_PROGRAM_ID,
+            ASSOCIATED_TOKEN_PROGRAM_ID,
+        );
+
+        const associatedDestTokenAddr = await getOrCreateAssociatedTokenAccount(
+            connection,
+            ownerPublicKey,
+            mySplToken,
+            destPublickey,
+            TOKEN_PROGRAM_ID,
+            ASSOCIATED_TOKEN_PROGRAM_ID,
+        );
+        let decimals = mint.decimals;
+        let valueDesi = Math.pow(10, decimals);
+        let amount = (valueDesi*splTokenAmount).toFixed(0);
+        const tokens = BigNumber.from(`${amount}`);
+        console.log('token ', tokens)
+        let transaction = new Transaction().add(
+            createTransferCheckedInstruction(
+                associatedSourceTokenAddr.address,
+                mySplToken,
+                associatedDestTokenAddr.address,
+                ownerPublicKey,
+                tokens,
+                mint.decimals,
+            )
+        );
+        transaction.feePayer = ownerPublicKey;
+        // addLog("Getting recent blockhash");
+        const anyTransaction = transaction;
+        anyTransaction.recentBlockhash = (
+            await connection.getLatestBlockhash()
+        ).blockhash;
+        if(transaction) {
+          console.log("Txn created successfully", transaction);
+        }                
+        return transaction;
+    };
+
     const createTransferTransaction = async (lamports) => {
         let provider = getProvider();
         if (!provider.publicKey) return;
@@ -750,6 +821,7 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
                 fromPubkey: provider.publicKey,
                 toPubkey: review_wallet_address,
                 lamports: lamports,
+                
             })
         );
         transaction.feePayer = provider.publicKey;
@@ -783,7 +855,9 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
 
         const [dollarAmount, setdollarAmount] = useState(1);
         const [equalentSolLamports, setequalentSolLamports] = useState(0);
+        const [equalentSplToken, setequalentSplToken] = useState(0);
         const [usd, setusd] = useState(0);
+        const [usdMean, setusdMean] = useState(0);
         let one_sol = 1000000000;
 
         let calculateUSDtoSol = async () => {
@@ -797,14 +871,34 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
             let usd = coingecko.data.market_data.current_price.usd;
             setusd(usd);
         }
+        
+        //changes made by dheeraj added calculateUSDtoSplToken,getUsdMean
+        let calculateUSDtoSplToken  = async () => {
+
+            let one_dollar_in_lamport = parseInt(one_sol / parseFloat(usdMean));
+            setequalentSplToken(one_dollar_in_lamport * dollarAmount);
+        }
+
+        let getUsdMean = async () => {
+            // Mean SplToken Id  = meanfi
+            let tokenId = 'meanfi'
+            let coingecko = await axios.get(`https://api.coingecko.com/api/v3/coins/${tokenId}`);
+            console.log(coingecko)
+            let usd = coingecko.data.market_data.current_price.usd;
+            setusdMean(usd);
+        }
 
         useEffect(() => {
             getUsd();
+            //Changed by dheeraj
+            getUsdMean();
         }, [])
 
         useEffect(() => {
             calculateUSDtoSol();
-        }, [dollarAmount, usd])
+            //Changed by dheeraj
+            calculateUSDtoSplToken();
+        }, [dollarAmount, usd,usdMean])
 
         return (
             <>
@@ -817,8 +911,9 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
                         </div>
                         <div className={styles.body}>
                             <span className={styles.token}>
-                                <img src="/solana.png" alt="" />
-                                <h2>{(equalentSolLamports > 0) && (parseFloat(equalentSolLamports / one_sol).toFixed(2))} SOL</h2>
+                                <img src="/meanfi.png" alt="" />
+                                {/* <h2>{(equalentSolLamports > 0) && (parseFloat(equalentSolLamports / one_sol).toFixed(2))} SOL</h2> */}
+                                <h2>{(equalentSplToken > 0) && (parseFloat(equalentSplToken / one_sol).toFixed(2))} MEAN</h2>
                             </span>
                             <h1 className={styles.amount}>$</h1>
                             <input className={styles.dollarInput} type="number" value={dollarAmount} onChange={(e) => { (e.target.value >= 0) ? setdollarAmount(e.target.value) : setdollarAmount(0) }} />
@@ -827,7 +922,9 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
                     <div className={styles.connectBtn} onClick={async () => {
                         if (dollarAmount <= 0) { return alert("Tipping amount should be greater than 0") }
                         await window.solana.connect()
-                        let trx = await createTransferTransaction(equalentSolLamports);
+                        //let trx = await createTransferTransaction(equalentSplToken/one_sol);
+                        //Change the fucntion
+                        let trx = await createTransferTransactionSplToken(equalentSplToken/one_sol);
                         await sendTransaction(trx);
                     }}>
                         <p>Tip it!</p>
