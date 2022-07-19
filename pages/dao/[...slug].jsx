@@ -332,7 +332,7 @@ function DaoPage({ dao_data, rid, slug }) {
                                             }
                                         }}
                                         slug={slug}
-                                        twitter_slug={dao_data.twitter_link.split('/').split('/')[dao_data.twitter_link.split('/').length - 1]}
+                                        twitter_slug={dao_data.twitter_link.split('/')[dao_data.twitter_link.split('/').length - 1]}
                                     />
                                 }).reverse()
                             }
