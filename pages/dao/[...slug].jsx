@@ -691,8 +691,6 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
     const SUCCESS = 'SUCESS';
     const FAILURE = 'FAILURE';
     const INSUFFICIENT = 'INSUFFICIENT';
-    console.log('key' , process.env.SPLTOKENACCOUNTSPAREKEY)
-
     const [dialogType, setdialogType] = useState('CONNECT_WALLET')
 
     const scrollDisable = (control) => {
