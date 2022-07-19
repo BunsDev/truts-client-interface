@@ -84,10 +84,10 @@ function Starrating({ rating }) {
     )
 }
 //
-function DaoPage({ dao_data, rid }) {
+function DaoPage({ dao_data, rid, slug }) {
 
     const router = useRouter()
-    const slug = router.query.slug[0];
+    //const slug = router.query.slug[0];
     const [splAccountLoad, setsplAccountLoad] = useState(false)
     const resize = () => {
         let bdy = document.querySelector('body');
@@ -197,7 +197,7 @@ function DaoPage({ dao_data, rid }) {
             </Head>
             <div className={styles.main_con}>
                 <WalletModalEth visible={walletModelVisible} setvisible={setwalletModelVisible} review_wallet_address={current_review_wallet_address} />
-                <WalletModalSol setnavKey={setnavKey} setsplAccountLoad = {setsplAccountLoad} splAccountLoad={splAccountLoad} visible={solWalletModelVisible} setvisible={setsolWalletModelVisible} review_wallet_address={current_review_wallet_address} />
+                <WalletModalSol setnavKey={setnavKey} setsplAccountLoad={setsplAccountLoad} splAccountLoad={splAccountLoad} visible={solWalletModelVisible} setvisible={setsolWalletModelVisible} review_wallet_address={current_review_wallet_address} />
                 <div className={styles.con}>
                     <InfoBar data={dao_data} />
                     <Nav key={navKey + 'n'} topSearchVisible={true} outline={false} openConnectWallet={connectModelVisible} getWalletAddress={(address) => { }} />
@@ -680,7 +680,7 @@ const getProvider = () => {
 const NETWORK = clusterApiUrl("mainnet-beta");
 console.log(NETWORK)
 
-const WalletModalSol = ({ setvisible, visible,setsplAccountLoad, splAccountLoad, review_wallet_address, setnavKey }) => {
+const WalletModalSol = ({ setvisible, visible, setsplAccountLoad, splAccountLoad, review_wallet_address, setnavKey }) => {
     const { disconnectAsync } = useDisconnect()
     const CONNECT_WALLET = 'CONNECT_WALLET';
     const TIP_REVIEWER = 'TIP_REVIEWER';
@@ -768,7 +768,7 @@ const WalletModalSol = ({ setvisible, visible,setsplAccountLoad, splAccountLoad,
             const ownerPublicKey = new PublicKey(provider.publicKey);
             const destPublickey = new PublicKey(review_wallet_address)
 
-            const feePayer =  Keypair.fromSecretKey(
+            const feePayer = Keypair.fromSecretKey(
                 bs58.decode(process.env.SPLTOKENACCOUNTSPAREKEY)
             )
 
@@ -959,7 +959,7 @@ const WalletModalSol = ({ setvisible, visible,setsplAccountLoad, splAccountLoad,
                             await sendTransaction(trx);
                         }
                     }}>
-                        <p>{(splAccountLoad)? "Account Creating.." : "Tip it!"}</p>
+                        <p>{(splAccountLoad) ? "Account Creating.." : "Tip it!"}</p>
                     </div>
                 </div>
             </>
@@ -1389,7 +1389,7 @@ export async function getServerSideProps(ctx) {
     let res = await fetchData(slug[0])
     let rid = slug[1] || '';
     // Pass data to the page via props
-    return { props: { dao_data: res, rid: rid } }
+    return { props: { dao_data: res, rid: rid, slug: slug[0] } }
 }
 
 const fetchData = async (slug) => {
