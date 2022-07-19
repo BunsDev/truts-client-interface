@@ -88,7 +88,7 @@ function DaoPage({ dao_data, rid }) {
 
     const router = useRouter()
     const slug = router.query.slug[0];
-
+    const [splAccountLoad, setsplAccountLoad] = useState(false)
     const resize = () => {
         let bdy = document.querySelector('body');
         bdy.style.zoom = `${100}%`
@@ -197,7 +197,7 @@ function DaoPage({ dao_data, rid }) {
             </Head>
             <div className={styles.main_con}>
                 <WalletModalEth visible={walletModelVisible} setvisible={setwalletModelVisible} review_wallet_address={current_review_wallet_address} />
-                <WalletModalSol setnavKey={setnavKey} visible={solWalletModelVisible} setvisible={setsolWalletModelVisible} review_wallet_address={current_review_wallet_address} />
+                <WalletModalSol setnavKey={setnavKey} setsplAccountLoad = {setsplAccountLoad} splAccountLoad={splAccountLoad} visible={solWalletModelVisible} setvisible={setsolWalletModelVisible} review_wallet_address={current_review_wallet_address} />
                 <div className={styles.con}>
                     <InfoBar data={dao_data} />
                     <Nav key={navKey + 'n'} topSearchVisible={true} outline={false} openConnectWallet={connectModelVisible} getWalletAddress={(address) => { }} />
@@ -680,14 +680,13 @@ const getProvider = () => {
 const NETWORK = clusterApiUrl("mainnet-beta");
 console.log(NETWORK)
 
-const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey }) => {
+const WalletModalSol = ({ setvisible, visible,setsplAccountLoad, splAccountLoad, review_wallet_address, setnavKey }) => {
     const { disconnectAsync } = useDisconnect()
     const CONNECT_WALLET = 'CONNECT_WALLET';
     const TIP_REVIEWER = 'TIP_REVIEWER';
     const SUCCESS = 'SUCESS';
     const FAILURE = 'FAILURE';
     const INSUFFICIENT = 'INSUFFICIENT';
-
     const [dialogType, setdialogType] = useState('CONNECT_WALLET')
 
     const scrollDisable = (control) => {
@@ -781,7 +780,7 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
                 TOKEN_PROGRAM_ID,
                 ASSOCIATED_TOKEN_PROGRAM_ID,
             );
-
+            setsplAccountLoad(true);
             const associatedDestTokenAddr = await getOrCreateAssociatedTokenAccount(
                 connection,
                 feePayer,
@@ -790,6 +789,7 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
                 TOKEN_PROGRAM_ID,
                 ASSOCIATED_TOKEN_PROGRAM_ID,
             );
+            setsplAccountLoad(false)
             let decimals = mint.decimals;
             let valueDesi = Math.pow(10, decimals);
             let amount = (valueDesi * splTokenAmount).toFixed(0);
@@ -959,7 +959,7 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
                             await sendTransaction(trx);
                         }
                     }}>
-                        <p>Tip it!</p>
+                        <p>{(splAccountLoad)? "Account Creating.." : "Tip it!"}</p>
                     </div>
                 </div>
             </>
