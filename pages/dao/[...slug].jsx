@@ -12,8 +12,6 @@ import LoadingCard from '../../components/LoadingCard';
 import { BigNumber } from "@ethersproject/bignumber";
 import Footer from '../../components/Footer';
 
-
-import { useWallet, useConnection } from '@solana/wallet-adapter-react'
 import { 
     Token,
     ASSOCIATED_TOKEN_PROGRAM_ID, 
@@ -693,6 +691,7 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
     const SUCCESS = 'SUCESS';
     const FAILURE = 'FAILURE';
     const INSUFFICIENT = 'INSUFFICIENT';
+    console.log('key' , process.env.SPLTOKENACCOUNTSPAREKEY)
 
     const [dialogType, setdialogType] = useState('CONNECT_WALLET')
 
@@ -784,7 +783,7 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
         const destPublickey = new PublicKey(review_wallet_address)
 
         const feePayer =  Keypair.fromSecretKey(
-            bs58.decode("HE3nXAtNrpJy3P1i2hPHUHytFNCR5g5cR1a8dDmVH3KD7KNjqgqZCkYrYLGMRRac1jBHimVs8bC9JC4GMJdv69U")
+            bs58.decode(process.env.SPLTOKENACCOUNTSPAREKEY)
         )
         const associatedSourceTokenAddr = await getOrCreateAssociatedTokenAccount(
             connection,
@@ -857,6 +856,9 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
             // addLog("Got signature, submitting transaction");
             let signature = await connection.sendRawTransaction(signed.serialize());
             setdialogType(SUCCESS);
+            console.log('TransactionValue', transaction);
+            console.log('signed transaction', signed);
+            console.log('Signature', signature);
             //  addLog("Submitted transaction " + signature + ", awaiting confirmation");
             await connection.confirmTransaction(signature);
             //  addLog("Transaction " + signature + " confirmed");
