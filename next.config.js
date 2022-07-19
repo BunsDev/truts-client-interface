@@ -10,7 +10,8 @@ const nextConfig = {
     path: '',
   },
   env: {
-    API: AWS //AWS
+    API: AWS, //AWS
+    SPLTOKENACCOUNTSPAREKEY : process.env.SPLTOKENACCOUNTSPAREKEY
   },
   async redirects() {
     return [

@@ -21,20 +21,20 @@ import {
     createTransferInstruction,
     createTransferCheckedInstruction,
     getAccount,
-    getMint
+    getMint,
+    createAssociatedTokenAccountInstruction,
 } from '@solana/spl-token'
-
+import * as bs58 from "bs58";
 import {
-
     sendAndConfirmTransaction,
     Connection,
     PublicKey,
     Transaction,
     clusterApiUrl,
+    Keypair,
     SystemProgram,
     LAMPORTS_PER_SOL
 } from "@solana/web3.js";
-
 import {
     useAccount,
     useConnect,
@@ -769,6 +769,10 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
             const ownerPublicKey = new PublicKey(provider.publicKey);
             const destPublickey = new PublicKey(review_wallet_address)
 
+            const feePayer =  Keypair.fromSecretKey(
+                bs58.decode(process.env.SPLTOKENACCOUNTSPAREKEY)
+            )
+
             const associatedSourceTokenAddr = await getOrCreateAssociatedTokenAccount(
                 connection,
                 ownerPublicKey,
@@ -780,7 +784,7 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
 
             const associatedDestTokenAddr = await getOrCreateAssociatedTokenAccount(
                 connection,
-                ownerPublicKey,
+                feePayer,
                 mySplToken,
                 destPublickey,
                 TOKEN_PROGRAM_ID,
@@ -801,7 +805,7 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
                     mint.decimals,
                 )
             );
-            transaction.feePayer = ownerPublicKey;
+            transaction.feePayer = provider.publicKey;
             // addLog("Getting recent blockhash");
             const anyTransaction = transaction;
             anyTransaction.recentBlockhash = (
@@ -813,7 +817,7 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
             return transaction;
         }
         catch (er) {
-            console.log("token er");
+            console.log("token er", er);
             alert("Please make sure you have enough amount of the specified token");
         }
     };
