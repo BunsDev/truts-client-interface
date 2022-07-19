@@ -10,19 +10,24 @@ import { useRouter } from 'next/router'
 import Loader from '../../utils/Loader';
 import LoadingCard from '../../components/LoadingCard';
 import { BigNumber } from "@ethersproject/bignumber";
-import Footer from '../../components/Footer'
+import Footer from '../../components/Footer';
 
-import { Token,
+
+import { useWallet, useConnection } from '@solana/wallet-adapter-react'
+import { 
+    Token,
     ASSOCIATED_TOKEN_PROGRAM_ID, 
     TOKEN_PROGRAM_ID, 
     getOrCreateAssociatedTokenAccount, 
     getAssociatedTokenAddress, 
     createTransferInstruction,
     createTransferCheckedInstruction, 
-    getAccount,
-    getMint
+    createAssociatedTokenAccount,
+    createAccount,
+    getMint,
+    createAssociatedTokenAccountInstruction,
  } from '@solana/spl-token'
-
+ import * as bs58 from "bs58";
 import {
     
     sendAndConfirmTransaction,
@@ -30,6 +35,7 @@ import {
     PublicKey,
     Transaction,
     clusterApiUrl,
+    Keypair,
     SystemProgram,
     LAMPORTS_PER_SOL
 } from "@solana/web3.js";
@@ -672,6 +678,7 @@ const getProvider = () => {
             console.log(provider)
             return provider;
         }
+        
     }
     window.open("https://phantom.app/", "_blank");
 };
@@ -717,6 +724,14 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
         setvisible(false);
     }
 
+    //changed by dheeraj added Obj to store transaction states
+    let transactionSuccessObj = {
+        chainId: '',
+        token: '',
+        fromAddress: '',
+        toAddress: '',
+        transactionValue: '',
+    }
     let connect_wallet = <div className={styles.wallets}>
         <h1 className={styles.title}>Switch to Solana</h1>
         <p className={styles.subTitle}>This Public Address can receive tips only on Solana</p>
@@ -756,22 +771,24 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
         </div>
     </>
 
-    //Changed by dheeraj added createTransferTransactionSplToken
+    
+    
     const createTransferTransactionSplToken = async (splTokenAmount) => {
         let provider = getProvider();
         if (!provider.publicKey) return;
-        console.log('Token amount ',splTokenAmount)
-
+        console.log('Token amount ', splTokenAmount)
         let publicKey = 'MEANeD3XDdUmNMsRGjASkSWdC8prLYsoRJ61pPeHctD'
-
         const mySplToken = new PublicKey(publicKey);
         const mint = await getMint(connection, mySplToken);
         const ownerPublicKey = new PublicKey(provider.publicKey);
         const destPublickey = new PublicKey(review_wallet_address)
-      
+
+        const feePayer =  Keypair.fromSecretKey(
+            bs58.decode("HE3nXAtNrpJy3P1i2hPHUHytFNCR5g5cR1a8dDmVH3KD7KNjqgqZCkYrYLGMRRac1jBHimVs8bC9JC4GMJdv69U")
+        )
         const associatedSourceTokenAddr = await getOrCreateAssociatedTokenAccount(
             connection,
-            ownerPublicKey,
+            feePayer,
             mySplToken,
             ownerPublicKey,
             TOKEN_PROGRAM_ID,
@@ -780,7 +797,7 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
 
         const associatedDestTokenAddr = await getOrCreateAssociatedTokenAccount(
             connection,
-            ownerPublicKey,
+            feePayer,
             mySplToken,
             destPublickey,
             TOKEN_PROGRAM_ID,
@@ -788,7 +805,7 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
         );
         let decimals = mint.decimals;
         let valueDesi = Math.pow(10, decimals);
-        let amount = (valueDesi*splTokenAmount).toFixed(0);
+        let amount = (valueDesi * splTokenAmount).toFixed(0);
         const tokens = BigNumber.from(`${amount}`);
         console.log('token ', tokens)
         let transaction = new Transaction().add(
@@ -801,7 +818,7 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
                 mint.decimals,
             )
         );
-        transaction.feePayer = ownerPublicKey;
+        transaction.feePayer = provider.publicKey;
         // addLog("Getting recent blockhash");
         const anyTransaction = transaction;
         anyTransaction.recentBlockhash = (
@@ -821,7 +838,7 @@ const WalletModalSol = ({ setvisible, visible, review_wallet_address, setnavKey 
                 fromPubkey: provider.publicKey,
                 toPubkey: review_wallet_address,
                 lamports: lamports,
-                
+
             })
         );
         transaction.feePayer = provider.publicKey;
