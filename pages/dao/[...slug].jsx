@@ -11,7 +11,6 @@ import Loader from '../../utils/Loader';
 import LoadingCard from '../../components/LoadingCard';
 import { BigNumber } from "@ethersproject/bignumber";
 import Footer from '../../components/Footer'
-
 import {
     Token,
     ASSOCIATED_TOKEN_PROGRAM_ID,
@@ -22,6 +21,7 @@ import {
     createTransferCheckedInstruction,
     getAccount,
     getMint,
+    decodeTransferInstruction,
     createAssociatedTokenAccountInstruction,
 } from '@solana/spl-token'
 import * as bs58 from "bs58";
@@ -43,8 +43,12 @@ import {
     useSignMessage,
     useNetwork,
     useSendTransaction,
+    usePrepareContractWrite,
+    useSwitchNetwork,
+    useContractWrite,
 } from 'wagmi';
-
+import umbriaPolygonAbi  from '../../assets/ERC20contractAbi/umbriaPolygonAbi.json'
+import { ethers } from 'ethers';
 import { Buffer } from "buffer";
 import { get } from 'lodash';
 
@@ -115,6 +119,7 @@ function DaoPage({ dao_data, rid }) {
     }, [])
 
     const [selected, setselected] = useState({});
+    const [tipTxData, settipTxData] = useState([])
 
     useEffect(() => {
         // _id
@@ -197,7 +202,7 @@ function DaoPage({ dao_data, rid }) {
             </Head>
             <div className={styles.main_con}>
                 <WalletModalEth visible={walletModelVisible} setvisible={setwalletModelVisible} review_wallet_address={current_review_wallet_address} />
-                <WalletModalSol setnavKey={setnavKey} setsplAccountLoad = {setsplAccountLoad} splAccountLoad={splAccountLoad} visible={solWalletModelVisible} setvisible={setsolWalletModelVisible} review_wallet_address={current_review_wallet_address} />
+                <WalletModalSol setnavKey={setnavKey} setsplAccountLoad = {setsplAccountLoad} splAccountLoad={splAccountLoad} visible={solWalletModelVisible} setvisible={setsolWalletModelVisible} review_wallet_address={current_review_wallet_address} data={dao_data}/>
                 <div className={styles.con}>
                     <InfoBar data={dao_data} />
                     <Nav key={navKey + 'n'} topSearchVisible={true} outline={false} openConnectWallet={connectModelVisible} getWalletAddress={(address) => { }} />
@@ -680,7 +685,7 @@ const getProvider = () => {
 const NETWORK = clusterApiUrl("mainnet-beta");
 console.log(NETWORK)
 
-const WalletModalSol = ({ setvisible, visible,setsplAccountLoad, splAccountLoad, review_wallet_address, setnavKey }) => {
+const WalletModalSol = ({ setvisible, visible,setsplAccountLoad, splAccountLoad, review_wallet_address, setnavKey, data }) => {
     const { disconnectAsync } = useDisconnect()
     const CONNECT_WALLET = 'CONNECT_WALLET';
     const TIP_REVIEWER = 'TIP_REVIEWER';
@@ -697,6 +702,18 @@ const WalletModalSol = ({ setvisible, visible,setsplAccountLoad, splAccountLoad,
             console.log("enable scroll")
             document.querySelector('body').style.overflow = "auto";
         }
+    }
+    let postTxData = {
+        "dao_name": '',
+        "chain": '',
+        "review_id": '',
+        "tip_token_name": '',
+        "tip_token_address": '',
+        "from_address": '',
+        "to_address": '',
+        "value_inTokens": '',
+        "value_inUSD": '',
+        "tx_hash": '',
     }
 
     const connection = new Connection(NETWORK);
@@ -811,9 +828,6 @@ const WalletModalSol = ({ setvisible, visible,setsplAccountLoad, splAccountLoad,
             anyTransaction.recentBlockhash = (
                 await connection.getLatestBlockhash()
             ).blockhash;
-            if (transaction) {
-                console.log("Txn created successfully", transaction);
-            }
             return transaction;
         }
         catch (er) {
@@ -839,18 +853,88 @@ const WalletModalSol = ({ setvisible, visible,setsplAccountLoad, splAccountLoad,
         anyTransaction.recentBlockhash = (
             await connection.getLatestBlockhash()
         ).blockhash;
+        console.log('Transaction created: ' ,transaction);
+        console.log('keys length', transaction.instructions[0].keys);
         return transaction;
     };
-    const sendTransaction = async (transaction) => {
+
+
+    const sendTransaction = async (transaction, selectedToken, tokenInUSD) => {
         let provider = getProvider();
         try {
             if (!transaction) return;
+            let wallet_state = JSON.parse(window.localStorage.getItem('wallet_state'));
             let signed = await provider.signTransaction(transaction);
+
+            const sleep = (milliseconds) => {
+                return new Promise(resolve => setTimeout(resolve, milliseconds))
+              }
+            
             // addLog("Got signature, submitting transaction");
             let signature = await connection.sendRawTransaction(signed.serialize());
-            setdialogType(SUCCESS);
+            setdialogType(SUCCESS)
+
             //  addLog("Submitted transaction " + signature + ", awaiting confirmation");
-            await connection.confirmTransaction(signature);
+            let sigobj = [signature];
+            let status = true;
+            while(status){
+                //console.log('status',status)
+                let sigStatus = await connection.getSignatureStatuses(sigobj,{searchTransactionHistory: true})
+                if(sigStatus.value[0]){   
+                 if(sigStatus.value[0].confirmationStatus === 'finalized') status = false;
+                }
+                sleep(1000);
+            }
+            let tx;
+            if (status === false) {
+                tx = await axios.get(`https://public-api.solscan.io/transaction/${signature}`)
+                //console.log('tx',tx);
+            
+                postTxData.dao_name = data.dao_name;
+                postTxData.review_id = data._id;
+                postTxData.tip_token_name = selectedToken;
+                postTxData.chain = wallet_state.chain;
+                postTxData.tx_hash = signature;
+                postTxData.from_address 
+            
+                if(tx.data.tokenTransfers.length >  0) {
+                    let digit = tx.data.tokenTransfers[0].token.decimals
+                    let decimal = Math.pow(10, digit);
+                    let tokenTransfer = tx.data.tokenTransfers[0]
+                    postTxData.from_address = tokenTransfer.source_owner;
+                    postTxData.to_address = tokenTransfer.destination_owner;
+                    postTxData.tip_token_address = tokenTransfer.token.address;
+                    postTxData.value_inTokens = (tokenTransfer.amount)/decimal;
+                    postTxData.value_inUSD = postTxData.value_inTokens*tokenInUSD;
+
+                }else{
+                    let tokenTransfer = tx.data.solTransfers[0]
+                    postTxData.from_address = tokenTransfer.source;
+                    postTxData.to_address = tokenTransfer.destination;
+                    postTxData.tip_token_address = '';
+                    postTxData.value_inTokens = (tokenTransfer.amount)/1e9;
+                    postTxData.value_inUSD = postTxData.value_inTokens*tokenInUSD;
+                }
+                //console.log('postTxData', postTxData);
+                
+
+                try {
+                    let res = await axios.post(`${API}/txn/tipping-txn`, postTxData);
+                    console.log('res',res);
+                    if (res.status == 201) {
+                        return { status: true, unique: res.data.unique, deleted: res.data.deleted };
+                    }
+                    else {
+                        alert("network error");
+                        return false;
+                    }
+                }
+                catch (er) {
+                    console.log(er)
+                    return false;
+                }
+            }
+            
             //  addLog("Transaction " + signature + " confirmed");
         } catch (err) {
             setdialogType(FAILURE)
@@ -952,11 +1036,12 @@ const WalletModalSol = ({ setvisible, visible,setsplAccountLoad, splAccountLoad,
                         await window.solana.connect()
                         if (selectedToken == 'SOL') {
                             let trx = await createTransferTransaction(equalentSolLamports);
-                            await sendTransaction(trx)
+                            await sendTransaction(trx , selectedToken, usd)
                         }
                         if (selectedToken == 'MEAN') {
+                            console.log('usdMean',usdMean)
                             let trx = await createTransferTransactionSplToken(equalentSplToken / one_sol);
-                            await sendTransaction(trx);
+                            await sendTransaction(trx, selectedToken,usdMean);
                         }
                     }}>
                         <p>{(splAccountLoad)? "Account Creating.." : "Tip it!"}</p>
@@ -1019,33 +1104,45 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
 
     const [dialogType, setdialogType] = useState(CONNECT_WALLET);
 
-    const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
+    const { connectAsync, connectors, isLoading, pendingConnector } = useConnect();
     const { disconnectAsync } = useDisconnect()
-    const { data: walletData, isError, isLoading } = useAccount()
+    const { address, isConnected ,connector,isConnecting } = useAccount();
 
     const {
-        activeChain,
-        chains,
-        error,
-        isLoading: chain_loading,
-        pendingChainId,
-        switchNetwork,
+        chain,
     } = useNetwork()
+
+    const {
+
+        switchNetwork,
+
+     } = useSwitchNetwork({
+            //chainId: 137,
+            onError(error) {
+            console.log('Error', error)
+        },
+    })
 
     let ONE_MATIC = '1000000000000000000'
     const [dollarAmount, setdollarAmount] = useState(1);
     const [equalentMaticAmount, setequalentMaticAmount] = useState(0);
-
+    const [equalentUmbriaAmount, setequalentUmbriaAmount] = useState(0);
     const [usd, setusd] = useState(0);
+    const [umbriaUsd, setumbriaUsd] = useState(0);
 
     let getUsd = async () => {
         let coingecko = await axios.get('https://api.coingecko.com/api/v3/coins/matic-network');
         let usd = coingecko.data.market_data.current_price.usd;
         setusd(usd)
     }
+    let getUmbriaUsd = async () => {
+        let coingecko = await axios.get('https://api.coingecko.com/api/v3/coins/umbra-network');
+        let usd = coingecko.data.market_data.current_price.usd;
+        setumbriaUsd(usd)
+    }
 
     useEffect(() => {
-        getUsd()
+        getUsd(),getUmbriaUsd()
     }, [])
 
     let calculateUSDtoMatic = async () => {
@@ -1053,9 +1150,32 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
         setequalentMaticAmount(one_dollar_in_gwei * dollarAmount);
     }
 
+    let calculateUSDtoUmbria = async () => {
+        let one_dollar_in_gwei = parseInt(ONE_MATIC / parseFloat(umbriaUsd));
+        setequalentUmbriaAmount(one_dollar_in_gwei * dollarAmount);
+    }
+
     useEffect(() => {
-        if (dollarAmount > 0 && usd > 0) { calculateUSDtoMatic() }
-    }, [dollarAmount, usd])
+        if ((dollarAmount > 0 && usd > 0)) { calculateUSDtoMatic() }
+        if (dollarAmount > 0 && umbriaUsd > 0) { calculateUSDtoUmbria()}
+    }, [dollarAmount, usd, umbriaUsd])
+
+//changed by dheeraj added useContractWrite 
+
+    let amountInEther = '1.0';;
+    let toAddress = review_wallet_address;
+    let umbriaTokenAddressPolygon = process.env.UMBRIA_POLYGON_ADDRESS;
+
+
+    const { config : umbriaPolygonConfig} = usePrepareContractWrite({
+      addressOrName: umbriaTokenAddressPolygon,
+      contractInterface: umbriaPolygonAbi.abi,
+      functionName: 'transfer',
+      args : [toAddress, BigNumber.from(`${equalentUmbriaAmount}`)]
+    })
+    const { write : writeUmbriaTransaction} = useContractWrite(umbriaPolygonConfig)
+ 
+
 
     const { data, isIdle, isError: tip_isError, isLoading: tip_Loading, isSuccess, sendTransaction } =
         useSendTransaction({
@@ -1112,9 +1232,9 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
                 {
                     connectors.map((connector) => {
                         return (
-                            <div key={connector.id} className={styles.option} onClick={() => {
-                                connectAsync(connector);
-                            }}>
+                            <div key={connector.id} className={styles.option} onClick={() => 
+                                {connectAsync({connector})}
+                            }>
                                 <img src={getWalletIcon(connector.name)} alt="" />
                                 <p> {connector.name}
                                     {!connector.ready && '(unsupported)'}
@@ -1134,7 +1254,7 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
             <h1 className={styles.title}>Wrong Network</h1>
             <p className={styles.subTitle}>Please switch to Matic network in your Wallet</p>
             <div className={styles.connectBtn} onClick={() => {
-                switchNetwork(137);
+                switchNetwork?.(137);
             }}>
                 <img src="/polygon.png" alt="" />
                 <p>Switch to Polygon Chain</p>
@@ -1153,15 +1273,16 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
                 </div>
                 <div className={styles.body}>
                     <span className={styles.token}>
-                        <img src="/matic.png" alt="" />
-                        <h2>{(equalentMaticAmount > 0) && parseFloat(equalentMaticAmount / ONE_MATIC).toFixed(2)} MATIC</h2>
+                        <img src="/umbria.png" alt="" />
+                        <h2>{(equalentUmbriaAmount > 0) && parseFloat(equalentUmbriaAmount / ONE_MATIC).toFixed(2)} UMBR</h2>
                     </span>
                     <h1 className={styles.amount}>$</h1>
                     <input className={styles.dollarInput} type="number" value={dollarAmount} onChange={(e) => { (e.target.value >= 0) ? setdollarAmount(e.target.value) : setdollarAmount(0) }} />
                 </div>
             </div>
             <div className={styles.connectBtn} onClick={async () => {
-                (!tip_Loading) && sendTransaction();
+                (!tip_Loading) && writeUmbriaTransaction;
+                //(!tip_Loading) && sendTransaction();
             }}>
                 {/* <img src="/polygon.png" alt="" /> */}
                 {(!tip_Loading) ? <p>Tip it!</p> : <p>Waiting for transaction to complete...</p>}
@@ -1204,7 +1325,7 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
             return wallets
         }
         else if (dialogType == WRONG_NETWORK) {
-            if (activeChain.id == 137) {
+            if (chain.id == 137) {
                 return setdialogType(TIP_REVIEWER);
             }
             return wrongNetwork
@@ -1256,9 +1377,9 @@ function Comment({ comment, address, rating, profile_img, openModel, data, openC
 
     // thumbs_up: data.thumbs_up, thumbs_down: data.thumbs_down
 
-    const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
+    const {connectAsync, connectors, isConnecting,isLoading, pendingConnector} = useConnect();
     const { disconnectAsync } = useDisconnect()
-    const { data: walletData, isError, isLoading } = useAccount()
+    const { data: walletData,address: walletAddress, isConnected ,connector } = useAccount()
 
     const giveThumbs = async (type) => {
         console.log("rating ", type)
