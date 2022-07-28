@@ -48,6 +48,9 @@ import {
     useContractWrite,
 } from 'wagmi';
 import umbriaPolygonAbi  from '../../assets/ERC20contractAbi/umbriaPolygonAbi.json'
+import cultDaoMainnetAbi from '../../assets/ERC20contractAbi/cultDaoMainnetAbi.json'
+import rvltPolyfomAbi from '../../assets/ERC20contractAbi/rvltPolygonAbi.json'
+
 import { ethers } from 'ethers';
 import { Buffer } from "buffer";
 import { get } from 'lodash';
@@ -1126,23 +1129,23 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
     let ONE_MATIC = '1000000000000000000'
     const [dollarAmount, setdollarAmount] = useState(1);
     const [equalentMaticAmount, setequalentMaticAmount] = useState(0);
-    const [equalentUmbriaAmount, setequalentUmbriaAmount] = useState(0);
+    const [equalentCultAmount, seteequalentCultAmount] = useState(0);
     const [usd, setusd] = useState(0);
-    const [umbriaUsd, setumbriaUsd] = useState(0);
+    const [cultDaoUsd, setcultDaoUsd] = useState(0);
 
     let getUsd = async () => {
         let coingecko = await axios.get('https://api.coingecko.com/api/v3/coins/matic-network');
         let usd = coingecko.data.market_data.current_price.usd;
         setusd(usd)
     }
-    let getUmbriaUsd = async () => {
-        let coingecko = await axios.get('https://api.coingecko.com/api/v3/coins/umbra-network');
+    let getCultDaoUsd = async () => {
+        let coingecko = await axios.get('https://api.coingecko.com/api/v3/coins/cult-dao');
         let usd = coingecko.data.market_data.current_price.usd;
-        setumbriaUsd(usd)
+        setcultDaoUsd(usd)
     }
 
     useEffect(() => {
-        getUsd(),getUmbriaUsd()
+        getUsd(),getCultDaoUsd()
     }, [])
 
     let calculateUSDtoMatic = async () => {
@@ -1150,30 +1153,30 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
         setequalentMaticAmount(one_dollar_in_gwei * dollarAmount);
     }
 
-    let calculateUSDtoUmbria = async () => {
-        let one_dollar_in_gwei = parseInt(ONE_MATIC / parseFloat(umbriaUsd));
-        setequalentUmbriaAmount(one_dollar_in_gwei * dollarAmount);
+    let calculateUSDtoCultDao = async () => {
+        let one_dollar_in_gwei = parseInt(ONE_MATIC / parseFloat(cultDaoUsd));
+        seteequalentCultAmount(one_dollar_in_gwei * dollarAmount);
     }
 
     useEffect(() => {
         if ((dollarAmount > 0 && usd > 0)) { calculateUSDtoMatic() }
-        if (dollarAmount > 0 && umbriaUsd > 0) { calculateUSDtoUmbria()}
-    }, [dollarAmount, usd, umbriaUsd])
+        if (dollarAmount > 0 && cultDaoUsd > 0) { calculateUSDtoCultDao()}
+    }, [dollarAmount, usd, cultDaoUsd])
 
 //changed by dheeraj added useContractWrite 
 
     let amountInEther = '1.0';;
     let toAddress = review_wallet_address;
     let umbriaTokenAddressPolygon = process.env.UMBRIA_POLYGON_ADDRESS;
+    let cultDaoTokenAddressMainnet = process.env.CULTDAO_MAINNET_ADDRESS;
 
-
-    const { config : umbriaPolygonConfig} = usePrepareContractWrite({
-      addressOrName: umbriaTokenAddressPolygon,
-      contractInterface: umbriaPolygonAbi.abi,
+    const { config : cultMainnetConfig} = usePrepareContractWrite({
+      addressOrName: cultDaoTokenAddressMainnet,
+      contractInterface: cultDaoMainnetAbi.abi,
       functionName: 'transfer',
-      args : [toAddress, BigNumber.from(`${equalentUmbriaAmount}`)]
+      args : [toAddress, BigNumber.from(`${equalentCultAmount}`)]
     })
-    const { write : writeUmbriaTransaction} = useContractWrite(umbriaPolygonConfig)
+    const { write : writeCultDaoTransaction} = useContractWrite(cultMainnetConfig)
  
 
 
@@ -1274,14 +1277,14 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
                 <div className={styles.body}>
                     <span className={styles.token}>
                         <img src="/umbria.png" alt="" />
-                        <h2>{(equalentUmbriaAmount > 0) && parseFloat(equalentUmbriaAmount / ONE_MATIC).toFixed(2)} UMBR</h2>
+                        <h2>{(equalentCultAmount > 0) && parseFloat(equalentCultAmount / ONE_MATIC).toFixed(2)} CULT</h2>
                     </span>
                     <h1 className={styles.amount}>$</h1>
                     <input className={styles.dollarInput} type="number" value={dollarAmount} onChange={(e) => { (e.target.value >= 0) ? setdollarAmount(e.target.value) : setdollarAmount(0) }} />
                 </div>
             </div>
             <div className={styles.connectBtn} onClick={async () => {
-                (!tip_Loading) && writeUmbriaTransaction;
+                (!tip_Loading) && writeCultDaoTransaction;
                 //(!tip_Loading) && sendTransaction();
             }}>
                 {/* <img src="/polygon.png" alt="" /> */}
@@ -1492,7 +1495,7 @@ function Comment({ comment, address, rating, profile_img, openModel, data, openC
                 </span>
                 <span  >
                     <img src="/tips.png" alt="" onClick={() => { openModel() }} />
-                    <p onClick={() => { openModel() }}>{(data.chain == 'sol') ? 'Tip SOL' : 'Tip MATIC'}</p>
+                    <p onClick={() => { openModel() }}>{(data.chain == 'sol') ? 'Tip SOL/SPL' : 'Tip MATIC/ERC20'}</p>
                 </span>
                 {<span>
                     <img src="/share.png" alt="" onClick={() => { openNewTab(`http://twitter.com/share?text=Check out this ${data.rating}⭐ review for ${data.dao_name} (@${twitter_slug}) on @trutsxyz  &hashtags=truts,${unspacedDaoName} %0A WAGMI &url=https://www.truts.xyz/dao/${slug}/${data._id}`) }} />
