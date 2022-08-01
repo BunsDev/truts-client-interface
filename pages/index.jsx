@@ -123,7 +123,7 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
                 border: "1.25px solid #3f3f3f8d", padding: "0 50px", borderTopColor: "#121212",
                 borderBottomColor: "#121212",
               }} >
-                <h3 style={{ color: "#E1BA9D" }}>300+</h3>
+                <h3 style={{ color: "#E1BA9D" }}>500+</h3>
                 <p>Reviews Posted and Counting</p>
               </span>
 
