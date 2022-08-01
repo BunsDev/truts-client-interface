@@ -35,6 +35,7 @@ import {
     SystemProgram,
     LAMPORTS_PER_SOL
 } from "@solana/web3.js";
+
 import {
     useAccount,
     useConnect,
@@ -1104,9 +1105,9 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
         return (usdAmount)
     }
     let calculateUSDtoRvlt = async () => {
-      let umbr =  await getUmbrUsd();
-      let one_dollar_in_umbr = 1/umbr;
-      setequivalentUmbriaAmount(one_dollar_in_umbr * dollarAmount);
+        let umbr = await getUmbrUsd();
+        let one_dollar_in_umbr = 1 / umbr;
+        setequivalentUmbriaAmount(one_dollar_in_umbr * dollarAmount);
     }
     //----------------------------------------------------------------
 
@@ -1126,7 +1127,7 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
 
     useEffect(() => {
         if (dollarAmount >= 0 && usd > 0) { calculateUSDtoMatic() }
-        if (dollarAmount >= 0 ) { calculateUSDtoRvlt() }
+        if (dollarAmount >= 0) { calculateUSDtoRvlt() }
     }, [dollarAmount, usd])
 
     const { data, isIdle, isError: tip_isError, isLoading: tip_Loading, isSuccess, sendTransaction } =
@@ -1148,15 +1149,21 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
             },
         })
 
-        const { config : umbrPolygonConfig } = usePrepareContractWrite({
-            addressOrName: process.env.UMBRIA_POLYGON_ERC20,
-            contractInterface: umbriaPolygonAbi.abi,
-            functionName: 'transfer',
-            args: [review_wallet_address, ethers.utils.parseEther(`${equivalentUmbriaAmount}`)]
-          })
-        const { isLoading:umbr_Loading,write :umbrSendTransaction} = useContractWrite(umbrPolygonConfig)
-          
-          
+    const { config: umbrPolygonConfig } = usePrepareContractWrite({
+        addressOrName: process.env.UMBRIA_POLYGON_ERC20,
+        contractInterface: umbriaPolygonAbi.abi,
+        functionName: 'transfer',
+        args: [review_wallet_address, ethers.utils.parseEther(`${equivalentUmbriaAmount}`)]
+    })
+
+    const { isLoading: umbr_Loading, write: umbrSendTransaction } = useContractWrite({
+        ...umbrPolygonConfig,
+        onError(error) {
+            console.log('Error', error)
+        },
+    })
+
+
 
     const scrollDisable = (control) => {
         if (control) {
@@ -1235,46 +1242,51 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
                 <div className={styles.body}>
                     <span className={styles.token}>
                         {
-                            (selectedToken == 'MATIC')?
-                             <>  
-                             <img src="/matic.png" alt="" />
-                             <h2>{(equalentMaticAmount > 0) && parseFloat(equalentMaticAmount / ONE_MATIC).toFixed(2)} MATIC</h2>
-                             </>
-                             :
-                             <>  
-                             <img src="/umbria.png" alt="" />
-                             <h2>{(equivalentUmbriaAmount > 0) && parseFloat(equivalentUmbriaAmount).toFixed(2)} UMBR</h2>
-                             </>
-                           
+                            (selectedToken == 'MATIC') ?
+                                <>
+                                    <img src="/matic.png" alt="" />
+                                    <h2>{(equalentMaticAmount > 0) && parseFloat(equalentMaticAmount / ONE_MATIC).toFixed(2)} MATIC</h2>
+                                </>
+                                :
+                                <>
+                                    <img src="/umbria.png" alt="" />
+                                    <h2>{(equivalentUmbriaAmount > 0) && parseFloat(equivalentUmbriaAmount).toFixed(2)} UMBR</h2>
+                                </>
+
                         }
                         <img src="/down-arrow.png" alt="" className={styles.dropArrow} />
-                            <div className={styles.dropDownOptions}>
-                                <div className={styles.splOption} onClick={() => {
-                                    setselectedToken('MATIC');
-                                }}>
-                                    <img src="/matic.png" alt="" />
-                                    <p>MATIC</p>
-                                </div>
-                                <div className={styles.splOption} onClick={() => {
-                                    setselectedToken('UMBR');
-                                }}>
-                                    <img src="/umbria.png" alt="" />
-                                    <p>UMBR</p>
-                                </div>
-                                
+                        <div className={styles.dropDownOptions} style={{ marginTop: "135px" }}>
+                            <div className={styles.splOption} onClick={() => {
+                                setselectedToken('MATIC');
+                            }}>
+                                <img src="/matic.png" alt="" />
+                                <p>MATIC</p>
                             </div>
-                        </span>
+                            <div className={styles.splOption} onClick={() => {
+                                setselectedToken('UMBR');
+                            }}>
+                                <img src="/umbria.png" alt="" />
+                                <p>UMBR</p>
+                            </div>
+
+                        </div>
+                    </span>
                     <h1 className={styles.amount}>$</h1>
                     <input className={styles.dollarInput} type="number" value={dollarAmount} onChange={(e) => { (e.target.value >= 0) ? setdollarAmount(e.target.value) : setdollarAmount(0) }} />
                 </div>
             </div>
             <div className={styles.connectBtn} onClick={async () => {
                 if (dollarAmount <= 0) { return alert("Tipping amount should be greater than 0") }
-                if(selectedToken == 'MATIC'){
+                if (selectedToken == 'MATIC') {
                     (!tip_Loading) && sendTransaction();
                 }
-                if(selectedToken == 'UMBR'){
-                    (!umbr_Loading) && umbrSendTransaction;
+                if (selectedToken == 'UMBR') {
+                    try {
+                        (!umbr_Loading) && umbrSendTransaction;
+                    }
+                    catch (er) {
+                        console.log(er);
+                    }
                 }
             }}>
                 {/* <img src="/polygon.png" alt="" /> */}
