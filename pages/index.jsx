@@ -115,7 +115,7 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
           <div id={'sec2'} className={styles.sec2}>
             <div className={styles.r1} style={{ backgroundColor: "#121212" }} >
               <span>
-                <h3 style={{ color: "#EB6079" }} >500+</h3>
+                <h3 style={{ color: "#EB6079" }} >550+</h3>
                 <p>Communities listed and verified</p>
               </span>
 
@@ -123,12 +123,12 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
                 border: "1.25px solid #3f3f3f8d", padding: "0 50px", borderTopColor: "#121212",
                 borderBottomColor: "#121212",
               }} >
-                <h3 style={{ color: "#E1BA9D" }}>190+</h3>
+                <h3 style={{ color: "#E1BA9D" }}>300+</h3>
                 <p>Reviews Posted and Counting</p>
               </span>
 
               <span>
-                <h3 style={{ color: "#C09DFF" }}>300+</h3>
+                <h3 style={{ color: "#C09DFF" }}>500+</h3>
                 <p>Individuals joined Web3 using Truts</p>
               </span>
             </div>
