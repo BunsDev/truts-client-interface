@@ -777,12 +777,12 @@ const WalletModalSol = ({ setvisible, visible,setsplAccountLoad, splAccountLoad,
     </>
 
     //Changed by dheeraj added createTransferTransactionSplToken
-    const createTransferTransactionSplToken = async (splTokenAmount) => {
+    const createTransferTransactionSplToken = async (splTokenAmount, splTokenPubKey) => {
         try {
             let provider = getProvider();
             if (!provider.publicKey) return;
             console.log('Token amount ', splTokenAmount)
-            let publicKey = 'MEANeD3XDdUmNMsRGjASkSWdC8prLYsoRJ61pPeHctD'
+            let publicKey = splTokenPubKey;
             const mySplToken = new PublicKey(publicKey);
             const mint = await getMint(connection, mySplToken);
             const ownerPublicKey = new PublicKey(provider.publicKey);
@@ -1040,10 +1040,9 @@ const WalletModalSol = ({ setvisible, visible,setsplAccountLoad, splAccountLoad,
                         if (selectedToken == 'SOL') {
                             let trx = await createTransferTransaction(equalentSolLamports);
                             await sendTransaction(trx , selectedToken, usd)
-                        }
-                        if (selectedToken == 'MEAN') {
+                        }else if (selectedToken == 'MEAN') {
                             console.log('usdMean',usdMean)
-                            let trx = await createTransferTransactionSplToken(equalentSplToken / one_sol);
+                            let trx = await createTransferTransactionSplToken(equalentSplToken / one_sol, process.env.MEAN_SPL_TOKEN);
                             await sendTransaction(trx, selectedToken,usdMean);
                         }
                     }}>
