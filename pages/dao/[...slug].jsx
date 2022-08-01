@@ -43,8 +43,13 @@ import {
     useSignMessage,
     useNetwork,
     useSendTransaction,
+    usePrepareContractWrite,
+    useSwitchNetwork,
+    useContractWrite,
 } from 'wagmi';
 
+
+import { ethers } from 'ethers';
 import { Buffer } from "buffer";
 import { get } from 'lodash';
 
@@ -757,12 +762,12 @@ const WalletModalSol = ({ setvisible, visible, setsplAccountLoad, splAccountLoad
     </>
 
     //Changed by dheeraj added createTransferTransactionSplToken
-    const createTransferTransactionSplToken = async (splTokenAmount) => {
+    const createTransferTransactionSplToken = async (splTokenAmount, splTokenPubKey) => {
         try {
             let provider = getProvider();
             if (!provider.publicKey) return;
             console.log('Token amount ', splTokenAmount)
-            let publicKey = 'MEANeD3XDdUmNMsRGjASkSWdC8prLYsoRJ61pPeHctD'
+            let publicKey = splTokenPubKey;
             const mySplToken = new PublicKey(publicKey);
             const mint = await getMint(connection, mySplToken);
             const ownerPublicKey = new PublicKey(provider.publicKey);
@@ -865,8 +870,10 @@ const WalletModalSol = ({ setvisible, visible, setsplAccountLoad, splAccountLoad
         const [dollarAmount, setdollarAmount] = useState(1);
         const [equalentSolLamports, setequalentSolLamports] = useState(0);
         const [equalentSplToken, setequalentSplToken] = useState(0);
+        const [equalentSolRazrToken, setequalentSolRazrToken] = useState(0);
         const [usd, setusd] = useState(0);
         const [usdMean, setusdMean] = useState(0);
+        const [usdSolRazr, setusdSolRazr] = useState(0);
         let one_sol = 1000000000;
 
         let calculateUSDtoSol = async () => {
@@ -882,7 +889,7 @@ const WalletModalSol = ({ setvisible, visible, setsplAccountLoad, splAccountLoad
         }
 
         //changes made by dheeraj added calculateUSDtoSplToken,getUsdMean
-        let calculateUSDtoSplToken = async () => {
+        let calculateUSDtoSplMeanToken = async () => {
             let one_dollar_in_lamport = parseInt(one_sol / parseFloat(usdMean));
             setequalentSplToken(one_dollar_in_lamport * dollarAmount);
         }
@@ -896,20 +903,53 @@ const WalletModalSol = ({ setvisible, visible, setsplAccountLoad, splAccountLoad
             setusdMean(usd);
         }
 
+        //changes made by dheeraj added calculateUSDtoSplToken,getUsdMean
+        let calculateUSDtoSolRazrToken = async () => {
+            let one_dollar_in_lamport = parseInt(one_sol / parseFloat(usdSolRazr));
+            setequalentSolRazrToken(one_dollar_in_lamport * dollarAmount);
+        }
+
+        let getUsdSolRazr = async () => {
+            // Mean SplToken Id  = meanfi
+            let tokenId = 'solrazr'
+            let coingecko = await axios.get(`https://api.coingecko.com/api/v3/coins/${tokenId}`);
+            console.log(coingecko)
+            let usd = coingecko.data.market_data.current_price.usd;
+            setusdSolRazr(usd);
+        }
+
         useEffect(() => {
             getUsd();
-            //Changed by dheeraj
+            //Changed by dheeraj MeanFi 
             getUsdMean();
+            //SolRazr
+            getUsdSolRazr();
         }, [])
 
         useEffect(() => {
             calculateUSDtoSol();
             //Changed by dheeraj
-            calculateUSDtoSplToken();
-        }, [dollarAmount, usd, usdMean])
+            calculateUSDtoSplMeanToken();
+            //solRazr
+            calculateUSDtoSolRazrToken();
+        }, [dollarAmount, usd, usdMean, usdSolRazr])
+
 
         const [selectedToken, setselectedToken] = useState('SOL');
 
+        const getSelectedTokenString = () => {
+
+            if (selectedToken == 'SOL') {
+                return <> <img src="/solana.png" alt="" /> <h2>{(equalentSolLamports > 0) && (parseFloat(equalentSolLamports / one_sol).toFixed(2))} SOL</h2> </>
+            }
+            if (selectedToken == 'MEAN') {
+                return <>  <img src="/meanfi.png" alt="" /> <h2>{(equalentSplToken > 0) && (parseFloat(equalentSplToken / one_sol).toFixed(2))} MEAN</h2> </>
+            }
+            if (selectedToken == 'SOLR') {
+                return <>  <img src="/solrazr.png" alt="" /> <h2>{(equalentSolRazrToken > 0) && (parseFloat(equalentSolRazrToken / one_sol).toFixed(2))} SOLR</h2> </>
+            }
+
+        }
         return (
             <>
                 <div className={styles.wallets} key={"wallets"}>
@@ -923,9 +963,7 @@ const WalletModalSol = ({ setvisible, visible, setsplAccountLoad, splAccountLoad
                             <span className={styles.token}>
 
                                 {
-                                    (selectedToken == 'SOL') ?
-                                        <> <img src="/solana.png" alt="" /> <h2>{(equalentSolLamports > 0) && (parseFloat(equalentSolLamports / one_sol).toFixed(2))} SOL</h2> </> :
-                                        <>  <img src="/meanfi.png" alt="" /> <h2>{(equalentSplToken > 0) && (parseFloat(equalentSplToken / one_sol).toFixed(2))} MEAN</h2> </>
+                                    getSelectedTokenString()
                                 }
                                 <img src="/down-arrow.png" alt="" className={styles.dropArrow} />
                                 <div className={styles.dropDownOptions}>
@@ -941,6 +979,12 @@ const WalletModalSol = ({ setvisible, visible, setsplAccountLoad, splAccountLoad
                                         <img src="/meanfi.png" alt="" />
                                         <p>MEAN</p>
                                     </div>
+                                    <div className={styles.splOption} onClick={() => {
+                                        setselectedToken('SOLR');
+                                    }}>
+                                        <img src="/solrazr.png" alt="" />
+                                        <p>SOLR</p>
+                                    </div>
                                 </div>
                             </span>
                             <h1 className={styles.amount}>$</h1>
@@ -955,9 +999,14 @@ const WalletModalSol = ({ setvisible, visible, setsplAccountLoad, splAccountLoad
                             await sendTransaction(trx)
                         }
                         if (selectedToken == 'MEAN') {
-                            let trx = await createTransferTransactionSplToken(equalentSplToken / one_sol);
+                            let trx = await createTransferTransactionSplToken(equalentSplToken / one_sol, process.env.MEAN_SPL_TOKEN);
                             await sendTransaction(trx);
                         }
+                        if (selectedToken == 'SOLR') {
+                            let trx = await createTransferTransactionSplToken(equalentSplToken / one_sol, process.env.SOLRAZR_SPL_TOKEN);
+                            await sendTransaction(trx);
+                        }
+
                     }}>
                         <p>{(splAccountLoad) ? "Account Creating.." : "Tip it!"}</p>
                     </div>
@@ -1019,18 +1068,25 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
 
     const [dialogType, setdialogType] = useState(CONNECT_WALLET);
 
-    const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
+    const { connectAsync, connectors, isLoading, pendingConnector } = useConnect();
     const { disconnectAsync } = useDisconnect()
-    const { data: walletData, isError, isLoading } = useAccount()
+    const { address, isConnected, connector, isConnecting } = useAccount();
 
     const {
-        activeChain,
-        chains,
-        error,
-        isLoading: chain_loading,
-        pendingChainId,
-        switchNetwork,
+        chain,
     } = useNetwork()
+
+    const {
+
+        switchNetwork,
+
+    } = useSwitchNetwork({
+        //chainId: 137,
+        onError(error) {
+            console.log('Error', error)
+        },
+    })
+
 
     let ONE_MATIC = '1000000000000000000'
     const [dollarAmount, setdollarAmount] = useState(1);
@@ -1112,9 +1168,8 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
                 {
                     connectors.map((connector) => {
                         return (
-                            <div key={connector.id} className={styles.option} onClick={() => {
-                                connectAsync(connector);
-                            }}>
+                            <div key={connector.id} className={styles.option} onClick={() => { connectAsync({ connector }) }
+                            }>
                                 <img src={getWalletIcon(connector.name)} alt="" />
                                 <p> {connector.name}
                                     {!connector.ready && '(unsupported)'}
@@ -1204,7 +1259,7 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
             return wallets
         }
         else if (dialogType == WRONG_NETWORK) {
-            if (activeChain.id == 137) {
+            if (chain.id == 137) {
                 return setdialogType(TIP_REVIEWER);
             }
             return wrongNetwork
