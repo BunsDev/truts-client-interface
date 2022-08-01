@@ -44,9 +44,12 @@ function Nav({ topSearchVisible, outline, openConnectWallet, getWalletAddress })
         }
     }, [openConnectWallet])
 
-    const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
+    const { address, isConnected, isConnecting} = useAccount();
+    const { connectAsync,isLoading, connectors, pendingConnector} =
+      useConnect();
+    //const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
     const { disconnectAsync } = useDisconnect()
-    const { data: walletData, isError, isLoading } = useAccount()
+   // const { data: walletData, isError, isLoading } = useAccount()
     const [isPhantomInstalled, setisPhantomInstalled] = useState(false);
 
     let search_style = styles.nav;
@@ -63,8 +66,8 @@ function Nav({ topSearchVisible, outline, openConnectWallet, getWalletAddress })
     useEffect(() => {
 
         if (isConnected) {
-            setwalletState({ chain: 'eth', connected: true, wallet_address: walletData.address });
-            window.localStorage.setItem('wallet_state', JSON.stringify({ chain: 'eth', connected: true, wallet_address: walletData.address }));
+            setwalletState({ chain: 'eth', connected: true, wallet_address: address });
+            window.localStorage.setItem('wallet_state', JSON.stringify({ chain: 'eth', connected: true, wallet_address: address }));
             setwalletPopUpVisible(false);
         }
         if (!isConnected && (!localStorage.getItem('wallet_state'))) {
@@ -89,7 +92,8 @@ function Nav({ topSearchVisible, outline, openConnectWallet, getWalletAddress })
     }
 
     const connectEth = async (connetor) => {
-        let res = await connectAsync(connetor);
+        console.log('connector', connetor)
+        let res = await connectAsync({connector:connetor});
         console.log(res);
         getWalletAddress && getWalletAddress(res.account);
     }
