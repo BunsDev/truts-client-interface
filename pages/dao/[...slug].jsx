@@ -48,7 +48,7 @@ import {
     useContractWrite,
 } from 'wagmi';
 
-
+import umbriaPolygonAbi from '../../assets/polygonERC20/umbriaNetworkPolygonAbi.json'
 import { ethers } from 'ethers';
 import { Buffer } from "buffer";
 import { get } from 'lodash';
@@ -1091,15 +1091,30 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
     let ONE_MATIC = '1000000000000000000'
     const [dollarAmount, setdollarAmount] = useState(1);
     const [equalentMaticAmount, setequalentMaticAmount] = useState(0);
-
+    const [selectedToken, setselectedToken] = useState('MATIC');
+    const [equivalentUmbriaAmount, setequivalentUmbriaAmount] = useState(0);
     const [usd, setusd] = useState(0);
+
+
+    //---------UMBRIA ContaractWRite --------------------------------//
+    let getUmbrUsd = async () => {
+        let tokenId = 'umbra-network'
+        let coingecko = await axios.get(`https://api.coingecko.com/api/v3/coins/${tokenId}`);
+        let usdAmount = coingecko.data.market_data.current_price.usd;
+        return (usdAmount)
+    }
+    let calculateUSDtoRvlt = async () => {
+      let umbr =  await getUmbrUsd();
+      let one_dollar_in_umbr = 1/umbr;
+      setequivalentUmbriaAmount(one_dollar_in_umbr * dollarAmount);
+    }
+    //----------------------------------------------------------------
 
     let getUsd = async () => {
         let coingecko = await axios.get('https://api.coingecko.com/api/v3/coins/matic-network');
         let usd = coingecko.data.market_data.current_price.usd;
         setusd(usd)
     }
-
     useEffect(() => {
         getUsd()
     }, [])
@@ -1110,7 +1125,8 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
     }
 
     useEffect(() => {
-        if (dollarAmount > 0 && usd > 0) { calculateUSDtoMatic() }
+        if (dollarAmount >= 0 && usd > 0) { calculateUSDtoMatic() }
+        if (dollarAmount >= 0 ) { calculateUSDtoRvlt() }
     }, [dollarAmount, usd])
 
     const { data, isIdle, isError: tip_isError, isLoading: tip_Loading, isSuccess, sendTransaction } =
@@ -1131,6 +1147,16 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
                 setdialogType(SUCCESS);
             },
         })
+
+        const { config : umbrPolygonConfig } = usePrepareContractWrite({
+            addressOrName: process.env.UMBRIA_POLYGON_ERC20,
+            contractInterface: umbriaPolygonAbi.abi,
+            functionName: 'transfer',
+            args: [review_wallet_address, ethers.utils.parseEther(`${equivalentUmbriaAmount}`)]
+          })
+        const { isLoading:umbr_Loading,write :umbrSendTransaction} = useContractWrite(umbrPolygonConfig)
+          
+          
 
     const scrollDisable = (control) => {
         if (control) {
@@ -1209,15 +1235,48 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
                 </div>
                 <div className={styles.body}>
                     <span className={styles.token}>
-                        <img src="/matic.png" alt="" />
-                        <h2>{(equalentMaticAmount > 0) && parseFloat(equalentMaticAmount / ONE_MATIC).toFixed(2)} MATIC</h2>
-                    </span>
+                        {
+                            (selectedToken == 'MATIC')?
+                             <>  
+                             <img src="/matic.png" alt="" />
+                             <h2>{(equalentMaticAmount > 0) && parseFloat(equalentMaticAmount / ONE_MATIC).toFixed(2)} MATIC</h2>
+                             </>
+                             :
+                             <>  
+                             <img src="/umbria.png" alt="" />
+                             <h2>{(equivalentUmbriaAmount > 0) && parseFloat(equivalentUmbriaAmount).toFixed(2)} UMBR</h2>
+                             </>
+                           
+                        }
+                        <img src="/down-arrow.png" alt="" className={styles.dropArrow} />
+                            <div className={styles.dropDownOptions}>
+                                <div className={styles.splOption} onClick={() => {
+                                    setselectedToken('MATIC');
+                                }}>
+                                    <img src="/matic.png" alt="" />
+                                    <p>MATIC</p>
+                                </div>
+                                <div className={styles.splOption} onClick={() => {
+                                    setselectedToken('UMBR');
+                                }}>
+                                    <img src="/umbria.png" alt="" />
+                                    <p>UMBR</p>
+                                </div>
+                                
+                            </div>
+                        </span>
                     <h1 className={styles.amount}>$</h1>
                     <input className={styles.dollarInput} type="number" value={dollarAmount} onChange={(e) => { (e.target.value >= 0) ? setdollarAmount(e.target.value) : setdollarAmount(0) }} />
                 </div>
             </div>
             <div className={styles.connectBtn} onClick={async () => {
-                (!tip_Loading) && sendTransaction();
+                if (dollarAmount <= 0) { return alert("Tipping amount should be greater than 0") }
+                if(selectedToken == 'MATIC'){
+                    (!tip_Loading) && sendTransaction();
+                }
+                if(selectedToken == 'UMBR'){
+                    (!umbr_Loading) && umbrSendTransaction;
+                }
             }}>
                 {/* <img src="/polygon.png" alt="" /> */}
                 {(!tip_Loading) ? <p>Tip it!</p> : <p>Waiting for transaction to complete...</p>}
