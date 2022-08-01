@@ -49,7 +49,7 @@ import {
 } from 'wagmi';
 import umbriaPolygonAbi  from '../../assets/ERC20contractAbi/umbriaPolygonAbi.json'
 import cultDaoMainnetAbi from '../../assets/ERC20contractAbi/cultDaoMainnetAbi.json'
-import rvltPolyfomAbi from '../../assets/ERC20contractAbi/rvltPolygonAbi.json'
+import rvltPolygonAbi from '../../assets/ERC20contractAbi/rvltPolygonAbi.json'
 
 import { ethers } from 'ethers';
 import { Buffer } from "buffer";
@@ -1129,23 +1129,30 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
     let ONE_MATIC = '1000000000000000000'
     const [dollarAmount, setdollarAmount] = useState(1);
     const [equalentMaticAmount, setequalentMaticAmount] = useState(0);
-    const [equalentCultAmount, seteequalentCultAmount] = useState(0);
+    const [equalentRvltAmount, setequalentRvltAmount] = useState(0);
     const [usd, setusd] = useState(0);
-    const [cultDaoUsd, setcultDaoUsd] = useState(0);
+    const [rvltUsd, setrvltUsd] = useState(0);
 
     let getUsd = async () => {
         let coingecko = await axios.get('https://api.coingecko.com/api/v3/coins/matic-network');
         let usd = coingecko.data.market_data.current_price.usd;
         setusd(usd)
     }
-    let getCultDaoUsd = async () => {
-        let coingecko = await axios.get('https://api.coingecko.com/api/v3/coins/cult-dao');
+
+    let getrvltUsd = async () => {
+        let coingecko = await axios.get('https://api.coingecko.com/api/v3/coins/revolt-2-earn');
         let usd = coingecko.data.market_data.current_price.usd;
-        setcultDaoUsd(usd)
+        console.log('Current price rvlt', usd);
+        return (usd)
+    }
+    let calculateUSDtoRvlt = async () => {
+      let rvlt =  await getrvltUsd();
+      let one_dollar_in_rvlt = 1/rvlt;
+      setequalentRvltAmount(one_dollar_in_rvlt * dollarAmount);
     }
 
     useEffect(() => {
-        getUsd(),getCultDaoUsd()
+        getUsd();
     }, [])
 
     let calculateUSDtoMatic = async () => {
@@ -1153,31 +1160,30 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
         setequalentMaticAmount(one_dollar_in_gwei * dollarAmount);
     }
 
-    let calculateUSDtoCultDao = async () => {
-        let one_dollar_in_gwei = parseInt(ONE_MATIC / parseFloat(cultDaoUsd));
-        seteequalentCultAmount(one_dollar_in_gwei * dollarAmount);
-    }
-
     useEffect(() => {
         if ((dollarAmount > 0 && usd > 0)) { calculateUSDtoMatic() }
-        if (dollarAmount > 0 && cultDaoUsd > 0) { calculateUSDtoCultDao()}
-    }, [dollarAmount, usd, cultDaoUsd])
+        if ((dollarAmount > 0 )) { calculateUSDtoRvlt() }
+    }, [dollarAmount, usd])
 
 //changed by dheeraj added useContractWrite 
 
-    let amountInEther = '1.0';;
+    let amountInEther = (dollarAmount/rvltUsd).toString();
     let toAddress = review_wallet_address;
     let umbriaTokenAddressPolygon = process.env.UMBRIA_POLYGON_ADDRESS;
-    let cultDaoTokenAddressMainnet = process.env.CULTDAO_MAINNET_ADDRESS;
-
-    const { config : cultMainnetConfig} = usePrepareContractWrite({
-      addressOrName: cultDaoTokenAddressMainnet,
-      contractInterface: cultDaoMainnetAbi.abi,
+    let rvltTokenAddressPolygon = process.env.RVLT_POLYGON_ADDRESS;
+    //external contract//0xb12ca3dBf866DA26B0f55a20A51fea8efd8592f9
+    
+    //RVLT token transfer on polygon 
+    console.log('equalentRvltAmount', equalentRvltAmount);
+    const { config : rvltPolygonConfig } = usePrepareContractWrite({
+      addressOrName: rvltTokenAddressPolygon,
+      contractInterface: rvltPolygonAbi.abi,
       functionName: 'transfer',
-      args : [toAddress, BigNumber.from(`${equalentCultAmount}`)]
+      args: [toAddress, ethers.utils.parseEther(`${equalentRvltAmount}`)]
     })
-    const { write : writeCultDaoTransaction} = useContractWrite(cultMainnetConfig)
+    const { write : writeRvltTransaction,isLoading : tip_LoadingERC} = useContractWrite(rvltPolygonConfig)
  
+    //CULT token transfer on Mainnet
 
 
     const { data, isIdle, isError: tip_isError, isLoading: tip_Loading, isSuccess, sendTransaction } =
@@ -1276,16 +1282,19 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
                 </div>
                 <div className={styles.body}>
                     <span className={styles.token}>
-                        <img src="/umbria.png" alt="" />
-                        <h2>{(equalentCultAmount > 0) && parseFloat(equalentCultAmount / ONE_MATIC).toFixed(2)} CULT</h2>
+                        {/* <img src="/matic.png" alt="" /> */}
+                        {/* <h2>{(equalentMaticAmount > 0) && parseFloat(equalentMaticAmount / ONE_MATIC).toFixed(2)} MATIC</h2> */}
+
+                        <img src="/revolt2earn.png" alt="" />
+                        <h2>{(equalentRvltAmount > 0) && parseFloat(equalentRvltAmount).toFixed(2)} RVLT</h2>
                     </span>
                     <h1 className={styles.amount}>$</h1>
                     <input className={styles.dollarInput} type="number" value={dollarAmount} onChange={(e) => { (e.target.value >= 0) ? setdollarAmount(e.target.value) : setdollarAmount(0) }} />
                 </div>
             </div>
             <div className={styles.connectBtn} onClick={async () => {
-                (!tip_Loading) && writeCultDaoTransaction;
-                //(!tip_Loading) && sendTransaction();
+                //(!tip_LoadingERC) && writeRvltTransaction;
+                (!tip_Loading) && sendTransaction();
             }}>
                 {/* <img src="/polygon.png" alt="" /> */}
                 {(!tip_Loading) ? <p>Tip it!</p> : <p>Waiting for transaction to complete...</p>}
