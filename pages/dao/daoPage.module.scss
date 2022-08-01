@@ -557,7 +557,7 @@
     z-index: 1000;
     box-shadow: 0px 40px 250px rgba(0, 0, 0, 0.16);
     border-radius: 32px;
-    overflow: hidden;
+   // overflow: hidden;
     position: absolute;
     animation: grow 0.5s ease-in-out forwards;
     .closeIcon {
@@ -743,11 +743,11 @@
         display: none;
         position: absolute;
         width: 100%;
-        min-height: 150px;
+        //min-height: 150px;
         background-color: rgb(255, 255, 255);
-        margin-top: 200px;
+        margin-top: 190px;
         z-index: 2000;
-        overflow-y: scroll;
+       
         border-radius: 10px;
         flex-direction: column;
         box-shadow: 0 0 15px rgba(128, 128, 128, 0.562);

@@ -938,17 +938,17 @@ const WalletModalSol = ({ setvisible, visible, setsplAccountLoad, splAccountLoad
         const [selectedToken, setselectedToken] = useState('SOL');
 
         const getSelectedTokenString = () => {
-            
-                if(selectedToken == 'SOL') {
-                    return <> <img src="/solana.png" alt="" /> <h2>{(equalentSolLamports > 0) && (parseFloat(equalentSolLamports / one_sol).toFixed(2))} SOL</h2> </> 
-                }
-                if(selectedToken == 'MEAN'){
-                   return  <>  <img src="/meanfi.png" alt="" /> <h2>{(equalentSplToken > 0) && (parseFloat(equalentSplToken / one_sol).toFixed(2))} MEAN</h2> </> 
-                }
-                if(selectedToken == 'SOLR'){
-                   return <>  <img src="/solrazr.png" alt="" /> <h2>{(equalentSolRazrToken > 0) && (parseFloat(equalentSolRazrToken / one_sol).toFixed(2))} SOLR</h2> </>
-                }
-            
+
+            if (selectedToken == 'SOL') {
+                return <> <img src="/solana.png" alt="" /> <h2>{(equalentSolLamports > 0) && (parseFloat(equalentSolLamports / one_sol).toFixed(2))} SOL</h2> </>
+            }
+            if (selectedToken == 'MEAN') {
+                return <>  <img src="/meanfi.png" alt="" /> <h2>{(equalentSplToken > 0) && (parseFloat(equalentSplToken / one_sol).toFixed(2))} MEAN</h2> </>
+            }
+            if (selectedToken == 'SOLR') {
+                return <>  <img src="/solrazr.png" alt="" /> <h2>{(equalentSolRazrToken > 0) && (parseFloat(equalentSolRazrToken / one_sol).toFixed(2))} SOLR</h2> </>
+            }
+
         }
         return (
             <>
@@ -963,7 +963,7 @@ const WalletModalSol = ({ setvisible, visible, setsplAccountLoad, splAccountLoad
                             <span className={styles.token}>
 
                                 {
-                                   getSelectedTokenString()
+                                    getSelectedTokenString()
                                 }
                                 <img src="/down-arrow.png" alt="" className={styles.dropArrow} />
                                 <div className={styles.dropDownOptions}>
@@ -1070,7 +1070,7 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
 
     const { connectAsync, connectors, isLoading, pendingConnector } = useConnect();
     const { disconnectAsync } = useDisconnect()
-    const { address, isConnected ,connector,isConnecting } = useAccount();
+    const { address, isConnected, connector, isConnecting } = useAccount();
 
     const {
         chain,
@@ -1080,9 +1080,9 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
 
         switchNetwork,
 
-     } = useSwitchNetwork({
-            //chainId: 137,
-            onError(error) {
+    } = useSwitchNetwork({
+        //chainId: 137,
+        onError(error) {
             console.log('Error', error)
         },
     })
@@ -1168,8 +1168,7 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
                 {
                     connectors.map((connector) => {
                         return (
-                            <div key={connector.id} className={styles.option} onClick={() => 
-                                {connectAsync({connector})}
+                            <div key={connector.id} className={styles.option} onClick={() => { connectAsync({ connector }) }
                             }>
                                 <img src={getWalletIcon(connector.name)} alt="" />
                                 <p> {connector.name}
