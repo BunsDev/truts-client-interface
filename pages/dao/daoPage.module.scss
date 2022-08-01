@@ -743,9 +743,11 @@
         display: none;
         position: absolute;
         width: 100%;
-        min-height: 50px;
+        min-height: 150px;
         background-color: rgb(255, 255, 255);
-        margin-top: 140px;
+        margin-top: 200px;
+        z-index: 2000;
+        overflow-y: scroll;
         border-radius: 10px;
         flex-direction: column;
         box-shadow: 0 0 15px rgba(128, 128, 128, 0.562);
