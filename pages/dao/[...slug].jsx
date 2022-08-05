@@ -1103,9 +1103,10 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
         let usdAmount = coingecko.data.market_data.current_price.usd;
         return (usdAmount)
     }
-    let calculateUSDtoRvlt = async () => {
+    let calculateUSDtoUmbr = async () => {
       let umbr =  await getUmbrUsd();
       let one_dollar_in_umbr = 1/umbr;
+      console.log('dollarAmount ',dollarAmount)
       setequivalentUmbriaAmount(one_dollar_in_umbr * dollarAmount);
     }
     //----------------------------------------------------------------
@@ -1126,7 +1127,7 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
 
     useEffect(() => {
         if (dollarAmount >= 0 && usd > 0) { calculateUSDtoMatic() }
-        if (dollarAmount >= 0 ) { calculateUSDtoRvlt() }
+        if (dollarAmount >= 0 ) { calculateUSDtoUmbr() }
     }, [dollarAmount, usd])
 
     const { data, isIdle, isError: tip_isError, isLoading: tip_Loading, isSuccess, sendTransaction } =
@@ -1154,7 +1155,13 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
             functionName: 'transfer',
             args: [review_wallet_address, ethers.utils.parseEther(`${equivalentUmbriaAmount}`)]
           })
-        const { isLoading:umbr_Loading,write :umbrSendTransaction} = useContractWrite(umbrPolygonConfig)
+        const { isLoading:umbr_Loading,write :umbrSendTransaction} = useContractWrite({
+            ...umbrPolygonConfig,
+            onError(error) {
+                console.log('Error', error)
+              },
+          
+        })
           
           
 
@@ -1275,7 +1282,8 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
                     (!tip_Loading) && sendTransaction();
                 }
                 if(selectedToken == 'UMBR'){
-                    (!umbr_Loading) && umbrSendTransaction;
+                    console.log('umbria Network');
+                    (!umbr_Loading) && umbrSendTransaction();
                 }
             }}>
                 {/* <img src="/polygon.png" alt="" /> */}
