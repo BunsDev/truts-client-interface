@@ -1282,10 +1282,11 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
                 }
                 if (selectedToken == 'UMBR') {
                     try {
-                        (!umbr_Loading) && umbrSendTransaction;
+                        (!umbr_Loading) && umbrSendTransaction();
                     }
                     catch (er) {
                         console.log(er);
+                        setdialogType(INSUFFICIENT);
                     }
                 }
             }}>

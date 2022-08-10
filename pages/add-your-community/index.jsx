@@ -287,7 +287,7 @@ const ConnectWalletModelSimple = ({ connectWalletModelVisible, setconnectWalletM
                                 connectors.map((connector) => {
                                     return (
                                         <div key={connector.id} className={styles.option} onClick={async () => {
-                                            let res = await connectAsync(connector);
+                                            let res = await connectAsync({connector});
                                             console.log(res);
                                             setpublic_address(res.account)
                                             console.log("submitform");
