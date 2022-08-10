@@ -1066,6 +1066,7 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
     const SUCCESS = 'SUCESS';
     const FAILURE = 'FAILURE';
     const INSUFFICIENT = 'INSUFFICIENT';
+    const INSUFFICIENT_FUND = 'INSUFFICIENT_FUND';
 
     const [dialogType, setdialogType] = useState(CONNECT_WALLET);
 
@@ -1159,7 +1160,15 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
     const { isLoading: umbr_Loading, write: umbrSendTransaction } = useContractWrite({
         ...umbrPolygonConfig,
         onError(error) {
-            console.log('Error', error)
+            console.log('Error', error);
+            if (error.code == -32603) {
+                return setdialogType(INSUFFICIENT);
+            }
+            else return setdialogType(FAILURE);
+        },
+        onSuccess(data) {
+            console.log('Success', data)
+            setdialogType(SUCCESS);
         },
     })
 
@@ -1286,7 +1295,7 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
                     }
                     catch (er) {
                         console.log(er);
-                        setdialogType(INSUFFICIENT);
+                        setdialogType(INSUFFICIENT_FUND);
                     }
                 }
             }}>
@@ -1323,6 +1332,15 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
         </div>
     </>
 
+    let insufficientFund = <>
+        <div className={styles.wallets} key={"balance"}>
+            <div className={styles.finalPrompt}>
+                <img src="/oops.png" alt="" />
+                <p>Transaction unsuccessful. Please make sure you have enough tokens :)</p>
+            </div>
+        </div>
+    </>
+
     const selector = () => {
         if (dialogType == CONNECT_WALLET) {
             if (!isConnecting && isConnected) {
@@ -1347,6 +1365,9 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
         }
         else if (dialogType == INSUFFICIENT) {
             return insufficient
+        }
+        else if(dialogType == INSUFFICIENT_FUND) {
+            return insufficientFund
         }
     }
 
