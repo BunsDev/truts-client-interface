@@ -115,9 +115,9 @@ function DaoForm() {
         })
     }
 
-    const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
+    const { connectAsync, connectors, isLoading, pendingConnector } = useConnect();
     const { disconnectAsync } = useDisconnect()
-    const { data: walletData, isError, isLoading } = useAccount()
+    const { address, isConnected ,connector,isConnecting } = useAccount();
 
 
     const [public_address, setpublic_address] = useState('');
@@ -264,9 +264,9 @@ function DaoForm() {
 }
 
 const ConnectWalletModelSimple = ({ connectWalletModelVisible, setconnectWalletModelVisible, setpublic_address, submit_form }) => {
-    const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
+    const { connectAsync, connectors, isLoading, pendingConnector } = useConnect();
     const { disconnectAsync } = useDisconnect()
-    const { data: walletData, isError, isLoading } = useAccount()
+    const { address, isConnected ,connector,isConnecting } = useAccount();
 
     console.log(submit_form)
 
@@ -286,8 +286,8 @@ const ConnectWalletModelSimple = ({ connectWalletModelVisible, setconnectWalletM
                                 connectors.map((connector) => {
                                     return (
                                         <div key={connector.id} className={styles.option} onClick={async () => {
-                                            let res = await connectAsync(connector);
-                                            console.log(res);
+                                            let res = await connectAsync({connector});
+                                            console.log('res', res);
                                             setpublic_address(res.account)
                                             console.log("submitform");
                                             submit_form(res.account)
@@ -298,7 +298,7 @@ const ConnectWalletModelSimple = ({ connectWalletModelVisible, setconnectWalletM
                                                 {!connector.ready && '(unsupported)'}
                                                 {isConnecting &&
                                                     connector.id === pendingConnector?.id &&
-                                                    ' (connecting)'}</p>
+                                                 ' (connecting)'}</p>
                                         </div>
                                     )
                                 })
