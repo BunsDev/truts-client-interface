@@ -1106,7 +1106,6 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
     let calculateUSDtoUmbr = async () => {
       let umbr =  await getUmbrUsd();
       let one_dollar_in_umbr = 1/umbr;
-      console.log('dollarAmount ',dollarAmount)
       setequivalentUmbriaAmount(one_dollar_in_umbr * dollarAmount);
     }
     //----------------------------------------------------------------
@@ -1153,13 +1152,29 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
             addressOrName: process.env.UMBRIA_POLYGON_ERC20,
             contractInterface: umbriaPolygonAbi.abi,
             functionName: 'transfer',
-            args: [review_wallet_address, ethers.utils.parseEther(`${equivalentUmbriaAmount}`)]
-          })
-        const { isLoading:umbr_Loading,write :umbrSendTransaction} = useContractWrite({
-            ...umbrPolygonConfig,
+            args: [review_wallet_address, ethers.utils.parseEther(`${equivalentUmbriaAmount}`)],
             onError(error) {
-                console.log('Error', error)
+                console.log('address' , review_wallet_address)
+                console.log('config Error', error);
+                //return setdialogType(INSUFFICIENT);
               },
+              onSuccess(data) {
+                console.log('config Success', data)
+              },
+          })
+        const {isLoading:umbr_Loading,write :umbrSendTransaction} = useContractWrite({
+            ...umbrPolygonConfig,
+             onError(error) {
+                console.log('Error', error);
+                if (error.code == -32603) {
+                    return setdialogType(INSUFFICIENT);
+                }
+                else return setdialogType(FAILURE);
+            },
+            onSuccess(data) {
+                console.log('Success', data)
+                return setdialogType(SUCCESS);
+            },
           
         })
           
@@ -1283,7 +1298,13 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
                 }
                 if(selectedToken == 'UMBR'){
                     console.log('umbria Network');
-                    (!umbr_Loading) && umbrSendTransaction();
+                    try {
+                        (!umbr_Loading) && umbrSendTransaction();
+                        
+                    } catch (error) {
+                      console.log(error);
+                      setdialogType(INSUFFICIENT);
+                    }
                 }
             }}>
                 {/* <img src="/polygon.png" alt="" /> */}

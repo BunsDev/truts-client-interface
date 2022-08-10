@@ -11,7 +11,6 @@ import {
     useEnsName,
     useSignMessage,
     useNetwork,
-    useSendTransaction,
 } from 'wagmi';
 
 const API = process.env.API
