@@ -1404,9 +1404,9 @@ function Comment({ comment, address, rating, profile_img, openModel, data, openC
 
     // thumbs_up: data.thumbs_up, thumbs_down: data.thumbs_down
 
-    const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
+    const { connectAsync, connectors, isLoading, pendingConnector } = useConnect();
     const { disconnectAsync } = useDisconnect()
-    const { data: walletData, isError, isLoading } = useAccount()
+    const { address : isAddress, isConnected, connector, isConnecting } = useAccount();
 
     const giveThumbs = async (type) => {
         console.log("rating ", type)

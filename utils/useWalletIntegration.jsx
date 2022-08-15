@@ -20,9 +20,9 @@ let useWalletIntegration = () => {
         }
     }, [])
 
-    const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
-    const { disconnectAsync } = useDisconnect();
-    const { data: walletData, isError, isLoading } = useAccount();
+    const { connectAsync, connectors, isLoading, pendingConnector } = useConnect();
+    const { disconnectAsync } = useDisconnect()
+    const { data: walletData, address, isConnected, connector, isConnecting } = useAccount();
 
     return ({
         connectAsync, disconnectAsync, connectors, isConnected, isConnecting, pendingConnector, walletData, isLoading

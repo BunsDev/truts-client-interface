@@ -115,11 +115,9 @@ function DaoForm() {
             return { ...obj }
         })
     }
-
-    const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
+    const { connectAsync, connectors, isLoading, pendingConnector } = useConnect();
     const { disconnectAsync } = useDisconnect()
-    const { data: walletData, isError, isLoading } = useAccount()
-
+    const { address, isConnected, connector, isConnecting } = useAccount();
 
     const [public_address, setpublic_address] = useState('');
     const { data: sign_data, isError: signError, isLoading: signLoading, isSuccess: signSucess, signMessage } = useSignMessage({
@@ -265,10 +263,10 @@ function DaoForm() {
 }
 
 const ConnectWalletModelSimple = ({ connectWalletModelVisible, setconnectWalletModelVisible, setpublic_address, submit_form }) => {
-    const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
+    const { connectAsync, connectors, isLoading, pendingConnector } = useConnect();
     const { disconnectAsync } = useDisconnect()
-    const { data: walletData, isError, isLoading } = useAccount()
-
+    const { address, isConnected, connector, isConnecting } = useAccount();
+    
     console.log(submit_form)
 
     useEffect(() => {

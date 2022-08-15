@@ -40,10 +40,9 @@ function MultiWallet({ setwalletAddress, styles }) {
     const { data: account, data: accountData } = useAccount();
     const { data: ensAvatar } = useEnsAvatar({ addressOrName: account?.address })
     const { data: ensName } = useEnsName({ address: account?.address })
-    const { activeConnector, data, connect, connectors, error, isConnected, isConnecting, pendingConnector } =
-        useConnect();
-
-    const { disconnect } = useDisconnect()
+    const { connectAsync, connectors, pendingConnector } = useConnect();
+    const { disconnectAsync } = useDisconnect()
+    const { address, isConnected, connector : activeConnector, isConnecting } = useAccount();
 
     let wallets = <>
         <div className={styles.wallets}>

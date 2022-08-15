@@ -44,12 +44,9 @@ function Nav({ topSearchVisible, outline, openConnectWallet, getWalletAddress })
         }
     }, [openConnectWallet])
 
-    const { address, isConnected, isConnecting} = useAccount();
-    const { connectAsync,isLoading, connectors, pendingConnector} =
-      useConnect();
-    //const { activeConnector, connectAsync, connectors, isConnected, isConnecting, pendingConnector } = useConnect();
+    const { connectAsync, connectors, isLoading, pendingConnector } = useConnect();
     const { disconnectAsync } = useDisconnect()
-   // const { data: walletData, isError, isLoading } = useAccount()
+    const { address, isConnected, connector, isConnecting } = useAccount();
     const [isPhantomInstalled, setisPhantomInstalled] = useState(false);
 
     let search_style = styles.nav;
