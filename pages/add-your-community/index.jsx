@@ -185,13 +185,13 @@ function DaoForm() {
                 <Nav />
                 <form className={styles.form} onSubmit={(e) => { e.preventDefault(); submitForm() }}>
                     <h1 className={styles.title}>Fill these details to list your Community</h1>
-                    <p className={styles.subtitle}>Please fill the required information to list your DAO on Truts</p>
+                    <p className={styles.subtitle}>Please fill the required information to list your Community on Truts</p>
 
                     <span className={styles.input}>
                         <p>Name of the Community</p>
                         <input required name={'dao_name'} type="text" onChange={formHandler} />
                     </span>
-                    <p className={styles.inputTitle}>What’s the category of your DAO?</p>
+                    <p className={styles.inputTitle}>What’s the category of your Community?</p>
                     <div className={styles.categoryCon}>
                         <input type="text" value={catInput} onChange={(e) => {
                             setcatInput(e.target.value);
