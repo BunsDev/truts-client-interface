@@ -5,7 +5,6 @@ import { useEffect } from 'react';
 import _ from 'lodash'
 import axios from 'axios'
 import Link from 'next/link'
-
 const API = process.env.API
 
 import {
@@ -94,6 +93,8 @@ function Nav({ topSearchVisible, outline, openConnectWallet, getWalletAddress })
         console.log(res);
         getWalletAddress && getWalletAddress(res.account);
     }
+
+
 
     const connectPhantom = async () => {
         try {
