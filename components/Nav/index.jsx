@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import _ from 'lodash'
 import axios from 'axios'
 import Link from 'next/link'
-
+import Wallet from '@project-serum/sol-wallet-adapter';
 const API = process.env.API
 
 import {
@@ -100,6 +100,17 @@ function Nav({ topSearchVisible, outline, openConnectWallet, getWalletAddress })
 
     const connectPhantom = async () => {
         try {
+
+            //====sollet wallet connect
+
+            // let provider = 'https://www.sollet.io';
+            // let towallet = new Wallet(provider);
+            // console.log('toWallet', towallet);
+            // await towallet.connect();
+            // console.log('public Key', towallet._publicKey.toString());
+            // towallet.on('connect', () => console.log('Connected to ' + publicKey.toBase58()));
+            // towallet.on('disconnect', () => console.log('Disconnected'));
+            //================================================================
             const resp = await window.solana.connect();
             let wallet = resp.publicKey.toString()
             window.localStorage.setItem('wallet_state', JSON.stringify({ chain: 'sol', connected: true, wallet_address: wallet }));
