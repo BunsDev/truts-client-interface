@@ -49,7 +49,8 @@ import {
     useContractWrite,
 } from 'wagmi';
 
-import umbriaPolygonAbi from '../../assets/polygonERC20/umbriaNetworkPolygonAbi.json'
+import umbriaPolygonAbi from '../../assets/polygonERC20/umbriaNetworkPolygonAbi.json';
+import mahaDaoPolygonAbi from '../../assets/polygonERC20/mahaDaoPolygonAbi.json';
 import { ethers } from 'ethers';
 import { Buffer } from "buffer";
 import { get } from 'lodash';
@@ -825,6 +826,7 @@ const WalletModalSol = ({ setvisible, visible, setsplAccountLoad, splAccountLoad
         catch (er) {
             console.log("token er", er);
             alert("Please make sure you have enough amount of the specified token");
+            //setdialogType(FAILURE)
         }
     };
 
@@ -872,9 +874,11 @@ const WalletModalSol = ({ setvisible, visible, setsplAccountLoad, splAccountLoad
         const [equalentSolLamports, setequalentSolLamports] = useState(0);
         const [equalentSplToken, setequalentSplToken] = useState(0);
         const [equalentSolRazrToken, setequalentSolRazrToken] = useState(0);
+        const [equalentBonfidaToken, setequalentBonfidaToken] = useState(0);
         const [usd, setusd] = useState(0);
         const [usdMean, setusdMean] = useState(0);
         const [usdSolRazr, setusdSolRazr] = useState(0);
+        const [usdBonFida, setusdBonFida] = useState(0);
         let one_sol = 1000000000;
 
         let calculateUSDtoSol = async () => {
@@ -919,12 +923,29 @@ const WalletModalSol = ({ setvisible, visible, setsplAccountLoad, splAccountLoad
             setusdSolRazr(usd);
         }
 
+        //changes made by dheeraj added calculateUSDtoBonfidaToken,getUsdBonfida
+        let calculateUSDtoBonfidaToken = async () => {
+            let one_dollar_in_lamport = parseInt(one_sol / parseFloat(usdBonFida));
+            setequalentBonfidaToken(one_dollar_in_lamport * dollarAmount);
+        }
+
+        let getUsdBonfida = async () => {
+            // Mean SplToken Id  = meanfi
+            let tokenId = 'bonfida'
+            let coingecko = await axios.get(`https://api.coingecko.com/api/v3/coins/${tokenId}`);
+            console.log(coingecko)
+            let usd = coingecko.data.market_data.current_price.usd;
+            setusdBonFida(usd);
+        }
+
         useEffect(() => {
             getUsd();
             //Changed by dheeraj MeanFi 
             getUsdMean();
             //SolRazr
             getUsdSolRazr();
+            //Bonfida
+            getUsdBonfida();
         }, [])
 
         useEffect(() => {
@@ -933,7 +954,9 @@ const WalletModalSol = ({ setvisible, visible, setsplAccountLoad, splAccountLoad
             calculateUSDtoSplMeanToken();
             //solRazr
             calculateUSDtoSolRazrToken();
-        }, [dollarAmount, usd, usdMean, usdSolRazr])
+            //Bonfida
+            calculateUSDtoBonfidaToken();
+        }, [dollarAmount, usd, usdMean, usdSolRazr, usdBonFida,])
 
 
         const [selectedToken, setselectedToken] = useState('SOL');
@@ -948,6 +971,8 @@ const WalletModalSol = ({ setvisible, visible, setsplAccountLoad, splAccountLoad
             }
             if (selectedToken == 'SOLR') {
                 return <>  <img src="/solrazr.png" alt="" /> <h2>{(equalentSolRazrToken > 0) && (parseFloat(equalentSolRazrToken / one_sol).toFixed(2))} SOLR</h2> </>
+            }if(selectedToken == 'FIDA') {
+                return <>  <img src="/bonfida.png" alt="" /> <h2>{(equalentBonfidaToken > 0) && (parseFloat(equalentBonfidaToken / one_sol).toFixed(2))} FIDA</h2> </>
             }
 
         }
@@ -986,6 +1011,12 @@ const WalletModalSol = ({ setvisible, visible, setsplAccountLoad, splAccountLoad
                                         <img src="/solrazr.png" alt="" />
                                         <p>SOLR</p>
                                     </div>
+                                    <div className={styles.splOption} onClick={() => {
+                                        setselectedToken('FIDA');
+                                    }}>
+                                        <img src="/bonfida.png" alt="" />
+                                        <p>FIDA</p>
+                                    </div>
                                 </div>
                             </span>
                             <h1 className={styles.amount}>$</h1>
@@ -1006,10 +1037,13 @@ const WalletModalSol = ({ setvisible, visible, setsplAccountLoad, splAccountLoad
                         if (selectedToken == 'SOLR') {
                             let trx = await createTransferTransactionSplToken(equalentSplToken / one_sol, process.env.SOLRAZR_SPL_TOKEN);
                             await sendTransaction(trx);
+                        }if (selectedToken == 'FIDA'){
+                            let trx = await createTransferTransactionSplToken(equalentSplToken / one_sol, process.env.BONFIDA_SPL_TOKEN);
+                            await sendTransaction(trx);
                         }
 
                     }}>
-                        <p>{(splAccountLoad) ? "Account Creating.." : "Tip it!"}</p>
+                        <p>{(splAccountLoad) ? "Account Creation in progress...." : "Tip it!"}</p>
                     </div>
                 </div>
             </>
@@ -1095,17 +1129,29 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
     const [equalentMaticAmount, setequalentMaticAmount] = useState(0);
     const [selectedToken, setselectedToken] = useState('MATIC');
     const [equivalentUmbriaAmount, setequivalentUmbriaAmount] = useState(0);
+    const [equivalentMahaAmount, setequivalentMahaAmount] = useState(0);
     const [usd, setusd] = useState(0);
+    //---------MahaDao tokenCalculation --------------------------------//
+    let getMahaUsd = async () => {
+        let tokenId = 'mahadao'
+        let coingecko = await axios.get(`https://api.coingecko.com/api/v3/coins/${tokenId}`);
+        let usdAmount = coingecko.data.market_data.current_price.usd;
+        return (usdAmount)
+    }
+    let calculateUSDtoMaha = async () => {
+        let maha = await getMahaUsd();
+        let one_dollar_in_maha = 1 / maha;
+        setequivalentMahaAmount(one_dollar_in_maha * dollarAmount);
+    }
 
-
-    //---------UMBRIA ContaractWRite --------------------------------//
+    //---------UMBRIA tokenCalculation --------------------------------//
     let getUmbrUsd = async () => {
         let tokenId = 'umbra-network'
         let coingecko = await axios.get(`https://api.coingecko.com/api/v3/coins/${tokenId}`);
         let usdAmount = coingecko.data.market_data.current_price.usd;
         return (usdAmount)
     }
-    let calculateUSDtoRvlt = async () => {
+    let calculateUSDtozUmbria = async () => {
         let umbr = await getUmbrUsd();
         let one_dollar_in_umbr = 1 / umbr;
         setequivalentUmbriaAmount(one_dollar_in_umbr * dollarAmount);
@@ -1128,7 +1174,10 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
 
     useEffect(() => {
         if (dollarAmount >= 0 && usd > 0) { calculateUSDtoMatic() }
-        if (dollarAmount >= 0) { calculateUSDtoRvlt() }
+        if (dollarAmount >= 0) { 
+            calculateUSDtozUmbria();
+            calculateUSDtoMaha();
+         }
     }, [dollarAmount, usd])
 
     const { data, isIdle, isError: tip_isError, isLoading: tip_Loading, isSuccess, sendTransaction } =
@@ -1150,6 +1199,7 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
             },
         })
 
+    //---------Umbria token Transfers ----------------------------------------------------------------
     const { config: umbrPolygonConfig } = usePrepareContractWrite({
         addressOrName: process.env.UMBRIA_POLYGON_ERC20,
         contractInterface: umbriaPolygonAbi.abi,
@@ -1172,7 +1222,31 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
         },
     })
 
+//---------MahaDao tokens transfer function------------------------------------
 
+    const { config: mahaDaoPolygonConfig } = usePrepareContractWrite({
+        addressOrName: process.env.MAHADAO_POLYGON_ERC20,
+        contractInterface: mahaDaoPolygonAbi.abi,
+        functionName: 'transfer',
+        args: [review_wallet_address, ethers.utils.parseEther(`${equivalentMahaAmount}`)]
+    })
+
+    const { isLoading: maha_Loading, write: mahaSendTransaction } = useContractWrite({
+        ...mahaDaoPolygonConfig,
+        onError(error) {
+            console.log('Error', error);
+            if (error.code == -32603) {
+                return setdialogType(INSUFFICIENT);
+            }
+            else return setdialogType(FAILURE);
+        },
+        onSuccess(data) {
+            console.log('Success', data)
+            setdialogType(SUCCESS);
+        },
+    })
+
+//------------------------------------------------------------------------------------------------
 
     const scrollDisable = (control) => {
         if (control) {
@@ -1238,7 +1312,15 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
             </div>
         </div>
     </>
-
+    const getSelectedTokenStringPolygon = ()=>{
+        if(selectedToken == 'MATIC'){
+            return <> <img src="/matic.png" alt="" /> <h2>{(equalentMaticAmount > 0) && parseFloat(equalentMaticAmount / ONE_MATIC).toFixed(2)} MATIC</h2> </>
+        }if(selectedToken == 'UMBR'){
+            return <> <img src="/umbria.png" alt="" /> <h2>{(equivalentUmbriaAmount > 0) && parseFloat(equivalentUmbriaAmount).toFixed(2)} UMBR</h2> </>
+        }if(selectedToken == 'MAHA'){
+            return <> <img src="/mahadao.png" alt="" /> <h2>{(equivalentMahaAmount > 0) && parseFloat(equivalentMahaAmount).toFixed(2)} MAHA</h2> </>
+        }
+    }
 
     let tipReviewer = <>
         <div className={styles.wallets} key={"wallets"}>
@@ -1251,16 +1333,7 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
                 <div className={styles.body}>
                     <span className={styles.token}>
                         {
-                            (selectedToken == 'MATIC') ?
-                                <>
-                                    <img src="/matic.png" alt="" />
-                                    <h2>{(equalentMaticAmount > 0) && parseFloat(equalentMaticAmount / ONE_MATIC).toFixed(2)} MATIC</h2>
-                                </>
-                                :
-                                <>
-                                    <img src="/umbria.png" alt="" />
-                                    <h2>{(equivalentUmbriaAmount > 0) && parseFloat(equivalentUmbriaAmount).toFixed(2)} UMBR</h2>
-                                </>
+                            getSelectedTokenStringPolygon()
 
                         }
                         <img src="/down-arrow.png" alt="" className={styles.dropArrow} />
@@ -1277,6 +1350,12 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
                                 <img src="/umbria.png" alt="" />
                                 <p>UMBR</p>
                             </div>
+                            <div className={styles.splOption} onClick={() => {
+                                setselectedToken('MAHA');
+                            }}>
+                                <img src="/mahadao.png" alt="" />
+                                <p>MAHA</p>
+                            </div>
 
                         </div>
                     </span>
@@ -1292,6 +1371,15 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
                 if (selectedToken == 'UMBR') {
                     try {
                         (!umbr_Loading) && umbrSendTransaction();
+                    }
+                    catch (er) {
+                        console.log(er);
+                        setdialogType(INSUFFICIENT_FUND);
+                    }
+                }
+                if (selectedToken == 'MAHA') {
+                    try {
+                        (!maha_Loading) && mahaSendTransaction();
                     }
                     catch (er) {
                         console.log(er);
