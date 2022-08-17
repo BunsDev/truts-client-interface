@@ -5,7 +5,6 @@ import { useEffect } from 'react';
 import _ from 'lodash'
 import axios from 'axios'
 import Link from 'next/link'
-//import Wallet from '@project-serum/sol-wallet-adapter';
 const API = process.env.API
 
 import {
@@ -96,32 +95,6 @@ function Nav({ topSearchVisible, outline, openConnectWallet, getWalletAddress })
     }
 
 
-    // //====sollet wallet connect
-    // const connectSollet = async () => {
-    //     try {
-
-    //         let provider = 'https://www.sollet.io';
-    //         let wallet = new Wallet(provider);
-    //         console.log('wallet', wallet);
-    //         await wallet.connect();
-            
-    //         wallet.on('connect', () => console.log('Connected to ' + publicKey.toBase58()));
-    //         wallet.on('disconnect', () => console.log('Disconnected'));
-
-    //         let walletAddress = wallet._publicKey.toString();
-    //         console.log('public Key', walletAddress);
-            
-    //         // const resp = await window.solana.connect();
-    //         // let wallet = resp.publicKey.toString()
-    //         window.localStorage.setItem('wallet_state', JSON.stringify({ chain: 'sol', connected: true, wallet_address: walletAddress }));
-    //         setwalletState({ chain: 'sol', connected: true, wallet_address: walletAddress });
-    //         getWalletAddress && getWalletAddress(walletAddress);
-    //         // 26qv4GCcx98RihuK3c4T6ozB3J7L6VwCuFVc7Ta2A3Uo 
-    //         setwalletPopUpVisible(false);
-    //     } catch (err) {
-    //         // { code: 4001, message: 'User rejected the request.' }
-    //     }
-    // }
 
     const connectPhantom = async () => {
         try {

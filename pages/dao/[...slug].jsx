@@ -1337,7 +1337,7 @@ const WalletModalEth = ({ setvisible, visible, review_wallet_address }) => {
 
                         }
                         <img src="/down-arrow.png" alt="" className={styles.dropArrow} />
-                        <div className={styles.dropDownOptions} style={{ marginTop: "135px" }}>
+                        <div className={styles.dropDownOptions} style={{ marginTop: "190px" }}>
                             <div className={styles.splOption} onClick={() => {
                                 setselectedToken('MATIC');
                             }}>
