@@ -47,7 +47,19 @@ const { chains, provider } = configureChains(
 export const client = createClient({
   autoConnect: true,
   connectors: [
-    InjectedConnector
+    new MetaMaskConnector({ chains }),
+    new CoinbaseWalletConnector({
+      chains,
+      options: {
+        appName: 'truts',
+      },
+    }),
+    new WalletConnectConnector({
+      chains,
+      options: {
+        qrcode: true,
+      },
+    }),
   ],
   provider
 })
