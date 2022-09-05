@@ -149,6 +149,7 @@ function DaoForm() {
             return null
         }
         let url = `https://truts.herokuapp.com/dao/create-new-dao-v2`
+        url = 'https://7cjecbsr4a.us-west-2.awsapprunner.com/dao/create-new-dao-v2'
         setloaderVisible(true);
         let res = await axios.post(url, { ...formData, dao_category: daoCatList, submitter_public_address: `${walletAddress}` });
 
@@ -266,7 +267,7 @@ const ConnectWalletModelSimple = ({ connectWalletModelVisible, setconnectWalletM
     const { connectAsync, connectors, isLoading, pendingConnector } = useConnect();
     const { disconnectAsync } = useDisconnect()
     const { address, isConnected, connector, isConnecting } = useAccount();
-    
+
     console.log(submit_form)
 
     useEffect(() => {
@@ -285,7 +286,7 @@ const ConnectWalletModelSimple = ({ connectWalletModelVisible, setconnectWalletM
                                 connectors.map((connector) => {
                                     return (
                                         <div key={connector.id} className={styles.option} onClick={async () => {
-                                            let res = await connectAsync({connector});
+                                            let res = await connectAsync({ connector });
                                             console.log(res);
                                             setpublic_address(res.account)
                                             console.log("submitform");
