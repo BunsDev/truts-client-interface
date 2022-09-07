@@ -287,7 +287,7 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
             </span>
             <p className={styles.footerSubTitle}></p>
           </div> */}
-         
+
 
         </section >
       </div >
@@ -295,8 +295,8 @@ export default function Home({ daoList_ssr, leaderboard_ssr }) {
         <Nav data={daoList} topSearchVisible={topSearchVisible} />
         <div className={styles.m_hero}>
           <div className={styles.title}>
-            <h3>Review web3 communities,</h3>
-            <h3 className={styles.titleBlue}>Earn Rewards!</h3>
+            <h3>Discover web3 communities</h3>
+            <h3 className={styles.titleBlue}>with Truts</h3>
             <p className={styles.subTitle}>Discover cool communities; Learn, Contribute and Earn with communities you love and Truts</p>
             <SearchComp data={daoList} />
           </div>
