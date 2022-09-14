@@ -38,7 +38,7 @@ function DaoList() {
     useEffect(() => {
         let query_category = window.location.href.split('=')[1];
         if (query_category) {
-            setselectedTab(query_category);
+            setselectedTab(decodeURI(query_category));
         }
         getDaoList();
     }, [])
@@ -115,13 +115,13 @@ function DaoList() {
             <div className={styles.con}>
                 <Nav data={dao_list} topSearchVisible={true} outline={true} />
                 <h1 className={styles.title}>Our community library</h1>
-                <p className={styles.subText}>Explore our 480+ communities and find the one that fits you</p>
+                <p className={styles.subText}>Explore our 600+ communities and find the one that fits you</p>
                 <div className={styles.m_filters}>
                     <select onChange={(e) => {
                         setselectedTab(e.target.value);
                     }} name="" id="">
                         {[
-                            'all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal'
+                            'all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal', `NEAR Ecosystem`
                         ].map((ele, idx) => {
                             return (
                                 <option onClick={() => { sortBy(ele) }} key={ele + idx} value={ele}>{ele}</option>
@@ -161,7 +161,7 @@ function DaoList() {
                         />
                         {/* Second filter */}
                         <Filter list={[
-                            'all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal'
+                            'all', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal', `NEAR Ecosystem`
                         ]} selectedTab={selectedTab} setselectedTab={setselectedTab} reset={() => { setselectedTab('all') }} />
                     </div>
 
