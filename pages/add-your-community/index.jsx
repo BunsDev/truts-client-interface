@@ -16,6 +16,8 @@ import {
 
 const API = process.env.API
 
+const CATEGORY_LIST = ['All', 'Service', 'Investment', 'Social', 'Community', 'Education', 'Media', 'Collector', 'Art', 'Sports', 'Legal', `NEAR Ecosystem`]
+
 const getWalletIcon = (name) => {
     if (name == 'MetaMask') {
         return '/metamask.png'
@@ -192,11 +194,22 @@ function DaoForm() {
                         <p>Name of the Community</p>
                         <input required name={'dao_name'} type="text" onChange={formHandler} />
                     </span>
+
+                    <span className={styles.input}>
+                        <p>Whats your community`s mission statement?</p>
+                        <input required name={'dao_mission'} placeholder='Please keep it within 1 or 2 lines' type="text" onChange={formHandler} />
+                    </span>
+
                     <p className={styles.inputTitle}>What’s the category of your Community?</p>
                     <div className={styles.categoryCon}>
                         <input type="text" value={catInput} onChange={(e) => {
                             setcatInput(e.target.value);
                         }} />
+
+                        <div className={styles.suggestionBox}>
+
+                        </div>
+
                         <span className={styles.addBtn} onClick={() => {
                             setdaoCatList((ele) => {
                                 return [...ele, catInput.trim()]
@@ -212,13 +225,8 @@ function DaoForm() {
                                 )
                             })
                         }
-
                     </div>
 
-                    <span className={styles.input}>
-                        <p>Whats your community`s mission statement?</p>
-                        <input required name={'dao_mission'} placeholder='Please keep it within 1 or 2 lines' type="text" onChange={formHandler} />
-                    </span>
 
                     <span className={styles.input}>
                         <p>A brief description of the community</p>
