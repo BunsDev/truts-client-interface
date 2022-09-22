@@ -205,11 +205,6 @@ function DaoForm() {
                         <input type="text" value={catInput} onChange={(e) => {
                             setcatInput(e.target.value);
                         }} />
-
-                        <div className={styles.suggestionBox}>
-
-                        </div>
-
                         <span className={styles.addBtn} onClick={() => {
                             setdaoCatList((ele) => {
                                 return [...ele, catInput.trim()]
